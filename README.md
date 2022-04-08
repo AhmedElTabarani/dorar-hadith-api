@@ -1,15 +1,13 @@
 # Dorar.net Hadith API
 
-<div dir=rtl>
-
 السلام عليكم ورحمة الله وبركاته
 
-منذ مدة حاولت إستعمال الـ API الخاص [بالدرر السنية](https://dorar.net/article/389/%D8%AE%D8%AF%D9%85%D8%A9-%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%88%D8%B9%D8%A9-%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AB%D9%8A%D8%A9-API)  
-لكنني واجهت بعض الصعوبات منها أن الـ API يتعامل مع JSONP فقط وأيضًا لن تستطيع التعامل معه بالطرق العادية بسبب الـ [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+منذ مدة حاولت إستعمال الـ `API` الخاص [بالدرر السنية](https://dorar.net/article/389/%D8%AE%D8%AF%D9%85%D8%A9-%D9%88%D8%A7%D8%AC%D9%87%D8%A9-%D8%A7%D9%84%D9%85%D9%88%D8%B3%D9%88%D8%B9%D8%A9-%D8%A7%D9%84%D8%AD%D8%AF%D9%8A%D8%AB%D9%8A%D8%A9-API)  
+لكنني واجهت بعض الصعوبات منها أن الـ `API` يتعامل مع [JSONP](https://en.wikipedia.org/wiki/JSONP) فقط وأيضًا لن تستطيع التعامل معه بالطرق العادية بسبب الـ [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
 
-وإن نجحت بتجنب الـ CORS بإستعمال JSONP فتحصل على الناتج بهيئة HTML
+وإن نجحت بتجنب الـ `CORS` بإستعمال `JSONP` فتحصل على الناتج بهيئة `HTML`
 
-فأنا قررت عمل API وسيط يتجنب مشكلة CORS ويعطيك البيانات كهيئة JSON
+فأنا قررت عمل `API` وسيط يتجنب مشكلة `CORS` ويعطيك البيانات كهيئة JSON
 
 ## شكل الـ JSON
 
@@ -34,9 +32,9 @@
 
 لنبحث عن حديث `أتاكم أهل اليمن أرق قلوباً منكم`
 
-`../api/search?value=أتاكم أهل اليمن أرق قلوباً منكم`
+`https://dorar-hadith-api.herokuapp.com/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم`
 
-الـ API يحضر لك 15 حديث
+الـ `API` يحضر لك `15` حديث
 
 <details>
 <summary>عرض الناتج</summary>
@@ -168,6 +166,6 @@
 
 </details>
 
-يكمننا إستخدام page لعرض صفحة مختلفة من الاحاديث (15 حديث آخر)
+يكمننا إستخدام `page` لعرض صفحة مختلفة من الاحاديث (15 حديث آخر)
 
-`../api/search?value=أتاكم أهل اليمن أرق قلوباً منكم&page=5`
+`https://dorar-hadith-api.herokuapp.com/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم&page=5`
