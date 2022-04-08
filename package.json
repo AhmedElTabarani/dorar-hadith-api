@@ -1,0 +1,25 @@
+{
+  "name": "hadith-api",
+  "version": "1.0.0",
+  "description": "hadith api based on dorar.net",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "keywords": [
+    "hadith",
+    "api",
+    "sunnah"
+  ],
+  "author": "أحمد الطبراني (Ahmed El-Tabarani)",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "get-json": "^1.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
