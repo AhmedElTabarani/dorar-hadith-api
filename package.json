@@ -17,7 +17,8 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
-    "get-json": "^1.0.1"
+    "get-json": "^1.0.1",
+    "html-entities": "^2.3.3"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

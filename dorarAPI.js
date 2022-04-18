@@ -1,14 +1,14 @@
 const getJSON = require('get-json');
-
+const { decode } = require('html-entities');
 module.exports = async (query) => {
   const json = [];
   query.page = query.page || 1;
   const url = `https://dorar.net/dorar_api.json?skey=${query.value}&page=${query.page}`;
 
   const data = await getJSON(encodeURI(url));
-  const result = data.ahadith.result;
-  const allHadith = result.matchAll(/<div class="hadith".*?>(.*?)<\/div>/g);
-  const allHadithInfo = result.matchAll(
+  const html = decode(data.ahadith.result);
+  const allHadith = html.matchAll(/<div class="hadith".*?>(.*?)<\/div>/g);
+  const allHadithInfo = html.matchAll(
     /<div class="hadith-info">([\s\S]*?)<\/div>/g
   );
   for (const hadith of allHadith) {
