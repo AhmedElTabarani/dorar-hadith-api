@@ -1,26 +1,32 @@
 const getJSON = require('get-json');
 const { decode } = require('html-entities');
-module.exports = async (query) => {
-  query.page = query.page || 1;
-  const url = `https://dorar.net/dorar_api.json?skey=${query.value}&page=${query.page}`;
+module.exports = async (query, next) => {
+  try {
+    query.page = query.page || 1;
+    const url = `https://dorar.net/dorar_api.json?skey=${query.value}&page=${query.page}`;
 
-  const data = await getJSON(encodeURI(url));
-  const html = decode(data.ahadith.result);
-  const allHadith = getAllHadith(html);
-  const allHadithInfo = getAllHadithInfo(html);
+    const data = await getJSON(encodeURI(url));
+    const html = decode(data.ahadith.result);
+    const allHadith = getAllHadith(html);
+    const allHadithInfo = getAllHadithInfo(html);
 
-  const result = allHadith.map((hadith, index) => {
-    return {
-      ...hadith,
-      ...allHadithInfo[index],
-    };
-  });
-  return result;
+    const result = allHadith.map((hadith, index) => {
+      return {
+        ...hadith,
+        ...allHadithInfo[index],
+      };
+    });
+    return result;
+  } catch (err) {
+    next(new Error(err));
+  }
 };
 
 const getAllHadith = (html) => {
   const allHadith = [];
-  const allHadithHTML = html.matchAll(/<div class="hadith".*?>(.*?)<\/div>/g);
+  const allHadithHTML = html.matchAll(
+    /<div class="hadith".*?>(.*?)<\/div>/g
+  );
   for (const hadith of allHadithHTML) {
     const _hadith = hadith[1]
       .replace(/<\/?[^>]+(>|$)/g, '')
@@ -40,10 +46,14 @@ const getAllHadithInfo = (html) => {
     /<div class="hadith-info">([\s\S]*?)<\/div>/g
   );
   for (const hadithInfo of allHadithInfoHTML) {
-    const _hadithInfo = hadithInfo[1].replace(/<\/?[^>]+(>|$)/g, '').trim();
+    const _hadithInfo = hadithInfo[1]
+      .replace(/<\/?[^>]+(>|$)/g, '')
+      .trim();
     const el_rawi = _hadithInfo.match(/الراوي: ([\s\S]*?) (?=المحدث)/);
     const el_mohdith = _hadithInfo.match(/المحدث: ([\s\S]*?) (?=المصدر)/);
-    const source = _hadithInfo.match(/المصدر: ([\s\S]*?) (?=الصفحة أو الرقم)/);
+    const source = _hadithInfo.match(
+      /المصدر: ([\s\S]*?) (?=الصفحة أو الرقم)/
+    );
     const number_or_page = _hadithInfo.match(
       /الصفحة أو الرقم: ([\s\S]*?) (?=خلاصة حكم المحدث)/
     );

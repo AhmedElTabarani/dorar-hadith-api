@@ -9,6 +9,7 @@ const port = process.env.PORT || 5000;
 
 app.get('/', (req, res) => {
   res.json({
+    status: 'success',
     endpint: '/api/search?value={value}&page={page}',
     example: '/api/search?value=الحج&page=5',
     abstractResponse: [
@@ -24,8 +25,23 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/api/search', async (req, res) => {
-  res.json(await dorarAPI(req.query));
+app.get('/api/search', async (req, res, next) => {
+  res.json(await dorarAPI(req.query, next));
+});
+
+app.get('*', (req, res, next) => {
+  res.status(501).json({
+    status: 'error',
+    message:
+      "There is no router for this url, Please try '/api/search?value={value}&page={page}'",
+  });
+});
+
+app.use((err, req, res, next) => {
+  res.status(400).json({
+    status: 'error',
+    message: err.message,
+  });
 });
 
 app.listen(port, () =>
