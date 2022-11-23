@@ -11,7 +11,7 @@
 
 ## الاستعمال
  
-الرابط: https://dorar-hadith-api.onrender.com/  
+الرابط: https://dorar-hadith-api.cyclic.app/  
 لديه `endpoint` وحيدة وهى `/api/search?value={value}&page={page}`  
 الـ `query` يحتوي على `value` وهي محتوى نص الحديث المراد البحث عنه  
 والـ `page` رقم الصفحة - الدرر السنية يقدم `15` حديث لكل صفحة -  
@@ -47,7 +47,7 @@
 
 لنبحث عن حديث `أتاكم أهل اليمن أرق قلوباً منكم`
 
-`https://dorar-hadith-api.onrender.com/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم`
+`https://dorar-hadith-api.cyclic.app/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم`
 
 الـ `API` يحضر لك `15` حديث
 
@@ -183,4 +183,4 @@
 
 يكمننا إستخدام `page` لعرض صفحة مختلفة من الاحاديث (15 حديث آخر)
 
-`https://dorar-hadith-api.onrender.com/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم&page=5`
+`https://dorar-hadith-api.cyclic.app/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم&page=5`
