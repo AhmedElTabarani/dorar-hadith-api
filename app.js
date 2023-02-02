@@ -10,7 +10,7 @@ const port = process.env.PORT || 5000;
 app.get('/', (req, res) => {
   res.json({
     status: 'success',
-    endpint: '/api/search?value={value}&page={page}',
+    endpoint: '/api/search?value={text}&page={page}',
     example: '/api/search?value=الحج&page=5',
     abstractResponse: [
       {
@@ -22,18 +22,30 @@ app.get('/', (req, res) => {
         grade: 'درجة الصحة',
       },
     ],
+    query: {
+      value: 'محتوى نص الحديث المراد البحث عنه',
+      page: 'تحديد رقم الصفحة',
+      st: 'تحدد طريقة البحث',
+      xclude: 'استبعاد بعض الكلمات من البحث',
+      t: 'تحديد نطاق البحث',
+      'd[]': 'تحديد درجة الحديث سواء صحيح ام ضعيف',
+      'm[]': 'تحديد اسماء المحدثين التي تريدهم',
+      's[]': 'تحديد الكتب التي تريد البحث فيها',
+      'rawi[]': 'تحديد اسماء الرواه التي تريدهم',
+    },
   });
 });
 
 app.get('/api/search', async (req, res, next) => {
-  res.json(await dorarAPI(req.query, next));
+  const query = req._parsedUrl.query.replace('value=', 'skey=');
+  res.json(await dorarAPI(query, next));
 });
 
 app.get('*', (req, res, next) => {
   res.status(501).json({
     status: 'error',
     message:
-      "There is no router for this url, Please try '/api/search?value={value}&page={page}'",
+      "There is no router for this url, Please try '/api/search?value={text}&page={page}'",
   });
 });
 

@@ -2,9 +2,7 @@ const getJSON = require('get-json');
 const { decode } = require('html-entities');
 module.exports = async (query, next) => {
   try {
-    query.page = query.page || 1;
-    const url = `https://dorar.net/dorar_api.json?skey=${query.value}&page=${query.page}`;
-
+    const url = `https://dorar.net/dorar_api.json?${query}`;
     const data = await getJSON(encodeURI(url));
     const html = decode(data.ahadith.result);
     const allHadith = getAllHadith(html);
