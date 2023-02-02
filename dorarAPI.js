@@ -23,7 +23,7 @@ module.exports = async (query, next) => {
 const getAllHadith = (html) => {
   const allHadith = [];
   const allHadithHTML = html.matchAll(
-    /<div class="hadith".*?>(.*?)<\/div>/g
+    /<div class="hadith".*?>([\s\S]*?)<\/div>/g,
   );
   for (const hadith of allHadithHTML) {
     const _hadith = hadith[1]
