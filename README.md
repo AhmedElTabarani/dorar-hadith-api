@@ -218,6 +218,19 @@
   - للبحث بـ `بحث مطابق` فستكون `st=p`
 - مثال `/api/search?value=جملة البحث&st=p` هكذا سيبحث بشكل مطابق لجملة البحث
 
+<details>
+<summary>عرض القيم كـ HTML</summary>
+
+```html
+<select searchable="تحديد طريقة البحث ..." name="st" id="st">
+  <option value="w">جميع الكلمات</option>
+  <option value="a">أي كلمة</option>
+  <option value="a">بحث مطابق</option>
+</select>
+```
+
+</details>
+
 ### xclude لاستبعاد بعض الكلمات
 
 - `xclude` كلمة أو جملة تريد استبعادها من البحث
@@ -235,6 +248,37 @@
   - للبحث عن `شروح الأحاديث` فستكون `t=3`
 - مثال `/api/search?value=جملة البحث&t=1` هكذا سيبحث فقط عن الأحاديث القدسية المطابق لجملة البحث
 
+<details>
+<summary>عرض القيم كـ HTML</summary>
+
+```html
+<div>
+  <label>نطاق البحث</label>
+  <div>
+    <input type="radio" id="t-all" name="t" value="*" />
+    <label for="t-all">جميع الأحاديث</label>
+  </div>
+  <div>
+    <input id="t-0" value="0" type="radio" name="t" />
+    <label for="t-0">الأحاديث المرفوعة</label>
+  </div>
+  <div>
+    <input id="t-1" value="1" type="radio" name="t" />
+    <label for="t-1">الأحاديث القدسية</label>
+  </div>
+  <div>
+    <input id="t-2" value="2" type="radio" name="t" />
+    <label for="t-2">آثار الصحابة</label>
+  </div>
+  <div>
+    <input id="t-3" value="3" type="radio" name="t" />
+    <label for="t-3">شروح الأحاديث</label>
+  </div>
+</div>
+```
+
+</details>
+
 ### d[] درجة الحديث
 
 - `d[]` تحديد درجة الحديث سواء صحيح ام ضعيف
@@ -246,6 +290,42 @@
 - مثال `/api/search?value=جملة البحث&d[]=3` هكذا سيبحث فقط عن الأحاديث المحكوم عليها بالضعف
 - يمكنك تحديد اكثر من اختيار
   - مثال `/api/search?value=جملة البحث&d[]=1&d[]=2` هكذا سيبحث فقط عن الأحاديث المحكوم عليها بالصحة من ناحية المتن و الاسناد
+
+<details>
+<summary>عرض القيم كـ HTML</summary>
+
+```html
+<div>
+  <label>درجة الحديث</label>
+
+  <div>
+    <input type="checkbox" value="1" id="degree-1" name="d[]" />
+    <label for="degree-1"
+      >أحاديث حكم المحدثون عليها بالصحة، ونحو ذلك</label
+    >
+  </div>
+  <div>
+    <input type="checkbox" value="2" id="degree-2" name="d[]" />
+    <label for="degree-2"
+      >أحاديث حكم المحدثون على أسانيدها بالصحة، ونحو ذلك</label
+    >
+  </div>
+  <div>
+    <input type="checkbox" value="3" id="degree-3" name="d[]" />
+    <label for="degree-3"
+      >أحاديث حكم المحدثون عليها بالضعف، ونحو ذلك</label
+    >
+  </div>
+  <div>
+    <input type="checkbox" value="4" id="degree-4" name="d[]" />
+    <label for="degree-4"
+      >أحاديث حكم المحدثون على أسانيدها بالضعف، ونحو ذلك</label
+    >
+  </div>
+</div>
+```
+
+</details>
 
 ### m[] اسماء المحدثين
 
