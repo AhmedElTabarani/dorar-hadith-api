@@ -3,7 +3,7 @@ const { decode } = require('html-entities');
 module.exports = async (query, next) => {
   try {
     const url = `https://dorar.net/dorar_api.json?${query}`;
-    const data = await getJSON(encodeURI(url));
+    const data = await getJSON(url);
     const html = decode(data.ahadith.result);
     const allHadith = getAllHadith(html);
     const allHadithInfo = getAllHadithInfo(html);
