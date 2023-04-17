@@ -18,7 +18,8 @@
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "get-json": "^1.0.1",
-    "html-entities": "^2.3.3"
+    "html-entities": "^2.3.3",
+    "node-cache": "^5.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"

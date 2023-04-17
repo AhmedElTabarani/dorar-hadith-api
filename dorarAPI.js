@@ -1,11 +1,11 @@
 const getJSON = require('get-json');
 const { decode } = require('html-entities');
-module.exports = async (query, next) => {
+module.exports = async (query, req, next) => {
   try {
     const url = `https://dorar.net/dorar_api.json?${query}`;
     const data = await getJSON(url);
     const html = decode(data.ahadith.result);
-    const allHadith = getAllHadith(html);
+    const allHadith = getAllHadith(html, req.isRemoveHTML);
     const allHadithInfo = getAllHadithInfo(html);
 
     const result = allHadith.map((hadith, index) => {
@@ -20,16 +20,16 @@ module.exports = async (query, next) => {
   }
 };
 
-const getAllHadith = (html) => {
+const getAllHadith = (html, isRemoveHTML) => {
   const allHadith = [];
   const allHadithHTML = html.matchAll(
-    /<div class="hadith".*?>([\s\S]*?)<\/div>/g,
+    /<div class="hadith".*?>([\s\S]*?)<\/div>/g
   );
   for (const hadith of allHadithHTML) {
-    const _hadith = hadith[1]
-      .replace(/<\/?[^>]+(>|$)/g, '')
-      .replace(/^\d+ -/g, '')
-      .trim();
+    let _hadith = hadith[1];
+    if (isRemoveHTML) _hadith = _hadith.replace(/<\/?[^>]+(>|$)/g, '');
+
+    _hadith = _hadith.replace(/^\d+ -/g, '').trim();
 
     allHadith.push({
       hadith: _hadith,

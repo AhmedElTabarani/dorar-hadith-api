@@ -7,6 +7,15 @@ app.use(cors());
 
 const port = process.env.PORT || 5000;
 
+// to delete elements from hadith text or not
+// including this `<span class="search-keys">...</span>`
+app.use((req, res, next) => {
+  req.isRemoveHTML = req.query.removehtml || true;
+  req.isRemoveHTML =
+    req.query.removehtml?.toLowerCase() === 'false' ? false : true;
+  next();
+});
+
 app.get('/', (req, res) => {
   res.json({
     status: 'success',
@@ -25,6 +34,8 @@ app.get('/', (req, res) => {
     query: {
       value: 'محتوى نص الحديث المراد البحث عنه',
       page: 'تحديد رقم الصفحة',
+      removehtml:
+        'حذف عناصر الـ HTML في الحديث كـ <span class="search-keys">...</span>',
       st: 'تحدد طريقة البحث',
       xclude: 'استبعاد بعض الكلمات من البحث',
       t: 'تحديد نطاق البحث',
@@ -38,7 +49,7 @@ app.get('/', (req, res) => {
 
 app.get('/api/search', async (req, res, next) => {
   const query = req._parsedUrl.query.replace('value=', 'skey=');
-  res.json(await dorarAPI(query, next));
+  res.json(await dorarAPI(query, req, next));
 });
 
 app.get('*', (req, res, next) => {
