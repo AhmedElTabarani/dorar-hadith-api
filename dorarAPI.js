@@ -1,8 +1,15 @@
 const getJSON = require('get-json');
 const { decode } = require('html-entities');
+
+const NodeCache = require('node-cache');
+const cache = new NodeCache({ stdTTL: 60 * 60 * 24 });
+
 module.exports = async (query, req, next) => {
   try {
     const url = `https://dorar.net/dorar_api.json?${query}`;
+
+    if (cache.has(url)) return cache.get(url);
+
     const data = await getJSON(url);
     const html = decode(data.ahadith.result);
     const allHadith = getAllHadith(html, req.isRemoveHTML);
@@ -14,6 +21,9 @@ module.exports = async (query, req, next) => {
         ...allHadithInfo[index],
       };
     });
+
+    cache.set(url, result);
+
     return result;
   } catch (err) {
     next(new Error(err));
