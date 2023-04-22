@@ -1,8 +1,9 @@
 const getJSON = require('get-json');
 const { decode } = require('html-entities');
+const { JSDOM } = require('jsdom');
 
 const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 60 * 60 * 24 });
+const cache = new NodeCache({ stdTTL: 60 * 5 }); // cache for 5 minutes
 
 module.exports = async (query, req, next) => {
   try {
@@ -12,68 +13,40 @@ module.exports = async (query, req, next) => {
 
     const data = await getJSON(url);
     const html = decode(data.ahadith.result);
-    const allHadith = getAllHadith(html, req.isRemoveHTML);
-    const allHadithInfo = getAllHadithInfo(html);
+    const doc = new JSDOM(html).window.document;
 
-    const result = allHadith.map((hadith, index) => {
-      return {
-        ...hadith,
-        ...allHadithInfo[index],
-      };
-    });
+    const result = Array.from(doc.querySelectorAll('.hadith-info')).map(
+      (info) => {
+        hadith = info.previousElementSibling.textContent
+          .replace(/\d+ -/g, '')
+          .trim();
 
+        const rawSubtitleElements = [
+          ...info.querySelectorAll('.info-subtitle'),
+        ];
+
+        const grade = rawSubtitleElements
+          .pop()
+          .nextElementSibling.textContent.trim();
+
+        const subtitles = rawSubtitleElements.map((el) =>
+          el.nextSibling.textContent.trim()
+        );
+
+        return {
+          hadith,
+          el_rawi: subtitles[0],
+          el_mohdith: subtitles[1],
+          source: subtitles[2],
+          number_or_page: subtitles[3],
+          grade,
+        };
+      }
+    );
     cache.set(url, result);
 
     return result;
   } catch (err) {
     next(new Error(err));
   }
-};
-
-const getAllHadith = (html, isRemoveHTML) => {
-  const allHadith = [];
-  const allHadithHTML = html.matchAll(
-    /<div class="hadith".*?>([\s\S]*?)<\/div>/g
-  );
-  for (const hadith of allHadithHTML) {
-    let _hadith = hadith[1];
-    if (isRemoveHTML) _hadith = _hadith.replace(/<\/?[^>]+(>|$)/g, '');
-
-    _hadith = _hadith.replace(/^\d+ -/g, '').trim();
-
-    allHadith.push({
-      hadith: _hadith,
-    });
-  }
-  return allHadith;
-};
-
-const getAllHadithInfo = (html) => {
-  const allHadithInfo = [];
-  const allHadithInfoHTML = html.matchAll(
-    /<div class="hadith-info">([\s\S]*?)<\/div>/g
-  );
-  for (const hadithInfo of allHadithInfoHTML) {
-    const _hadithInfo = hadithInfo[1]
-      .replace(/<\/?[^>]+(>|$)/g, '')
-      .trim();
-    const el_rawi = _hadithInfo.match(/الراوي: ([\s\S]*?) (?=المحدث)/);
-    const el_mohdith = _hadithInfo.match(/المحدث: ([\s\S]*?) (?=المصدر)/);
-    const source = _hadithInfo.match(
-      /المصدر: ([\s\S]*?) (?=الصفحة أو الرقم)/
-    );
-    const number_or_page = _hadithInfo.match(
-      /الصفحة أو الرقم: ([\s\S]*?) (?=خلاصة حكم المحدث)/
-    );
-    const grade = _hadithInfo.match(/خلاصة حكم المحدث: ([\s\S]*?)$/);
-
-    allHadithInfo.push({
-      el_rawi: el_rawi[1].trim(),
-      el_mohdith: el_mohdith[1].trim(),
-      source: source[1].trim(),
-      number_or_page: number_or_page[1].trim(),
-      grade: grade[1].trim(),
-    });
-  }
-  return allHadithInfo;
 };
