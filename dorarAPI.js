@@ -17,9 +17,15 @@ module.exports = async (query, req, next) => {
 
     const result = Array.from(doc.querySelectorAll('.hadith-info')).map(
       (info) => {
-        hadith = info.previousElementSibling.textContent
-          .replace(/\d+ -/g, '')
-          .trim();
+        let hadith;
+        if (req.isRemoveHTML)
+          hadith = info.previousElementSibling.textContent
+            .replace(/\d+ -/g, '')
+            .trim();
+        else
+          hadith = info.previousElementSibling.innerHTML
+            .replace(/\d+ -/g, '')
+            .trim();
 
         const rawSubtitleElements = [
           ...info.querySelectorAll('.info-subtitle'),
