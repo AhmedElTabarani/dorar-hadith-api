@@ -14,24 +14,33 @@
 ## الاستعمال
 
 الرابط: https://dorar-hadith-api.cyclic.app/  
+الرابط: https://dorar-hadith-api.cyclic.app/  
+لديه `endpoint` واحدة فقط وهي `/api/search?value={text}&page={page}`  
+العناصر التي يحتويها الـ `query` هي:
+الرابط: https://dorar-hadith-api.cyclic.app/
 لديه `endpoint` واحدة فقط وهي `/api/search?value={text}&page={page}`  
 العناصر التي يحتويها الـ `query` هي:
 
-- `value` وهي محتوى نص الحديث المراد البحث عنه
-- `page` رقم الصفحة - الدرر السنية يقدم `15` حديث لكل صفحة -  
-  وهو اختياري فالقيمة الافتراضية ستكون الصفحة رقم واحد `page=1`
+### Endpoints
 
-## شكل الرد كـ JSON
+يحتوي الـ `API` على **ثلاث** `endpoint`، وهي:
+
+#### /api/search?value={text}
+
+يستخدم الـ `API` الرسمي الخاص بالدرر السنية للبحث عن الأحاديث  
+يعطي `15` نتيجة وسرعة رد سريعة
+
+شكل الرد كـ `JSON`
 
 ```
 [
     {
-        "hadith": "الحديث",
-        "el_rawi": "الراوي",
-        "el_mohdith": "المحدث",
-        "source": "المصدر",
-        "number_or_page": "رقم الحديث او الصفحة",
-        "grade": "درجة الصحة"
+        hadith: 'الحديث',
+        el_rawi: 'الراوي',
+        el_mohdith: 'المحدث',
+        source: 'المصدر',
+        number_or_page: 'رقم الحديث او الصفحة',
+        grade: 'درجة الصحة',
     },
     {
         ...
@@ -40,169 +49,99 @@
 ]
 ```
 
-مصفوفة تحتوي على مجموعة من البيانات كل واحدة يمثل حديث
+#### /site/search?value={text}
 
-- `hadith`: نص الحديث
-- `el_rawi`: إسم الراوي
-- `el_mohdith`: إسم المحدث
-- `source`: مصدر الحديث
-- `number_or_page`: رقم الحديث او الصفحة
-- `grade`: درجة صحة الحديث
+يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن الأحاديث  
+يعطي `30` نتيجة وسرعة رد متوسطة نسبيًا
 
-## مثال تطبيقي
+شكل الرد كـ `JSON`
 
-لنبحث عن حديث `أتاكم أهل اليمن أرق قلوباً منكم`
-
-`/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم`
-
-الـ `API` سيحضر لك `15` حديث
-
-<details>
-<summary>عرض الناتج</summary>
-
-```json
+```
 [
-  {
-    "hadith": "أتاكُم أهلُ اليَمَنِ وهُم أرَقُّ قلوبًا منكم، وهُم أوَّلُ مَن جاء بالمُصافَحةِ. .",
-    "el_rawi": "أنس بن مالك",
-    "el_mohdith": "شعيب الأرناؤوط",
-    "source": "تخريج المسند",
-    "number_or_page": "13212",
-    "grade": "إسناده صحيح على شرط مسلم"
-  },
-  {
-    "hadith": "أتاكم أهلُ اليمنِ هم أرَقُّ قلوبًا الإيمانُ يمانٍ والحكمةُ يمانيةُ والفقهُ يمانٍ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "أحمد شاكر",
-    "source": "تخريج المسند لشاكر",
-    "number_or_page": "14/50",
-    "grade": "إسناده صحيح"
-  },
-  {
-    "hadith": "أَتاكم أَهْلُ اليَمَنِ، هُم أَرَقُّ قُلوبًا، الإيمانُ يَمانٍ، الفِقهُ يَمانٍ، الحِكمَةُ يَمانيَّةٌ. .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "شعيب الأرناؤوط",
-    "source": "تخريج المسند",
-    "number_or_page": "7723",
-    "grade": "إسناده صحيح على شرط الشيخين"
-  },
-  {
-    "hadith": "أتاكم أهلُ اليمنِ ، هم أضعفُ قلوبًا ، و أَرَقُّ أفئدةً ، الفقهُ يمانٍ ، و الحكمةُ يمانيَّةٌ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "السيوطي",
-    "source": "الجامع الصغير",
-    "number_or_page": "75",
-    "grade": "صحيح"
-  },
-  {
-    "hadith": "أتاكم أهلُ اليمنِ ، هم أضعفُ قلوبًا ، و أَرَقُّ أفئدةً ، الفقهُ يمانٍ ، و الحكمةُ يمانيَّةٌ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "الألباني",
-    "source": "صحيح الجامع",
-    "number_or_page": "54",
-    "grade": "صحيح"
-  },
-  {
-    "hadith": "قد أقبل أهلُ اليمنِ ، وهم أرقُّ قلوبًا منكم .",
-    "el_rawi": "أنس بن مالك",
-    "el_mohdith": "الألباني",
-    "source": "صحيح الأدب المفرد",
-    "number_or_page": "744",
-    "grade": "صحيح"
-  },
-  {
-    "hadith": "أَتاكُمْ أهْلُ اليَمَنِ، هُمْ أرَقُّ أفْئِدَةً وأَلْيَنُ قُلُوبًا، الإيمانُ يَمانٍ والحِكْمَةُ يَمانِيَةٌ، والفَخْرُ والخُيَلاءُ في أصْحابِ الإبِلِ، والسَّكِينَةُ والوَقارُ في أهْلِ الغَنَمِ. .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "البخاري",
-    "source": "صحيح البخاري",
-    "number_or_page": "4388",
-    "grade": "[صحيح]"
-  },
-  {
-    "hadith": "لما نزلت :  إِذَا جَاءَ نَصْرُ اللهِ وَالْفَتْحُ  ؛ قال : أتاكم أهلُ اليمنِ ؛ هم أَرَقُّ قلوبًا ، الإيمانُ يمانٍ ، الفقهُ يمانٍ ، الحكمةُ يمانيَّةٌ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "الألباني",
-    "source": "السلسلة الصحيحة",
-    "number_or_page": "3369",
-    "grade": "إسناده صحيح على شرط الشيخين"
-  },
-  {
-    "hadith": "أتاكم أَهلُ اليمَنِ هم أرقُّ أفئدةً وأرقُّ قلوبًا الإيمانُ يمانٍ والحِكمةُ يمانيَةٌ والقَسوةُ وغِلَظُ القلوبِ في الفدَّادينَ أصحابِ الإبلِ قِبلَ المشرقِ في ربيعةَ ومُضَرَ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "أبو نعيم",
-    "source": "حلية الأولياء",
-    "number_or_page": "7/420",
-    "grade": "صحيح من حديث الأعمش مشهور"
-  },
-  {
-    "hadith": "لما نزلتْ { إِذا جاءَ نَصْرُ اللهِ وَالْفَتْحُ } قال النبيُّ صلَّى اللهُ عليهِ وسلَّمَ أتاكم أهلُ اليمنِ هم أرقُّ قلوبًا الإيمانُ يمانٍ الفقهُ يمانٍ الحكمةُ يمانيَّةٌ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "أحمد شاكر",
-    "source": "تخريج المسند لشاكر",
-    "number_or_page": "14/149",
-    "grade": "إسناده صحيح"
-  },
-  {
-    "hadith": "الإيمانُ يَمانٍ، والفقهُ يَمانٍ، والحكمةُ يَمانيَةٌ، أتاكم أَهلُ اليمنِ فهم أَرَقُّ أفئدةً، وأَلْينُ قلوبًا، والكفرُ قِبَلَ المَشرقِ، والفخرُ والخُيلاءُ في أهلِ الخيلِ والإبلِ والفدَّادين أهلِ الوَبَرِ، والسكينةُ في أهلِ الغنمِ.  .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "شعيب الأرناؤوط",
-    "source": "تخريج المسند",
-    "number_or_page": "8942",
-    "grade": "صحيح"
-  },
-  {
-    "hadith": "أتاكم أهلُ اليمنِ هم أَرَقُّ أفئدةً ، و ألينُ قلوبًا ، الإيمانُ يمانٍ ، و الحكمةُ يمانيَّةٌ ، و الفخرُ و الخُيلاءُ في أصحابِ الإبلِ ، و السكينةُ و الوقارُ في أهلِ الغنمِ .",
-    "el_rawi": "أبو هريرة",
-    "el_mohdith": "الألباني",
-    "source": "صحيح الجامع",
-    "number_or_page": "53",
-    "grade": "صحيح"
-  },
-  {
-    "hadith": "قد أقبلَ أهلُ اليمنِ ، و هُمْ أَرَقُّ قُلوبًا مِنكمْ قال أنسُ : و هُمْ أولُ مَنْ جاء بِالمُصافَحَةِ .",
-    "el_rawi": "أنس بن مالك",
-    "el_mohdith": "الألباني",
-    "source": "السلسلة الصحيحة",
-    "number_or_page": "527",
-    "grade": "إسناده صحيح على شرط مسلم"
-  },
-  {
-    "hadith": "إنَّه لَمَّا أقْبَلَ أهلُ اليَمَنِ، قال رسولُ اللهِ صلَّى اللهُ عليه وسلَّم: قد جاءَكم أهْلُ اليَمَنِ، هُم أرَقُّ مِنكم قُلوبًا. قال أنسٌ: وهُم أوَّلُ مَن جاء بالمُصافَحةِ. .",
-    "el_rawi": "أنس بن مالك",
-    "el_mohdith": "شعيب الأرناؤوط",
-    "source": "تخريج المسند",
-    "number_or_page": "13624",
-    "grade": "إسناده صحيح على شرط مسلم"
-  },
-  {
-    "hadith": "أَهْلُ اليمَنِ أرقُّ أفئدةً وأليَنُ قلوبًا .",
-    "el_rawi": "أبو سعيد الخدري وأبو هريرة",
-    "el_mohdith": "ابن القيسراني",
-    "source": "ذخيرة الحفاظ",
-    "number_or_page": "2/1088",
-    "grade": "تفرد به روح بن مسافر وهو ضعيف"
-  }
+    {
+        hadith: 'الحديث',
+        el_rawi: 'الراوي',
+        el_mohdith: 'المحدث',
+        source: 'المصدر',
+        number_or_page: 'رقم الحديث او الصفحة',
+        grade: 'درجة الصحة',
+        hasSharh: 'هل الحديث له شرح أم لا؟',
+        sharh: {
+            id: 'رقم الشرح',
+            urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+        },
+    },
+    {
+        ...
+    },
+    ...
 ]
 ```
 
-</details>
+#### /site/sharh?id={sharhId}
 
-يكمننا استخدام `page` لعرض صفحة مختلفة من الاحاديث (15 حديث آخر)
+يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن شرح للحديث  
+يعطي نتيجة واحدة وهو الحديث صاحب الـ `id` وسرعة رد سريعة نسبيًا
 
-`/api/search?value=أتاكم أهل اليمن أرق قلوباً منكم&page=5`
+شكل الرد كـ `JSON`
+
+```
+{
+    hadith: 'الحديث',
+    el_rawi: 'الراوي',
+    el_mohdith: 'المحدث',
+    source: 'المصدر',
+    number_or_page: 'رقم الحديث او الصفحة',
+    grade: 'درجة الصحة',
+    sharh: 'شرح الحديث',
+    sharhId: 'رقم الشرح',
+},
+```
+
+#### /site/sharh?text={text}
+
+يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن شرح للحديث  
+يعطي نتيجة واحدة وهو الحديث صاحب الـ `id` وسرعة رد سريعة نسبيًا
+
+شكل الرد كـ `JSON`
+
+```
+[
+    {
+        hadith: 'الحديث',
+        el_rawi: 'الراوي',
+        el_mohdith: 'المحدث',
+        source: 'المصدر',
+        number_or_page: 'رقم الحديث او الصفحة',
+        grade: 'درجة الصحة',
+        sharh: 'شرح الحديث',
+        sharhId: 'رقم الشرح',
+    },
+    {
+        ...
+    },
+    ...
+]
+```
 
 ## Documentation
 
 عناصر الـ `query` التي يمكنك استخدامها
 
 - `value` وهي محتوى نص الحديث المراد البحث عنه
-- `page` رقم الصفحة - الدرر السنية يقدم `15` حديث لكل صفحة -  
-  وهو اختياري فالقيمة الافتراضية ستكون الصفحة رقم واحد `page=1`
-- `removehtml` حذف عناصر الـ `HTML` في الحديث كـ `<span class="search-keys">...</span>`  
-  القيمة الافتراضي تكون `true`
-- `st` تحدد طريقة البحث بثلاثة خيارات فقط سواء بـ `جميع الكلمات` أو بـ `أي كلمة` أو بـ `بحث مطابق`
+- `page` لتحديد الصفحة التي تريدها  
+  القيمة الافتراضية ستكون الصفحة رقم واحد `page=1`
+- `removehtml` حذف عناصر الـ `HTML` في الحديث كـ
+  `<span class="search-keys">...</span>`
+  القيمة الافتراضي هي `true`
+- `tab` تستخدم فقط في `/site/search` لتحدد نوع الاحاديث هل هي للمتخصصين أم لا  
+  قيمها هي `specialist"` للمتخصصين و `home` لغير المتخصصين  
+  القيمة الافتراضية هي `home`
+- `st` تحدد طريقة البحث بثلاثة خيارات فقط سواء بـ `جميع الكلمات` أو بـ `أي كلمة`
+  أو بـ `بحث مطابق`
 - `xclude` كلمة أو جملة تريد استبعادها من البحث
-- `t` تحديد نطاق البحث بمعنى هل تريد البحث عن `جميع الأحاديث` أم `الأحاديث المرفوعة` أم `الأحاديث القدسية` أم `آثار الصحابة` أم `شروح الأحاديث`
+- `t` تحديد نطاق البحث بمعنى هل تريد البحث عن `جميع الأحاديث` أم
+  `الأحاديث المرفوعة` أم `الأحاديث القدسية` أم `آثار الصحابة` أم `شروح الأحاديث`
 - `d[]` تحديد درجة الحديث سواء صحيح ام ضعيف
 - `m[]` تحديد اسماء المحدثين التي تريدهم
 - `s[]` تحديد الكتب التي تريد البحث فيها
@@ -548,223 +487,10 @@
 
 </details>
 
-<details>
-<summary>عرض القيم كـ HTML</summary>
-
-```html
-<select
-  multiple="multiple"
-  searchable="ابحث في المحدثين .."
-  size="8"
-  name="m[]"
-  id="m"
->
-  <option value="0">الجميع</option>
-  <option value="94">سعيد بن المسيب</option>
-  <option value="131">أيوب السختياني</option>
-  <option value="150">أبو حنيفة</option>
-  <option value="151">ابن جريج</option>
-  <option value="153">معمر بن راشد الأزدي</option>
-  <option value="160">شعبة بن الحجاج</option>
-  <option value="161">سفيان الثوري</option>
-  <option value="167">حماد بن سلمة</option>
-  <option value="179">الإمام مالك</option>
-  <option value="180">حماد بن زيد</option>
-  <option value="181">عبدالله بن المبارك</option>
-  <option value="196">وكيع بن الجراح</option>
-  <option value="197">عبدالرحمن بن مهدي</option>
-  <option value="198">سفيان بن عيينة</option>
-  <option value="199">يحيى القطان</option>
-  <option value="204">الإمام الشافعي</option>
-  <option value="205">أبو داود الطيالسي</option>
-  <option value="206">يزيد بن هارون</option>
-  <option value="207">الواقدي</option>
-  <option value="211">عبدالرزاق</option>
-  <option value="224">سليمان بن حرب</option>
-  <option value="225">أبو عبيد القاسم بن سلام</option>
-  <option value="227">أبو الوليد الطيالسي</option>
-  <option value="230">ابن سعد</option>
-  <option value="232">يحيى بن معين</option>
-  <option value="233">ابن نمير</option>
-  <option value="234">علي بن المديني</option>
-  <option value="235">أبو بكر بن أبي شيبة</option>
-  <option value="238">إسحاق بن راهويه</option>
-  <option value="240">قتيبة بن سعيد</option>
-  <option value="241">الإمام أحمد</option>
-  <option value="249">أبو حفص عمرو الفلاس</option>
-  <option value="250">الدارمي</option>
-  <option value="256">البخاري</option>
-  <option value="258">الذهلي</option>
-  <option value="260">أبو بكر الأثرم</option>
-  <option value="261">مسلم</option>
-  <option value="262">العجلي</option>
-  <option value="263">يعقوب ابن الصلت</option>
-  <option value="264">أبو زرعة الرازي</option>
-  <option value="266">الدقيقي</option>
-  <option value="270">داود الظاهري</option>
-  <option value="271">الدوري</option>
-  <option value="273">ابن ماجه</option>
-  <option value="275">أبو داود</option>
-  <option value="276">ابن قتيبة</option>
-  <option value="277">أبو حاتم الرازي</option>
-  <option value="278">يعقوب الفسوي</option>
-  <option value="279">الترمذي</option>
-  <option value="280">ابن أبي خيثمة</option>
-  <option value="281">أبو زرعة الدمشقي</option>
-  <option value="282">إسماعيل القاضي المالكي</option>
-  <option value="285">إبراهيم الحربي</option>
-  <option value="291">ابن الجنيد</option>
-  <option value="292">البزار</option>
-  <option value="294">موسى بن هارون</option>
-  <option value="295">صالح بن محمد جزرة</option>
-  <option value="296">محمد بن نصر المروزي</option>
-  <option value="297">محمد بن عثمان بن أبي شيبة</option>
-  <option value="299">عبدالله بن أحمد</option>
-  <option value="303">النسائي</option>
-  <option value="307">الساجي</option>
-  <option value="310">ابن جرير الطبري</option>
-  <option value="311">ابن خزيمة</option>
-  <option value="312">ابو بكر الخلال</option>
-  <option value="313">الحسن بن نصر الطوسي</option>
-  <option value="315">أبو بكر بن أبي داود</option>
-  <option value="316">أبو عوانة</option>
-  <option value="317">أبو الفضل الشهيد</option>
-  <option value="318">ابن المنذر</option>
-  <option value="319">ابن صاعد</option>
-  <option value="321">الطحاوي</option>
-  <option value="322">العقيلي</option>
-  <option value="325">أبو حامد ابن الشرقي</option>
-  <option value="327">ابن أبي حاتم</option>
-  <option value="342">أبو بكر بن إسحاق الصبغي</option>
-  <option value="349">الحسين بن علي الحافظ</option>
-  <option value="353">ابن السكن</option>
-  <option value="354">ابن حبان</option>
-  <option value="360">الطبراني</option>
-  <option value="364">أبو بكر ابن السني</option>
-  <option value="365">ابن عدي</option>
-  <option value="367">أبو الفتح الأزدي</option>
-  <option value="376">أبو بكر الإسماعيلي</option>
-  <option value="378">أبو أحمد الحاكم</option>
-  <option value="379">ابن المظفر البزاز</option>
-  <option value="385">الدارقطني</option>
-  <option value="386">ابن شاهين</option>
-  <option value="387">عبيدالله بن بطة</option>
-  <option value="388">الخطابي</option>
-  <option value="395">ابن منده</option>
-  <option value="405">الحاكم</option>
-  <option value="414">أبو سعيد النقاش</option>
-  <option value="418">اللالكائي</option>
-  <option value="430">أبو نعيم</option>
-  <option value="433">عبدالغفار الأرموي</option>
-  <option value="444">أبو نصر السجزي الوائلي</option>
-  <option value="446">الخليلي</option>
-  <option value="449">ابن بطال</option>
-  <option value="456">ابن حزم</option>
-  <option value="457">النخشبي</option>
-  <option value="458">البيهقي</option>
-  <option value="463">الخطيب البغدادي</option>
-  <option value="464">ابن عبدالبر</option>
-  <option value="488">الحميدي</option>
-  <option value="508">ابن القيسراني</option>
-  <option value="511">يحيى ابن منده</option>
-  <option value="516">البغوي</option>
-  <option value="543">ابن العربي</option>
-  <option value="544">الجورقاني</option>
-  <option value="545">القاضي عياض</option>
-  <option value="571">ابن عساكر</option>
-  <option value="580">أبو موسى المديني</option>
-  <option value="581">عبد الحق الإشبيلي</option>
-  <option value="597">ابن الجوزي</option>
-  <option value="606">ابن الأثير</option>
-  <option value="615">أبو المظفر السمعاني</option>
-  <option value="620">موفق الدين ابن قدامة</option>
-  <option value="622">عمر بن بدر الموصلي</option>
-  <option value="628">ابن القطان</option>
-  <option value="637">أبو العباس النباتي</option>
-  <option value="643">الضياء المقدسي</option>
-  <option value="644">ابن الصلاح</option>
-  <option value="650">الصغاني</option>
-  <option value="656">المنذري</option>
-  <option value="662">الرشيد العطار</option>
-  <option value="671">القرطبي المفسر</option>
-  <option value="676">النووي</option>
-  <option value="702">ابن دقيق العيد</option>
-  <option value="705">الدمياطي</option>
-  <option value="728">ابن تيمية</option>
-  <option value="735">القطب الحلبي</option>
-  <option value="742">المزي</option>
-  <option value="744">محمد ابن عبدالهادي</option>
-  <option value="745">ابن التركماني</option>
-  <option value="748">الذهبي</option>
-  <option value="750">ابن الملقن</option>
-  <option value="751">ابن القيم</option>
-  <option value="760">علاء الدين مغلطاي</option>
-  <option value="761">صلاح الدين العلائي</option>
-  <option value="762">الزيلعي</option>
-  <option value="763">ابن مفلح</option>
-  <option value="771">السبكي (الابن)</option>
-  <option value="772">الزركشي الحنبلي</option>
-  <option value="774">ابن كثير</option>
-  <option value="794">الزركشي (البدر)</option>
-  <option value="795">ابن رجب</option>
-  <option value="803">محمد المناوي</option>
-  <option value="806">العراقي</option>
-  <option value="807">الهيثمي</option>
-  <option value="823">القسطلاني</option>
-  <option value="826">ابن العراقي</option>
-  <option value="827">الفيروزآبادي</option>
-  <option value="840">البوصيري</option>
-  <option value="841">ابن الوزير اليماني</option>
-  <option value="842">ابن ناصر الدين الدمشقي</option>
-  <option value="852">ابن حجر العسقلاني</option>
-  <option value="855">العيني</option>
-  <option value="861">الكمال بن الهمام</option>
-  <option value="902">السخاوي</option>
-  <option value="909">يوسف ابن عبدالهادي</option>
-  <option value="911">السيوطي</option>
-  <option value="912">السمهودي</option>
-  <option value="944">ابن الديبع</option>
-  <option value="953">محمد بن طولون الصالحي</option>
-  <option value="963">ابن عراق الكناني</option>
-  <option value="974">الهيتمي المكي</option>
-  <option value="986">محمد طاهر الفتني</option>
-  <option value="1014">ملا علي قاري</option>
-  <option value="1033">مرعي الكرمي</option>
-  <option value="1051">البهوتي</option>
-  <option value="1061">محمد بن محمد الغزي</option>
-  <option value="1108">المقبلي</option>
-  <option value="1122">الزرقاني</option>
-  <option value="1138">محمد بن عبد الهادي السندي</option>
-  <option value="1162">العجلوني</option>
-  <option value="1175">ابن همات الدمشقي</option>
-  <option value="1181">محمد جار الله الصعدي</option>
-  <option value="1182">الصنعاني</option>
-  <option value="1188">السفاريني الحنبلي</option>
-  <option value="1205">الزبيدي</option>
-  <option value="1206">محمد ابن عبد الوهاب</option>
-  <option value="1255">الشوكاني</option>
-  <option value="1276">الرباعي</option>
-  <option value="1305">القاوقجي</option>
-  <option value="1329">العظيم آبادي</option>
-  <option value="1353">المباركفوري</option>
-  <option value="1377">أحمد شاكر</option>
-  <option value="1378">الحكمي</option>
-  <option value="1386">المعلمي</option>
-  <option value="1393">محمد الأمين الشنقيطي</option>
-  <option value="1419">ابن باز</option>
-  <option value="1420">الألباني</option>
-  <option value="1421">ابن عثيمين</option>
-  <option value="1422">الوادعي</option>
-  <option value="1438">شعيب الأرناووط</option>
-</select>
-```
-
-</details>
-
 ### s[] اسماء الكتب
 
 - `s[]` تحديد الكتب التي تريد البحث فيها
-- قيمها متتعدة ومنها: `0`، `13457`، `6216`، `3088`، `96` ... إلخ
+- قيمها متعددة ومنها: `0`، `13457`، `6216`، `3088`، `96` ... إلخ
   - حيث `0` تمثل `جميع المحدثين`
   - و`13457` تمثل `الأربعون النووية`
   - و`6216` تمثل `صحيح البخاري`
@@ -772,7 +498,7 @@
   - و`96` تمثل `الصحيح المسند`
 - مثال `/api/search?value=جملة البحث&s[]=96` هكذا سيبحث فقط عن الأحاديث الواردة في كتاب الصحيح المسند
 - يمكنك تحديد اكثر من اختيار
-  - مثال `/api/search?value=جملة البحث&s[]=6216&s[]=13457` هكذا سيبحث فقط عن الأحاديث التي وردت في كتابي الأربعون النووية ومتاب صحيح البخاري
+  - مثال `/api/search?value=جملة البحث&s[]=6216&s[]=13457` هكذا سيبحث فقط عن الأحاديث التي وردت في كتابي الأربعون النووية وكتاب صحيح البخاري
 
 <details>
 <summary>كل القيم وأسماء الكتب التي تمثلها</summary>>
@@ -1463,707 +1189,6 @@
 6902 وجوب الأخذ بحديث الآحاد
 10069 ورثة الأنبياء
 10070 يتبع الميت ثلاث
-```
-
-</details>
-
-<details>
-<summary>عرض القيم كـ HTML</summary>
-
-```html
-<select
-  multiple="multiple"
-  searchable="ابحث في الكتب .."
-  size="8"
-  name="s[]"
-  id="s"
->
-  <option value="0">الجميع</option>
-  <option value="11259">آداب البحث والمناظرة</option>
-  <option value="8312">آداب الزفاف</option>
-  <option value="14782">آداب المشي إلى الصلاة</option>
-  <option value="10128">أجوبة الحافظ ابن حجر لتلامذته</option>
-  <option value="6079">أحاديث مختارة</option>
-  <option value="13387">أحاديث معلة</option>
-  <option value="42">أحاديث من صحيح البخاري أعلها الدارقطني</option>
-  <option value="11561">أحكام أهل الذمة</option>
-  <option value="8266">أحكام الجنائز</option>
-  <option value="12351">أحكام الخراج</option>
-  <option value="10052">أحكام الخواتيم</option>
-  <option value="13435">أحكام القرآن لابن العربي</option>
-  <option value="8177">أحكام من القرآن الكريم</option>
-  <option value="13396">أخبار أهل الرسوخ</option>
-  <option value="8308">أداء ما وجب</option>
-  <option value="13437">أسئلة وأجوبة لابن حجر</option>
-  <option value="36">أسنى المطالب</option>
-  <option value="11053">أصل صفة الصلاة</option>
-  <option value="9726">أضواء البيان</option>
-  <option value="12762">أطراف الغرائب</option>
-  <option value="13438">أعلام الموقعين</option>
-  <option value="10063">أغبط أوليائي</option>
-  <option value="12350">أهوال القبور</option>
-  <option value="13076">أوهام الجمع والتفريق</option>
-  <option value="14539">إتحاف الخيرة المهرة</option>
-  <option value="3239">إتحاف المهرة</option>
-  <option value="6111">إتقان ما يحسن</option>
-  <option value="31">إثارة الفوائد</option>
-  <option value="41">إجمال الإصابة</option>
-  <option value="13397">إحكام الأحكام</option>
-  <option value="10074">إخراج الزكاة</option>
-  <option value="13403">إخلاص كلمة التوحيد</option>
-  <option value="10067">إذا كنز الناس</option>
-  <option value="45">إرشاد الساري</option>
-  <option value="13436">إرشاد الفحول</option>
-  <option value="6091">إرشاد الفقيه</option>
-  <option value="6092">إرواء الغليل</option>
-  <option value="6093">إزالة الدهش</option>
-  <option value="7073">إصلاح المساجد</option>
-  <option value="13439">إغاثة اللهفان</option>
-  <option value="5975">إكمال المعلم</option>
-  <option value="10062">إنما يخشى الله من عباده العلماء</option>
-  <option value="13448">اجتماع الجيوش الإسلامية</option>
-  <option value="13531">اختلاف الحديث</option>
-  <option value="6113">اختيار الأولى</option>
-  <option value="62">استدراكات على شرح مسلم</option>
-  <option value="13449">اقتضاء الصراط المستقيم</option>
-  <option value="13450">اقتضاء العلم</option>
-  <option value="4163">الآداب الشرعية</option>
-  <option value="13454">الآداب للبيهقي</option>
-  <option value="7191">الآيات البينات</option>
-  <option value="13377">الأباطيل والمناكير</option>
-  <option value="13451">الأجوبة العلية</option>
-  <option value="6121">الأجوبة المرضية</option>
-  <option value="10789">الأجوبة المستوعبة</option>
-  <option value="8412">الأجوبة النافعة</option>
-  <option value="7874">الأجوبة على الأسئلة الوافدة</option>
-  <option value="5977">الأجوبة لأبي مسعود</option>
-  <option value="95">الأحاديث المختارة</option>
-  <option value="6127">الأحاديث الموضوعة للموصلي</option>
-  <option value="6129">الأحكام الشرعية الصغرى</option>
-  <option value="13930">الأحكام الشرعية الكبرى</option>
-  <option value="14530">الأحكام الكبير</option>
-  <option value="97">الأحكام الوسطى</option>
-  <option value="13455">الأذكار للنووي</option>
-  <option value="13456">الأربعون العشارية</option>
-  <option value="13457">الأربعون النووية</option>
-  <option value="6139">الأربعون الودعانية</option>
-  <option value="29">الأربعين المغنية</option>
-  <option value="7493">الأرواح النوافخ</option>
-  <option value="7875">الأسئلة الفائقة</option>
-  <option value="13381">الأسرار المرفوعة</option>
-  <option value="7165">الأسماء والصفات للبيهقي</option>
-  <option value="7172">الأصول والفروع</option>
-  <option value="8467">الأم</option>
-  <option value="6159">الأمالي الحلبية</option>
-  <option value="6161">الأمالي المطلقة</option>
-  <option value="5572">الأمر بالمعروف والنهي عن المنكر</option>
-  <option value="13460">الأنوار الكاشفة</option>
-  <option value="93">الأوسط لابن المنذر</option>
-  <option value="4444">الإحكام في أصول الأحكام</option>
-  <option value="13453">الإخنائية</option>
-  <option value="7708">الإخوة والأخوات</option>
-  <option value="7710">الإرشاد</option>
-  <option value="5333">الإصابة في تمييز الصحابة</option>
-  <option value="10793">الإعراب عن الحيرة والالتباس</option>
-  <option value="8451">الإعلام بفوائد عمدة الأحكام</option>
-  <option value="65">الإفصاح عن أحاديث النكاح</option>
-  <option value="8459">الإقناع لابن المنذر</option>
-  <option value="13458">الإلزامات والتتبع</option>
-  <option value="11028">الإلمام بأحاديث الأحكام</option>
-  <option value="8468">الإمام في معرفة أحاديث الأحكام</option>
-  <option value="13519">الإمامة والرد على الرافضة</option>
-  <option value="13459">الإمتاع لابن حجر</option>
-  <option value="13395">الإنصاف في حقيقة الأولياء</option>
-  <option value="51">الإنصاف فيما بين علماء المسلمين</option>
-  <option value="30">الإيجاز شرح سنن أبي داود</option>
-  <option value="13466">الإيضاح في مناسك الحج</option>
-  <option value="13461">الإيمان لأبي عبيد</option>
-  <option value="7195">الإيمان لابن أبي شيبة</option>
-  <option value="7194">الإيمان لابن تيمية</option>
-  <option value="13392">الإيمان لابن منده</option>
-  <option value="13462">الاحتجاج بالقدر</option>
-  <option value="13463">الاستذكار</option>
-  <option value="7724">الاستغناء</option>
-  <option value="3045">الاستفتاح في الصلاة</option>
-  <option value="13464">الاستقامة</option>
-  <option value="13465">الاستيعاب في معرفة الأصحاب</option>
-  <option value="7209">الاعتقاد للبيهقي</option>
-  <option value="13400">الاقتراح في بيان الاصطلاح</option>
-  <option value="13401">الباعث الحثيث</option>
-  <option value="11654">الباعث على الخلاص</option>
-  <option value="6181">البحر الزخار</option>
-  <option value="13440">البداية والنهاية</option>
-  <option value="10478">البدر المنير</option>
-  <option value="7225">البدور السافرة</option>
-  <option value="13441">البسط المبثوث</option>
-  <option value="10073">البشارة العظمى</option>
-  <option value="11264">البلدانيات</option>
-  <option value="7233">البناء على القبور</option>
-  <option value="4742">التاريخ الأوسط</option>
-  <option value="7731">التاريخ الصغير</option>
-  <option value="7733">التاريخ الكبير</option>
-  <option value="13442">التبيان</option>
-  <option value="14039">التحفة الكريمة</option>
-  <option value="13505">التخويف من النار</option>
-  <option value="13402">التذكار في أفضل الأذكار</option>
-  <option value="4178">التذكرة للقرطبي</option>
-  <option value="8534">الترخيص بالقيام</option>
-  <option value="13430">الترغيب والترهيب</option>
-  <option value="11669">التسعينية</option>
-  <option value="7483">التعليق على الطحاوية</option>
-  <option value="101">التعليقات البازية على زاد المعاد</option>
-  <option value="11400">التعليقات الرضية</option>
-  <option value="7900">التقييد والإيضاح</option>
-  <option value="13562">التلخيص الحبير</option>
-  <option value="13443">التمهيد</option>
-  <option value="14527">التمييز</option>
-  <option value="6209">التنكيت والإفادة</option>
-  <option value="13444">التنكيل</option>
-  <option value="40">التنوير شرح الجامع الصغير</option>
-  <option value="7290">التوحيد لابن خزيمة</option>
-  <option value="13445">التوسل للألباني</option>
-  <option value="13496">التوسل والوسيلة</option>
-  <option value="13446">الثقات لابن حبان</option>
-  <option value="14540">الجامع الصغير</option>
-  <option value="6608">الجرح والتعديل</option>
-  <option value="7302">الجواب الصحيح</option>
-  <option value="13447">الجواب الكافي</option>
-  <option value="23">الجواهر والدرر</option>
-  <option value="28">الجوهر النقي</option>
-  <option value="11691">الحديث حجة بنفسه</option>
-  <option value="14779">الحديث لابن عبدالوهاب</option>
-  <option value="32">الحرز الثمين</option>
-  <option value="13393">الخصائص الكبرى</option>
-  <option value="13515">الخصال المكفرة</option>
-  <option value="14777">الخطب المنبرية</option>
-  <option value="94">الخلافيات للبيهقي</option>
-  <option value="6237">الدر الملتقط</option>
-  <option value="11702">الدر المنثور</option>
-  <option value="34">الدر المنظوم</option>
-  <option value="13404">الدراري المضية</option>
-  <option value="13467">الدراية تخريج أحاديث الهداية</option>
-  <option value="13378">الدرر المنتثرة</option>
-  <option value="6244">الدعوات الكبير</option>
-  <option value="6975">الذب الأحمد</option>
-  <option value="10048">الذل والانكسار</option>
-  <option value="7360">الرؤية للدارقطني</option>
-  <option value="11256">الرحلة إلى إفريقيا</option>
-  <option value="5386">الرحمة الغيثية</option>
-  <option value="8625">الرد المفحم</option>
-  <option value="657">الرد على البكري</option>
-  <option value="13405">الرد على الجهمية</option>
-  <option value="14776">الرد على الرافضة لابن عبدالوهاب</option>
-  <option value="24">الرد على السبكي في مسألة تعليق الطلاق</option>
-  <option value="7376">الرد على المنطقيين</option>
-  <option value="14778">الرسائل الشخصية لابن عبد الوهاب</option>
-  <option value="8">الرسالة الوازعة للمعتدين</option>
-  <option value="6800">الروح</option>
-  <option value="13468">الزهر النضر</option>
-  <option value="8650">الزواجر عن اقتراف الكبائر</option>
-  <option value="2543">الزيارة الشرعية والبدعية</option>
-  <option value="561">السلسلة الصحيحة</option>
-  <option value="556">السلسلة الضعيفة</option>
-  <option value="6269">السنن الصغير للبيهقي</option>
-  <option value="13470">السنن الكبرى للبيهقي</option>
-  <option value="13469">السنن الكبرى للنسائي</option>
-  <option value="11032">السنن والأحكام</option>
-  <option value="8659">السيل الجرار</option>
-  <option value="13383">الشذرة في الأحاديث المشتهرة</option>
-  <option value="8662">الشرح الممتع</option>
-  <option value="13471">الشفاعة للوادعي</option>
-  <option value="7435">الصارم المسلول</option>
-  <option value="13406">الصارم المنكي</option>
-  <option value="8673">الصحوة الإسلامية لابن عثيمين</option>
-  <option value="96">الصحيح المسند</option>
-  <option value="13497">الصفدية</option>
-  <option value="13419">الصلاة في النعال</option>
-  <option value="13495">الصلاة وحكم تاركها</option>
-  <option value="221">الصواعق المرسلة</option>
-  <option value="7761">الضعفاء الكبير</option>
-  <option value="8081">الضياء اللامع</option>
-  <option value="13408">الطرق الحكمية</option>
-  <option value="14781">الطهارة لمحمد بن عبدالوهاب</option>
-  <option value="9795">الطهور</option>
-  <option value="75">العجاب في بيان الأسباب</option>
-  <option value="13409">العدة على الإحكام</option>
-  <option value="85">العرش للذهبي</option>
-  <option value="6287">العشرة العشارية</option>
-  <option value="6835">العقيدة الأصفهانية</option>
-  <option value="14774">العقيدة والآداب الإسلامية</option>
-  <option value="13421">العلل الكبير</option>
-  <option value="6291">العلل المتناهية</option>
-  <option value="10204">العلل لابن المديني</option>
-  <option value="105">العلل ومعرفة الرجال رواية المروذي</option>
-  <option value="18">العلل ومعرفة الرجال رواية عبدالله</option>
-  <option value="106">العلم الهيب</option>
-  <option value="13539">العلم لأبي خيثمة</option>
-  <option value="7494">العلو للذهبي</option>
-  <option value="5056">العواصم من القواصم</option>
-  <option value="9518">العواصم والقواصم</option>
-  <option value="6297">الغماز على اللماز</option>
-  <option value="7503">الغنية في مسألة الرؤية</option>
-  <option value="14799">الفتاوى الحديثية للوادعي</option>
-  <option value="89">الفتاوى الكبرى</option>
-  <option value="14772">الفتاوى لابن عبدالوهاب</option>
-  <option value="9651">الفتح الرباني</option>
-  <option value="99">الفتح السماوي</option>
-  <option value="6300">الفتوحات الربانية</option>
-  <option value="2378">الفرق بين العبادات</option>
-  <option value="13540">الفروسية</option>
-  <option value="39">الفصول المفيدة للعلائي</option>
-  <option value="16107">الفوائد العلمية من الدروس البازية</option>
-  <option value="13541">الفوائد المجموعة</option>
-  <option value="102">الفوائد المنتخبة</option>
-  <option value="13386">الفوائد الموضوعة</option>
-  <option value="7526">القائد إلى تصحيح العقائد</option>
-  <option value="6315">القبس</option>
-  <option value="873">القراءة خلف الإمام</option>
-  <option value="4036">القرمانية</option>
-  <option value="13424">القصاص والمذكرين</option>
-  <option value="13542">القواعد النورانية</option>
-  <option value="13410">القول البديع</option>
-  <option value="13929">القول العلي</option>
-  <option value="172">القول المسدد</option>
-  <option value="13472">الكافي الشاف</option>
-  <option value="8763">الكافي لابن قدامة</option>
-  <option value="13473">الكامل في الضعفاء</option>
-  <option value="14775">الكبائر لابن عبدالوهاب</option>
-  <option value="17464">الكبائر للذهبي</option>
-  <option value="7561">الكشف عن مجاوزة الأمة الألف</option>
-  <option value="6328">الكلم الطيب</option>
-  <option value="6334">اللآلئ المصنوعة</option>
-  <option value="13385">اللآلئ المنثورة</option>
-  <option value="6331">اللؤلؤ المرصوع</option>
-  <option value="100">اللطائف من دقائق المعارف</option>
-  <option value="13057">اللفظ الموطا</option>
-  <option value="7779">المؤتلف والمختلف</option>
-  <option value="6336">المتجر الرابح</option>
-  <option value="13475">المجروحين</option>
-  <option value="13476">المجموع للنووي</option>
-  <option value="13477">المحرر في الحديث</option>
-  <option value="9887">المحصول في أصول الفقه</option>
-  <option value="104">المحلى</option>
-  <option value="12746">المدخل إلى السنن الكبرى</option>
-  <option value="13506">المدخل إلى معرفة كتاب الإكليل</option>
-  <option value="13480">المراسيل ابن أبي حاتم</option>
-  <option value="13479">المراسيل لأبي داود</option>
-  <option value="6349">المستخرج على المستدرك</option>
-  <option value="16226">المستدرك على الصحيحين</option>
-  <option value="9501">المستدرك على مجموع الفتاوى</option>
-  <option value="13481">المسح على الجوربين</option>
-  <option value="14234">المصابيح في الأحاديث المتواترة</option>
-  <option value="6365">المطالب العالية</option>
-  <option value="16584">المعجم الأوسط</option>
-  <option value="8813">المغني لابن قدامة</option>
-  <option value="13484">المقاصد الحسنة</option>
-  <option value="90">المقرر على أبواب المحرر</option>
-  <option value="11790">المنار المنيف</option>
-  <option value="4">المناهي اللفظية</option>
-  <option value="38">المنتخب من العلل للخلال</option>
-  <option value="8824">المنثورات للنووي</option>
-  <option value="13548">المهذب في اختصار السنن</option>
-  <option value="43">المواهب اللدنية</option>
-  <option value="13511">الموضوعات لابن الجوزي</option>
-  <option value="13411">الموضوعات للصغاني</option>
-  <option value="213">الناسخ والمنسوخ</option>
-  <option value="13928">الناسخ والمنسوخ لابن شاهين</option>
-  <option value="7630">النبوات</option>
-  <option value="12357">النزول للدارقطني</option>
-  <option value="126">النصيحة</option>
-  <option value="10071">النصيحة والتعيير</option>
-  <option value="8843">النظر في أحكام النظر</option>
-  <option value="27">النقد الصحيح للعلائي</option>
-  <option value="14533">النكت الأثرية</option>
-  <option value="6409">النكت على الموضوعات</option>
-  <option value="14462">النكت على تقريب التهذيب</option>
-  <option value="92">النكت على كتاب ابن الصلاح</option>
-  <option value="6411">النوافح العطرة</option>
-  <option value="13549">الوابل الصيب</option>
-  <option value="13431">الوهم والإيهام</option>
-  <option value="6421">انتقاض الاعتراض</option>
-  <option value="7810">بحر الدم</option>
-  <option value="13550">بدائع الفوائد</option>
-  <option value="13551">بداية السول</option>
-  <option value="13552">بذل الماعون</option>
-  <option value="4277">بستان العارفين</option>
-  <option value="10051">بعثت بالسيف</option>
-  <option value="7661">بغية المرتاد</option>
-  <option value="37">بغية الملتمس</option>
-  <option value="13553">بلوغ المرام</option>
-  <option value="4572">بيان الدليل</option>
-  <option value="12288">بيان تلبيس الجهمية</option>
-  <option value="13927">تأويل مختلف الحديث</option>
-  <option value="16580">تاريخ الإسلام</option>
-  <option value="13485">تاريخ الطبري</option>
-  <option value="13486">تاريخ بغداد</option>
-  <option value="13412">تاريخ دمشق</option>
-  <option value="11842">تبيين العجب</option>
-  <option value="13487">تحذير الساجد</option>
-  <option value="13488">تحريم آلات الطرب</option>
-  <option value="13398">تحريم الإسبال</option>
-  <option value="13417">تحريم رفع القبور</option>
-  <option value="13390">تحفة الأحوذي</option>
-  <option value="125">تحفة التحصيل</option>
-  <option value="13489">تحفة الذاكرين</option>
-  <option value="13490">تحفة الطالب</option>
-  <option value="10322">تحفة المحتاج</option>
-  <option value="13491">تحفة المودود</option>
-  <option value="13492">تحفة النبلاء</option>
-  <option value="19">تحقيق الكلام للمعلمي</option>
-  <option value="35">تحقيق المراد للعلائي</option>
-  <option value="25">تحقيق منيف الرتبة</option>
-  <option value="57">تخريج أقاويل الثقات</option>
-  <option value="13483">تخريج الإحياء للعراقي</option>
-  <option value="61">تخريج العواصم والقواصم</option>
-  <option value="11847">تخريج الكشاف</option>
-  <option value="20">تخريج المحلى</option>
-  <option value="59">تخريج المراسيل لأبي داود</option>
-  <option value="13482">تخريج المسند لشاكر</option>
-  <option value="64">تخريج المسند لشعيب</option>
-  <option value="6004">تخريج حديث الأسماء الحسنى</option>
-  <option value="67">تخريج رياض الصالحين</option>
-  <option value="44">تخريج زاد المعاد</option>
-  <option value="52">تخريج سنن أبي داود</option>
-  <option value="13502">تخريج سنن الترمذي</option>
-  <option value="46">تخريج سنن الدارقطني</option>
-  <option value="48">تخريج سير أعلام النبلاء</option>
-  <option value="47">تخريج شرح السنة</option>
-  <option value="63">تخريج شرح الطحاوية</option>
-  <option value="17576">تخريج صحيح ابن حبان</option>
-  <option value="13384">تخريج فضيلة العادلين</option>
-  <option value="13537">تخريج كتاب السنة</option>
-  <option value="2012">تخريج مختصر المنهاج</option>
-  <option value="53">تخريج مسند أبي بكر</option>
-  <option value="50">تخريج مشكل الآثار</option>
-  <option value="3650">تخريج مشكلة الفقر</option>
-  <option value="55">تخريج منهاج القاصدين</option>
-  <option value="9963">تدريب الراوي</option>
-  <option value="2451">تذكرة الحفاظ</option>
-  <option value="13382">تذكرة الموضوعات</option>
-  <option value="56">تراجم منتخبة من التهذيب</option>
-  <option value="1975">ترتيب الموضوعات</option>
-  <option value="2016">تسديد القوس</option>
-  <option value="10058">تسلية النفوس</option>
-  <option value="13493">تصحيح حديث إفطار الصائم</option>
-  <option value="2810">تعجيل المنفعة</option>
-  <option value="3837">تعليقات على المجروحين</option>
-  <option value="87">تعليقة على العلل</option>
-  <option value="3701">تغليق التعليق</option>
-  <option value="10834">تفسير آيات أشكلت</option>
-  <option value="33">تفسير الباقيات الصالحات</option>
-  <option value="13570">تفسير الطبري</option>
-  <option value="15102">تفسير الفاتحة والبقرة</option>
-  <option value="11865">تفسير القرآن العظيم</option>
-  <option value="12552">تفسير القرطبي</option>
-  <option value="12">تفسير سورة الأحزاب</option>
-  <option value="10077">تفسير سورة الإخلاص</option>
-  <option value="16581">تفسير سورة الحجرات إلى الحديد</option>
-  <option value="17">تفسير سورة الروم</option>
-  <option value="6">تفسير سورة الزمر</option>
-  <option value="5">تفسير سورة السجدة</option>
-  <option value="11">تفسير سورة الشورى</option>
-  <option value="12304">تفسير سورة الصافات</option>
-  <option value="16">تفسير سورة العنكبوت</option>
-  <option value="9">تفسير سورة الفرقان</option>
-  <option value="22">تفسير سورة القصص</option>
-  <option value="10068">تفسير سورة النصر</option>
-  <option value="15">تفسير سورة النمل</option>
-  <option value="12310">تفسير سورة ص</option>
-  <option value="21">تفسير سورة غافر</option>
-  <option value="14">تفسير سورة فاطر</option>
-  <option value="10">تفسير سورة فصلت</option>
-  <option value="13">تفسير سورة لقمان</option>
-  <option value="9956">تفسير سورة يس</option>
-  <option value="9885">تقرير القواعد</option>
-  <option value="13563">تلخيص العلل المتناهية</option>
-  <option value="2605">تمام المنة</option>
-  <option value="13564">تمام النصح</option>
-  <option value="1941">تمييز الطيب من الخبيث</option>
-  <option value="1965">تنزيه الشريعة</option>
-  <option value="68">تنقيح التحقيق</option>
-  <option value="1955">تهذيب الأسماء واللغات</option>
-  <option value="1171">تهذيب التهذيب</option>
-  <option value="1069">تهذيب السنن</option>
-  <option value="13569">تهذيب الكمال</option>
-  <option value="1901">توالي التأسيس</option>
-  <option value="13571">جامع الرسائل لابن تيمية</option>
-  <option value="1206">جامع العلوم والحكم</option>
-  <option value="14537">جامع المسانيد والسنن</option>
-  <option value="13521">جامع بيان العلم</option>
-  <option value="2376">جزء في مسائل أحمد</option>
-  <option value="8946">جلاء الأفهام</option>
-  <option value="8210">جلباب المرأة</option>
-  <option value="13543">حادي الأرواح</option>
-  <option value="3">حاشية الإلمام لابن عبد الهادي</option>
-  <option value="13947">حاشية السندي على النسائي</option>
-  <option value="14535">حاشية بلوغ المرام لابن باز</option>
-  <option value="8951">حجاب المرأة</option>
-  <option value="13544">حجة النبي</option>
-  <option value="3232">حجة الوداع</option>
-  <option value="12345">حديث ابن أبي المكارم</option>
-  <option value="15645">حديث المساء</option>
-  <option value="6061">حديث جابر لابن ناصر الدين</option>
-  <option value="6010">حديث لا تسبوا أصحابي</option>
-  <option value="1908">حقوق آل البيت</option>
-  <option value="13414">حقوق الجار</option>
-  <option value="17574">حقوق النساء في الإسلام</option>
-  <option value="7564">حقيقة الإسلام و الإيمان</option>
-  <option value="8954">حقيقة الصيام</option>
-  <option value="8970">حكم تارك الصلاة</option>
-  <option value="13432">حلية الأولياء</option>
-  <option value="13426">حياة الأنبياء</option>
-  <option value="13415">خصائص علي</option>
-  <option value="13545">خطبة الحاجة</option>
-  <option value="9906">خلاصة الأحكام للنووي</option>
-  <option value="2601">خلاصة البدر المنير</option>
-  <option value="3931">خلق أفعال العباد</option>
-  <option value="13926">در السحابة</option>
-  <option value="3185">درء تعارض العقل والنقل</option>
-  <option value="6032">دفاع عن الحديث</option>
-  <option value="11254">دفع إيهام الاضطراب</option>
-  <option value="1911">دلائل النبوة</option>
-  <option value="2558">ذخيرة الحفاظ</option>
-  <option value="10044">ذم الخمر</option>
-  <option value="3026">ذم الهوى واتباعه</option>
-  <option value="10059">ذم قسوة القلب</option>
-  <option value="3215">ذيل ميزان الاعتدال</option>
-  <option value="10065">رؤية الهلال</option>
-  <option value="11253">رحلة الحج</option>
-  <option value="13512">رسائل ابن رجب</option>
-  <option value="13546">رسالة لطيفة في أحاديث ضعيفة</option>
-  <option value="3655">رفع الأستار</option>
-  <option value="6037">رفع البأس عن حديث النفس</option>
-  <option value="13547">رفع الملام</option>
-  <option value="11155">رياض الصالحين</option>
-  <option value="10076">رياض القدس</option>
-  <option value="13500">زاد المعاد</option>
-  <option value="660">سؤالات أبي داود</option>
-  <option value="810">سؤالات ابن الجنيد</option>
-  <option value="1403">سؤالات ابن بكير</option>
-  <option value="3961">سؤالات الآجري</option>
-  <option value="3299">سؤالات البرقاني للدارقطني</option>
-  <option value="559">سؤالات الحاكم للدارقطني</option>
-  <option value="2327">سؤالات السلمي</option>
-  <option value="555">سؤالات السهمي</option>
-  <option value="14196">سؤالات العبد للمقبلي</option>
-  <option value="13416">سبل السلام</option>
-  <option value="13517">سفر السعادة</option>
-  <option value="6267">سنن أبي داود</option>
-  <option value="6264">سنن ابن ماجة</option>
-  <option value="13509">سنن الترمذي</option>
-  <option value="13501">سنن الدارقطني</option>
-  <option value="6266">سنن الشافعي</option>
-  <option value="13508">سنن النسائي</option>
-  <option value="1187">سير أعلام النبلاء</option>
-  <option value="13518">سير الدلجة</option>
-  <option value="13554">شرح مسلم للنووي</option>
-  <option value="14532">شرح ابن ماجه لمغلطاي</option>
-  <option value="13394">شرح الأربعين لابن دقيق</option>
-  <option value="14538">شرح الإلمام</option>
-  <option value="13349">شرح البخاري لابن الملقن</option>
-  <option value="15455">شرح البخاري لابن بطال</option>
-  <option value="13122">شرح البخاري لابن عثيمين</option>
-  <option value="3286">شرح الزركشي على الخرقي</option>
-  <option value="13503">شرح السنة</option>
-  <option value="13507">شرح الصدور</option>
-  <option value="6838">شرح الطحاوية</option>
-  <option value="10691">شرح العقيدة السفارينية</option>
-  <option value="9017">شرح العمدة (الصلاة)</option>
-  <option value="9018">شرح العمدة (الصيام)</option>
-  <option value="689">شرح العمدة (الطهارة)</option>
-  <option value="9016">شرح العمدة (المناسك)</option>
-  <option value="1764">شرح المواقف</option>
-  <option value="9834">شرح النزهة لابن عثيمين</option>
-  <option value="13936">شرح النسائي للسيوطي</option>
-  <option value="12781">شرح بلوغ المرام لابن عثيمين</option>
-  <option value="13388">شرح ثلاثيات المسند</option>
-  <option value="3066">شرح حديث جبريل</option>
-  <option value="1553">شرح رياض الصالحين لابن عثيمين</option>
-  <option value="13556">شرح علل الترمذي</option>
-  <option value="14531">شرح فتح القدير</option>
-  <option value="14534">شرح كتاب التوحيد لابن باز</option>
-  <option value="13041">شرح كتاب الشهاب</option>
-  <option value="11251">شرح مراقي السعود</option>
-  <option value="14428">شرح مسلم لابن عثيمين</option>
-  <option value="13418">شرح مسند أبي حنيفة</option>
-  <option value="3186">شرح مسند الشافعي</option>
-  <option value="1153">شرح مشكل الآثار</option>
-  <option value="1022">شرح معاني الآثار</option>
-  <option value="13433">شعب الإيمان</option>
-  <option value="690">شفاء العليل</option>
-  <option value="13559">صحيح أبي داود</option>
-  <option value="13494">صحيح أسباب النزول</option>
-  <option value="16582">صحيح ابن حبان</option>
-  <option value="13558">صحيح ابن خزيمة</option>
-  <option value="13560">صحيح ابن ماجه</option>
-  <option value="2463">صحيح الأدب المفرد</option>
-  <option value="6216">صحيح البخاري</option>
-  <option value="531">صحيح الترغيب</option>
-  <option value="977">صحيح الترمذي</option>
-  <option value="3741">صحيح الجامع</option>
-  <option value="13557">صحيح الموارد</option>
-  <option value="13561">صحيح النسائي</option>
-  <option value="13407">صحيح دلائل النبوة</option>
-  <option value="3088">صحيح مسلم</option>
-  <option value="10057">صدقة السر</option>
-  <option value="13516">صفة الجنة لأبي نعيم</option>
-  <option value="13533">صفة الصلاة</option>
-  <option value="6724">صفة الفتوى</option>
-  <option value="13534">صلاة التراويح</option>
-  <option value="9033">صلاة العيدين</option>
-  <option value="8974">صوم يوم الغيم</option>
-  <option value="2375">صيغ الحمد</option>
-  <option value="3695">ضعيف أبي داود</option>
-  <option value="3645">ضعيف ابن ماجه</option>
-  <option value="2462">ضعيف الأدب المفرد</option>
-  <option value="528">ضعيف الترغيب</option>
-  <option value="3641">ضعيف الترمذي</option>
-  <option value="3670">ضعيف الجامع</option>
-  <option value="2425">ضعيف الموارد</option>
-  <option value="3675">ضعيف النسائي</option>
-  <option value="13379">طبقات الشافعية الكبرى</option>
-  <option value="16583">طبقات الشافعية لابن كثير</option>
-  <option value="13535">طرح التثريب</option>
-  <option value="13536">طريق الهجرتين</option>
-  <option value="10130">طلاق الغضبان</option>
-  <option value="13538">عارضة الأحوذي</option>
-  <option value="2909">عدة الصابرين</option>
-  <option value="13420">عقود الزبرجد</option>
-  <option value="98">علل ابن أبي حاتم</option>
-  <option value="1624">علل الأحاديث</option>
-  <option value="17577">علل الدارقطني</option>
-  <option value="13422">عمدة التفسير</option>
-  <option value="13931">عمدة القاري</option>
-  <option value="13389">عون المعبود</option>
-  <option value="10735">غارة الفصل</option>
-  <option value="3694">غاية المرام</option>
-  <option value="3136">غاية المقصود</option>
-  <option value="10045">غاية النفع</option>
-  <option value="13932">غاية مأمول الراغب</option>
-  <option value="13935">غرائب حديث مالك</option>
-  <option value="12580">غرر الفوائد المجموعة</option>
-  <option value="13423">فتاوى ابن الصلاح</option>
-  <option value="11257">فتاوى الشنقيطي</option>
-  <option value="14529">فتاوى العراقي (ولي الدين)</option>
-  <option value="6874">فتاوى العقيدة</option>
-  <option value="14528">فتاوى العلائي</option>
-  <option value="2">فتاوى النووي</option>
-  <option value="14116">فتاوى نور على الدرب لابن باز</option>
-  <option value="26">فتاوى نور على الدرب لابن عثيمين</option>
-  <option value="13572">فتح الباري لابن حجر</option>
-  <option value="13573">فتح الباري لابن رجب</option>
-  <option value="14536">فتح الغفار</option>
-  <option value="9774">فتح القدير</option>
-  <option value="6983">فتح المغيث</option>
-  <option value="13425">فضائل الأوقات</option>
-  <option value="13391">فضائل الخلفاء الأربعة</option>
-  <option value="10061">فضائل الشام لابن رجب</option>
-  <option value="3662">فضائل الشام ودمشق</option>
-  <option value="14780">فضائل القرآن لابن عبدالوهاب</option>
-  <option value="10853">فضائل القرآن لابن كثير</option>
-  <option value="60">فضائل بيت الله الحرام</option>
-  <option value="13574">فضل الصلاة</option>
-  <option value="10054">فضل علم السلف</option>
-  <option value="13575">فقه السيرة</option>
-  <option value="58">فنون اللباس</option>
-  <option value="12358">فوائد الحنائي الحنائيات</option>
-  <option value="742">قتل مدمني الخمر</option>
-  <option value="1899">قوة الحجاج</option>
-  <option value="3619">قيام رمضان</option>
-  <option value="482">كشاف القناع</option>
-  <option value="13510">كشف الخفاء</option>
-  <option value="9095">كشف الستر</option>
-  <option value="10049">كشف الكربة</option>
-  <option value="12999">كشف اللثام</option>
-  <option value="13933">كشف المناهج والتناقيح</option>
-  <option value="3386">كشف النقاب</option>
-  <option value="88">كفاية المستنقع لأدلة المقنع</option>
-  <option value="13413">كلمة الإخلاص</option>
-  <option value="17575">كلمة الإخلاص وتحقيق معناها</option>
-  <option value="13427">لباب النقول</option>
-  <option value="10072">لبيك اللهم</option>
-  <option value="13498">لسان الميزان</option>
-  <option value="13499">لطائف المعارف</option>
-  <option value="1968">لقط اللآلئ المتناثرة</option>
-  <option value="776">لوائح الأنوار السنية</option>
-  <option value="1240">ليلة القدر</option>
-  <option value="1">ما تمس إليه الحاجة</option>
-  <option value="10047">ما ذئبان جائعان</option>
-  <option value="6012">ماء زمزم</option>
-  <option value="10043">مثل الإسلام</option>
-  <option value="9109">مجالس أمالي صلاة التسبيح</option>
-  <option value="13380">مجمع الزوائد</option>
-  <option value="9111">مجموع الفتاوى</option>
-  <option value="7">مجموع رسائل العلائي</option>
-  <option value="9113">مجموع فتاوى ابن باز</option>
-  <option value="9112">مجموع فتاوى ابن عثيمين</option>
-  <option value="1912">مجموعة الرسائل والمسائل</option>
-  <option value="11258">محاضرات الشنقيطي</option>
-  <option value="2371">محجة القرب</option>
-  <option value="652">مختصر الأحكام</option>
-  <option value="3616">مختصر الشمائل</option>
-  <option value="13513">مختصر الصواعق المرسلة</option>
-  <option value="3696">مختصر العلو</option>
-  <option value="3664">مختصر المقاصد</option>
-  <option value="13514">مختصر زوائد البزار</option>
-  <option value="91">مختصر سنن أبي داود</option>
-  <option value="9859">مدارج السالكين</option>
-  <option value="11252">مذكرة الأصول</option>
-  <option value="7565">مسألة السماع</option>
-  <option value="677">مسألة في الكنائس</option>
-  <option value="4048">مسألة في المرابطة</option>
-  <option value="54">مسائل أجاب عنها ابن حجر</option>
-  <option value="3731">مسائل أحمد رواية ابن هانيء</option>
-  <option value="3883">مسائل أحمد رواية صالح</option>
-  <option value="803">مسائل أحمد رواية عبدالله</option>
-  <option value="1765">مسائل أحمد لأبي داود</option>
-  <option value="14253">مسائل ابن باز</option>
-  <option value="3657">مساجلة علمية</option>
-  <option value="13568">مسند ابن عباس</option>
-  <option value="1514">مسند الفاروق</option>
-  <option value="3343">مسند علي</option>
-  <option value="13567">مسند عمر</option>
-  <option value="2347">مصباح الزجاجة</option>
-  <option value="1636">مطلع البدرين</option>
-  <option value="3030">معارج القبول</option>
-  <option value="13520">معالم التنزيل (تفسير البغوي)</option>
-  <option value="13934">معالم السنن</option>
-  <option value="13428">معجم الشيوخ</option>
-  <option value="1123">معرفة التذكرة</option>
-  <option value="809">معرفة الثقات</option>
-  <option value="6173">معرفة رواة الآثار</option>
-  <option value="13429">معرفة علوم الحديث</option>
-  <option value="2959">مفتاح دار السعادة</option>
-  <option value="586">من عاش مائة وعشرين سنة</option>
-  <option value="9151">مناسك الحج والعمرة</option>
-  <option value="3935">منزلة السنة</option>
-  <option value="3180">منهاج السنة</option>
-  <option value="13914">موارد الظمآن</option>
-  <option value="13522">موافقة الخبر الخبر</option>
-  <option value="1783">ميزان الاعتدال</option>
-  <option value="66">ناسخ الحديث ومنسوخه</option>
-  <option value="13523">نتائج الأفكار</option>
-  <option value="14333">نخب الافكار</option>
-  <option value="10060">نزهة الأسماع</option>
-  <option value="1625">نزهة السامعين</option>
-  <option value="86">نزهة الناظر والسامع</option>
-  <option value="13524">نزهة النظر</option>
-  <option value="2483">نسخة نبيط</option>
-  <option value="13525">نصب الراية</option>
-  <option value="13526">نصب المجانيق</option>
-  <option value="1767">نظرية العقد</option>
-  <option value="13527">نقد النصوص</option>
-  <option value="744">نقض المنطق</option>
-  <option value="13528">نهاية البداية والنهاية</option>
-  <option value="10055">نور الاقتباس</option>
-  <option value="13529">نيل الأوطار</option>
-  <option value="10760">هداية الحيارى</option>
-  <option value="3031">هداية الرواة</option>
-  <option value="13530">هدي الساري</option>
-  <option value="6902">وجوب الأخذ بحديث الآحاد</option>
-  <option value="10069">ورثة الأنبياء</option>
-  <option value="10070">يتبع الميت ثلاث</option>
-</select>
 ```
 
 </details>
