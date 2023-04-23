@@ -2,8 +2,7 @@ const getJSON = require('get-json');
 const { decode } = require('html-entities');
 const { JSDOM } = require('jsdom');
 
-const NodeCache = require('node-cache');
-const cache = new NodeCache({ stdTTL: 60 * 5 }); // cache for 5 minutes
+const cache = require('./cache');
 
 module.exports = async (query, req, next) => {
   try {

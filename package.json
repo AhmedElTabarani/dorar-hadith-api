@@ -20,7 +20,8 @@
     "get-json": "^1.0.1",
     "html-entities": "^2.3.3",
     "jsdom": "^21.1.1",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "node-fetch": "^2.6.9"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
