@@ -2,12 +2,13 @@ const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { JSDOM } = require('jsdom');
 
-const sharhById = require('./dorarSharhById');
+const sharhById = require('./dorarOneSharhById');
 const cache = require('./cache');
 
-module.exports = async (text, req, next) => {
+module.exports = async (text, query, req, next) => {
   try {
-    const url = `https://www.dorar.net/hadith/search?q=${text}&st=p`;
+    req.query.st ||= 'p';
+    const url = `https://www.dorar.net/hadith/search?q=${text}&${query}`;
 
     if (cache.has(url)) return cache.get(url);
 

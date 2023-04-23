@@ -3,8 +3,9 @@ const cors = require('cors');
 
 const dorarAPI = require('./dorarAPI');
 const dorarSite = require('./dorarSite');
-const sharhById = require('./dorarSharhById');
 const sharhByText = require('./dorarSharhByText');
+const oneSharhById = require('./dorarOneSharhById');
+const oneSharhByText = require('./dorarOneSharhByText');
 
 const app = express();
 app.use(cors());
@@ -29,7 +30,7 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/', (req, res) => {
+app.get('/docs', (req, res, next) => {
   res.json({
     status: 'success',
     endpoints: [
@@ -67,22 +68,8 @@ app.get('/', (req, res) => {
         ],
       },
       {
-        endpoint: '/site/sharh?id={sharhId}',
-        example: '/site/sharh?id=3429',
-        abstractResponse: {
-          hadith: 'الحديث',
-          el_rawi: 'الراوي',
-          el_mohdith: 'المحدث',
-          source: 'المصدر',
-          number_or_page: 'رقم الحديث او الصفحة',
-          grade: 'درجة الصحة',
-          sharh: 'شرح الحديث',
-          sharhId: 'رقم الشرح',
-        },
-      },
-      {
-        endpoint: '/site/sharh?text={text}',
-        example: '/site/sharh?text=انما الاعمال بالنيات',
+        endpoint: '/site/sharh?value={text}',
+        example: '/site/sharh?value=انما الاعمال بالنيات',
         abstractResponse: [
           {
             hadith: 'الحديث',
@@ -95,6 +82,34 @@ app.get('/', (req, res) => {
             sharhId: 'رقم الشرح',
           },
         ],
+      },
+      {
+        endpoint: '/site/oneSharhBy?id={sharhId}',
+        example: '/site/oneSharhBy?id=3429',
+        abstractResponse: {
+          hadith: 'الحديث',
+          el_rawi: 'الراوي',
+          el_mohdith: 'المحدث',
+          source: 'المصدر',
+          number_or_page: 'رقم الحديث او الصفحة',
+          grade: 'درجة الصحة',
+          sharh: 'شرح الحديث',
+          sharhId: 'رقم الشرح',
+        },
+      },
+      {
+        endpoint: '/site/onSharhBy?value={text}',
+        example: '/site/onSharhBy?value=انما الاعمال بالنيات',
+        abstractResponse: {
+          hadith: 'الحديث',
+          el_rawi: 'الراوي',
+          el_mohdith: 'المحدث',
+          source: 'المصدر',
+          number_or_page: 'رقم الحديث او الصفحة',
+          grade: 'درجة الصحة',
+          sharh: 'شرح الحديث',
+          sharhId: 'رقم الشرح',
+        },
       },
     ],
     query: {
@@ -125,22 +140,33 @@ app.get('/site/search', async (req, res, next) => {
 });
 
 app.get('/site/sharh', async (req, res, next) => {
-  const { id, text } = req.query;
+  const text = req.query.value;
 
-  if (id) res.json(await sharhById(id, req, next));
-  else if (text) res.json(await sharhByText(text, req, next));
+  if (text)
+    res.json(await sharhByText(text, req._parsedUrl.query, req, next));
   else
     res.status(400).json({
       status: 'error',
-      message: "'id' or 'text' is required",
+      message: "'value' is required",
+    });
+});
+
+app.get('/site/oneSharhBy', async (req, res, next) => {
+  const { id, value: text } = req.query;
+
+  if (id) res.json(await oneSharhById(id, req, next));
+  else if (text) res.json(await oneSharhByText(text, req, next));
+  else
+    res.status(400).json({
+      status: 'error',
+      message: "'id' or 'value' is required",
     });
 });
 
 app.get('*', (req, res, next) => {
   res.status(501).json({
     status: 'error',
-    message:
-      "There is no router for this url, Please try '/api/search?value={text}&page={page}'",
+    message: "There is no router for this url, Please check docs '/docs'",
   });
 });
 
