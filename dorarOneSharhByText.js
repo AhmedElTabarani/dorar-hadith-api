@@ -2,7 +2,7 @@ const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { JSDOM } = require('jsdom');
 
-const sharhById = require('./dorarOneSharhById');
+const oneSharhById = require('./dorarOneSharhById');
 const cache = require('./cache');
 
 module.exports = async (text, req, next) => {
@@ -17,7 +17,7 @@ module.exports = async (text, req, next) => {
 
     const sharhId = doc.querySelector('a[xplain]')?.getAttribute('xplain');
 
-    const result = await sharhById(sharhId);
+    const result = await oneSharhById(sharhId, req, next);
 
     cache.set(url, result);
 

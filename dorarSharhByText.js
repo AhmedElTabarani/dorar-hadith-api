@@ -2,7 +2,7 @@ const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { JSDOM } = require('jsdom');
 
-const sharhById = require('./dorarOneSharhById');
+const oneSharhById = require('./dorarOneSharhById');
 const cache = require('./cache');
 
 module.exports = async (text, query, req, next) => {
@@ -24,7 +24,7 @@ module.exports = async (text, query, req, next) => {
           return sharhId;
         })
         .filter((sharhId) => sharhId !== undefined)
-        .map((sharhId) => sharhById(sharhId))
+        .map((sharhId) => oneSharhById(sharhId, req, next))
     );
 
     cache.set(url, result);

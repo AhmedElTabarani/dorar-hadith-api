@@ -15,7 +15,7 @@ module.exports = async (id, req, next) => {
     const html = decode(await res.text());
     const doc = new JSDOM(html).window.document;
 
-    let hadith = doc
+    const hadith = doc
       .querySelector('article')
       .textContent.replace(/\d+ -/g, '')
       .trim();
