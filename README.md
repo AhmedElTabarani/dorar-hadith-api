@@ -11,21 +11,14 @@
 فأنا قررت عمل `API` وسيط يتجنب مشكلة `CORS` ويعطيك البيانات كهيئة `JSON`
 بجانب شرح مفصل للـ `API`
 
-## الاستعمال
+- الرابط: https://dorar-hadith-api.cyclic.app/  
+- يتم عمل `cache` لكل عملية بحث لمدة `5` دقائق
 
-الرابط: https://dorar-hadith-api.cyclic.app/  
-الرابط: https://dorar-hadith-api.cyclic.app/  
-لديه `endpoint` واحدة فقط وهي `/api/search?value={text}&page={page}`  
-العناصر التي يحتويها الـ `query` هي:
-الرابط: https://dorar-hadith-api.cyclic.app/
-لديه `endpoint` واحدة فقط وهي `/api/search?value={text}&page={page}`  
-العناصر التي يحتويها الـ `query` هي:
-
-### Endpoints
+## Endpoints
 
 يحتوي الـ `API` على **ثلاث** `endpoint`، وهي:
 
-#### /api/search?value={text}
+### /api/search?value={text}
 
 يستخدم الـ `API` الرسمي الخاص بالدرر السنية للبحث عن الأحاديث  
 يعطي `15` نتيجة وسرعة رد سريعة
@@ -49,7 +42,7 @@
 ]
 ```
 
-#### /site/search?value={text}
+### /site/search?value={text}
 
 يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن الأحاديث  
 يعطي `30` نتيجة وسرعة رد متوسطة نسبيًا
@@ -78,7 +71,7 @@
 ]
 ```
 
-#### /site/sharh?id={sharhId}
+### /site/sharh?id={sharhId}
 
 يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن شرح للحديث  
 يعطي نتيجة واحدة وهو الحديث صاحب الـ `id` وسرعة رد سريعة نسبيًا
@@ -98,7 +91,7 @@
 },
 ```
 
-#### /site/sharh?text={text}
+### /site/sharh?text={text}
 
 يستخدم صفحة البحث الخاصة بموقع الدرر السنية للبحث عن شرح للحديث  
 يعطي نتيجة واحدة وهو الحديث صاحب الـ `id` وسرعة رد سريعة نسبيًا
