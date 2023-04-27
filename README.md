@@ -61,7 +61,7 @@
         number_or_page: 'رقم الحديث او الصفحة',
         grade: 'درجة الصحة',
         hasSharh: 'هل الحديث له شرح أم لا؟',
-        sharh: {
+        sharhMetadata: {
             id: 'رقم الشرح',
             urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
         },

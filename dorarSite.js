@@ -42,10 +42,10 @@ module.exports = async (query, req, next) => {
         number_or_page: subtitles[3],
         grade: subtitles[4],
         hasSharh: !!sharhId,
-        sharh: sharhId
+        sharhMetadata: sharhId
           ? {
               id: sharhId,
-              urlToGetSharh: `/site/sharh/${sharhId}`,
+              urlToGetSharh: `/site/oneSharhBy?id=${sharhId}`,
             }
           : undefined,
       };
