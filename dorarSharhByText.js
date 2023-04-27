@@ -1,6 +1,6 @@
 const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
-const { JSDOM } = require('jsdom');
+const { parseHTML } = require('linkedom');
 
 const oneSharhById = require('./dorarOneSharhById');
 const cache = require('./cache');
@@ -14,7 +14,8 @@ module.exports = async (text, query, req, next) => {
 
     const res = await nodeFetch(url);
     const html = decode(await res.text());
-    const doc = new JSDOM(html).window.document;
+    const doc = parseHTML(html).document;
+
     const result = await Promise.all(
       Array.from(doc.querySelectorAll(`#${req.tab} .border-bottom`))
         .map((info) => {

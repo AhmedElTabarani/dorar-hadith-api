@@ -12,7 +12,7 @@
 بجانب شرح مفصل للـ `API`
 
 - الرابط: https://dorar-hadith-api.cyclic.app/  
-- يتم عمل `cache` لكل عملية بحث لمدة `5` دقائق
+- يتم عمل `cache` لكل عملية بحث لمدة `5` ثواني
 
 ## Endpoints
 
