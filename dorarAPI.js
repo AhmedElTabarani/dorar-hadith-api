@@ -1,6 +1,6 @@
 const getJSON = require('get-json');
 const { decode } = require('html-entities');
-const { JSDOM } = require('jsdom');
+const { parseHTML } = require('linkedom');
 
 const cache = require('./cache');
 
@@ -12,7 +12,7 @@ module.exports = async (query, req, next) => {
 
     const data = await getJSON(url);
     const html = decode(data.ahadith.result);
-    const doc = new JSDOM(html).window.document;
+    const doc = parseHTML(html).document;
 
     const result = Array.from(
       doc.querySelectorAll('.hadith-info'),
