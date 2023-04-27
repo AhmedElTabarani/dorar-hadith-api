@@ -15,7 +15,9 @@ module.exports = async (text, req, next) => {
     const html = decode(await res.text());
     const doc = parseHTML(html).document;
 
-    const sharhId = doc.querySelector('a[xplain]')?.getAttribute('xplain');
+    const sharhId = doc
+      .querySelector('a[xplain]')
+      ?.getAttribute('xplain');
 
     const result = await oneSharhById(sharhId, req, next);
 

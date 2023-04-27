@@ -15,7 +15,7 @@ module.exports = async (query, req, next) => {
     const doc = parseHTML(html).document;
 
     const result = Array.from(
-      doc.querySelectorAll(`#${req.tab} .border-bottom`)
+      doc.querySelectorAll(`#${req.tab} .border-bottom`),
     ).map((info) => {
       let hadith;
       if (req.isRemoveHTML)
@@ -23,7 +23,9 @@ module.exports = async (query, req, next) => {
           .replace(/\d+\s+-/g, '')
           .trim();
       else
-        hadith = info.children[0].innerHTML.replace(/\d+\s+-/g, '').trim();
+        hadith = info.children[0].innerHTML
+          .replace(/\d+\s+-/g, '')
+          .trim();
 
       const subtitles = [
         ...info.children[1].querySelectorAll('.primary-text-color'),

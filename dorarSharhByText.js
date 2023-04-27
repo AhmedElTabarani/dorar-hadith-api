@@ -25,7 +25,7 @@ module.exports = async (text, query, req, next) => {
           return sharhId;
         })
         .filter((sharhId) => sharhId !== undefined)
-        .map((sharhId) => oneSharhById(sharhId, req, next))
+        .map((sharhId) => oneSharhById(sharhId, req, next)),
     );
 
     cache.set(url, result);

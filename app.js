@@ -26,7 +26,9 @@ app.use((req, res, next) => {
 app.use((req, res, next) => {
   req.tab = req.query.tab || 'home';
   req.tab =
-    req.query.tab?.toLowerCase() === 'specialist' ? 'specialist' : 'home';
+    req.query.tab?.toLowerCase() === 'specialist'
+      ? 'specialist'
+      : 'home';
   next();
 });
 
@@ -143,7 +145,9 @@ app.get('/site/sharh', async (req, res, next) => {
   const text = req.query.value;
 
   if (text)
-    res.json(await sharhByText(text, req._parsedUrl.query, req, next));
+    res.json(
+      await sharhByText(text, req._parsedUrl.query, req, next),
+    );
   else
     res.status(400).json({
       status: 'error',
@@ -166,7 +170,8 @@ app.get('/site/oneSharhBy', async (req, res, next) => {
 app.get('*', (req, res, next) => {
   res.status(501).json({
     status: 'error',
-    message: "There is no router for this url, Please check docs '/docs'",
+    message:
+      "There is no router for this url, Please check docs '/docs'",
   });
 });
 
@@ -178,5 +183,5 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(port, () =>
-  console.log(`Server is listening at http://localhost:${port}`)
+  console.log(`Server is listening at http://localhost:${port}`),
 );

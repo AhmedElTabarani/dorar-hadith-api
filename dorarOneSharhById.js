@@ -20,9 +20,9 @@ module.exports = async (id, req, next) => {
       .textContent.replace(/\d+ -/g, '')
       .trim();
 
-    const subtitles = [...doc.querySelectorAll('.primary-text-color')].map(
-      (el) => el.textContent.trim()
-    );
+    const subtitles = [
+      ...doc.querySelectorAll('.primary-text-color'),
+    ].map((el) => el.textContent.trim());
 
     const sharh = doc
       .querySelector('.text-justify')
