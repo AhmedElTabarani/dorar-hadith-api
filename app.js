@@ -64,7 +64,7 @@ app.get('/docs', (req, res, next) => {
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
               id: 'رقم الشرح',
-              isCantainSharh:
+              isContainSharh:
                 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
               urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
             },
@@ -85,7 +85,7 @@ app.get('/docs', (req, res, next) => {
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
               id: 'رقم الشرح',
-              isCantainSharh:
+              isContainSharh:
                 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
               sharh: 'شرح الحديث',
               urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
@@ -106,7 +106,7 @@ app.get('/docs', (req, res, next) => {
           hasSharhMetadata: 'هل الحديث له شرح أم لا',
           sharhMetadata: {
             id: 'رقم الشرح',
-            isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+            isContainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
             sharh: 'شرح الحديث',
             urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
           },
@@ -125,7 +125,7 @@ app.get('/docs', (req, res, next) => {
           hasSharhMetadata: 'هل الحديث له شرح أم لا',
           sharhMetadata: {
             id: 'رقم الشرح',
-            isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+            isContainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
             sharh: 'شرح الحديث',
             urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
           },

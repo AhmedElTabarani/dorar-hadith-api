@@ -46,7 +46,7 @@ module.exports = async (query, req, next) => {
         sharhMetadata: sharhId
           ? {
               id: sharhId,
-              isCantainSharh: false,
+              isContainSharh: false,
               urlToGetSharh: `/site/oneSharhBy?id=${sharhId}`,
             }
           : undefined,

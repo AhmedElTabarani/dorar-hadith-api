@@ -40,7 +40,7 @@ module.exports = async (sharhId, req, next) => {
       hasSharhMetadata: true,
       sharhMetadata: {
         id: sharhId,
-        isCantainSharh: true,
+        isContainSharh: true,
         sharh,
         urlToGetSharh: `/site/oneSharhBy?id=${sharhId}`,
       },
