@@ -17,15 +17,16 @@ module.exports = async (text, query, req, next) => {
     const doc = parseHTML(html).document;
 
     const result = await Promise.all(
-      Array.from(doc.querySelectorAll(`#${req.tab} .border-bottom`))
-        .map((info) => {
-          const sharhId = info
-            .querySelector('a[xplain]')
-            ?.getAttribute('xplain');
-          return sharhId;
-        })
-        .filter((sharhId) => sharhId !== undefined)
-        .map((sharhId) => oneSharhById(sharhId, req, next)),
+      Array.from(
+        doc.querySelectorAll(`#${req.tab} .border-bottom`),
+      ).map((info) => {
+        const sharhId = info
+          .querySelector('a[xplain]')
+          ?.getAttribute('xplain');
+        return sharhId;
+      })
+      .filter((sharhId) => sharhId !== undefined)
+      .map((sharhId) => oneSharhById(sharhId, req, next)),
     );
 
     cache.set(url, result);
