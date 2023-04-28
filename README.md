@@ -60,9 +60,10 @@
         source: 'المصدر',
         number_or_page: 'رقم الحديث او الصفحة',
         grade: 'درجة الصحة',
-        hasSharh: 'هل الحديث له شرح أم لا؟',
+        hasSharhMetadata: 'بيانات متعلقة بشرح الحديث',
         sharhMetadata: {
             id: 'رقم الشرح',
+            isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
             urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
         },
     },
@@ -90,7 +91,12 @@
         number_or_page: 'رقم الحديث او الصفحة',
         grade: 'درجة الصحة',
         sharh: 'شرح الحديث',
-        sharhId: 'رقم الشرح',
+        hasSharhMetadata: 'بيانات متعلقة بشرح الحديث',
+        sharhMetadata: {
+            id: 'رقم الشرح',
+            isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+            urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+        },
     },
     {
         ...
@@ -115,7 +121,12 @@
     number_or_page: 'رقم الحديث او الصفحة',
     grade: 'درجة الصحة',
     sharh: 'شرح الحديث',
-    sharhId: 'رقم الشرح',
+    hasSharhMetadata: 'بيانات متعلقة بشرح الحديث',
+    sharhMetadata: {
+        id: 'رقم الشرح',
+        isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+        urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+    },
 },
 ```
 
@@ -135,7 +146,12 @@
     number_or_page: 'رقم الحديث او الصفحة',
     grade: 'درجة الصحة',
     sharh: 'شرح الحديث',
-    sharhId: 'رقم الشرح',
+    hasSharhMetadata: 'بيانات متعلقة بشرح الحديث',
+    sharhMetadata: {
+        id: 'رقم الشرح',
+        isCantainSharh: 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+        urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+    },
 },
 ```
 

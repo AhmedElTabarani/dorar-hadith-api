@@ -4,10 +4,10 @@ const { parseHTML } = require('linkedom');
 
 const cache = require('./cache');
 
-module.exports = async (id, req, next) => {
+module.exports = async (sharhId, req, next) => {
   try {
-    if (!id) return;
-    const url = `https://www.dorar.net/hadith/sharh/${id}`;
+    if (!sharhId) return;
+    const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
 
     if (cache.has(url)) return cache.get(url);
 
@@ -36,10 +36,15 @@ module.exports = async (id, req, next) => {
       number_or_page: subtitles[3],
       grade: subtitles[4],
       sharh,
-      sharhId: id,
+      hasSharhMetadata: true,
+      sharhMetadata: {
+        id: sharhId,
+        isCantainSharh: true,
+        urlToGetSharh: `/site/oneSharhBy?id=${sharhId}`,
+      },
     };
 
-    // cache.set(url, result);
+    cache.set(url, result);
 
     return result;
   } catch (err) {

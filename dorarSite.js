@@ -34,6 +34,7 @@ module.exports = async (query, req, next) => {
       const sharhId = info
         .querySelector('a[xplain]')
         ?.getAttribute('xplain');
+
       return {
         hadith,
         el_rawi: subtitles[0],
@@ -41,10 +42,11 @@ module.exports = async (query, req, next) => {
         source: subtitles[2],
         number_or_page: subtitles[3],
         grade: subtitles[4],
-        hasSharh: !!sharhId,
+        hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
           ? {
               id: sharhId,
+              isCantainSharh: false,
               urlToGetSharh: `/site/oneSharhBy?id=${sharhId}`,
             }
           : undefined,
