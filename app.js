@@ -6,6 +6,8 @@ const dorarSite = require('./dorarSite');
 const sharhByText = require('./dorarSharhByText');
 const oneSharhById = require('./dorarOneSharhById');
 const oneSharhByText = require('./dorarOneSharhByText');
+const oneMohdithById = require('./dorarOneMohdithById');
+const oneSourceById = require('./dorarOneSourceById');
 
 const app = express();
 app.use(cors());
@@ -131,6 +133,28 @@ app.get('/docs', (req, res, next) => {
           },
         },
       },
+      {
+        endpoint: '/site/mohdith/{mohdithId}',
+        example: '/site/mohdith/261',
+        abstractResponse: {
+          name: 'المحدث',
+          mohdithId: 'رقم المحدث',
+          info: 'معلومات عن المحدث',
+        },
+      },
+      {
+        endpoint: '/site/source/{sourceId}',
+        example: '/site/source/3088',
+        abstractResponse: {
+          name: 'المصدر',
+          sourceId: 'رقم المصدر',
+          author: 'المؤلف',
+          reviewer: 'المراجع',
+          publisher: 'دار النشر',
+          edition: 'رقم الطبعة',
+          editionYear: 'سنة الطبعة',
+        },
+      },
     ],
     query: {
       value: 'محتوى نص الحديث المراد البحث عنه',
@@ -182,6 +206,28 @@ app.get('/site/oneSharhBy', async (req, res, next) => {
     res.status(400).json({
       status: 'error',
       message: "'id' or 'value' is required",
+    });
+});
+
+app.get('/site/mohdith/:id', async (req, res, next) => {
+  const id = req.params.id;
+
+  if (id) res.json(await oneMohdithById(id, req, next));
+  else
+    res.status(400).json({
+      status: 'error',
+      message: "'id' is required",
+    });
+});
+
+app.get('/site/source/:id', async (req, res, next) => {
+  const id = req.params.id;
+
+  if (id) res.json(await oneSourceById(id, req, next));
+  else
+    res.status(400).json({
+      status: 'error',
+      message: "'id' is required",
     });
 });
 
