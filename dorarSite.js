@@ -6,7 +6,8 @@ const cache = require('./cache');
 
 module.exports = async (query, req, next) => {
   try {
-    const url = `https://www.dorar.net/hadith/search?${query}&all`;
+    let url = `https://www.dorar.net/hadith/search?${query}`;
+    if (req.tab === 'specialist') url += '&all';
 
     if (cache.has(url)) return cache.get(url);
 

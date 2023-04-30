@@ -6,13 +6,13 @@ const cache = require('./cache');
 
 module.exports = async (sharhId, req, next) => {
   try {
-    if (!sharhId) throw `Can't find sharh with this id`;
+    if (!sharhId) throw `Can't find any sharh`;
     const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
 
     if (cache.has(url)) return cache.get(url);
 
     const res = await nodeFetch(url);
-    if (res.status === 404) throw `Can't find sharh with this id`;
+    if (res.status === 404) throw `Can't find any sharh`;
 
     const html = decode(await res.text());
     const doc = parseHTML(html).document;

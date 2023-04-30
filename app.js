@@ -194,7 +194,6 @@ app.get('/site/search', async (req, res, next) => {
 
 app.get('/site/sharh', async (req, res, next) => {
   const text = req.query.value;
-  req.query.st ||= 'p'; // for more accurate search
   req.query.page = 1;
 
   if (text)
@@ -212,7 +211,10 @@ app.get('/site/oneSharhBy', async (req, res, next) => {
   const { id, value: text } = req.query;
 
   if (id) res.json(await oneSharhById(id, req, next));
-  else if (text) res.json(await oneSharhByText(text, req, next));
+  else if (text)
+    res.json(
+      await oneSharhByText(text, req, next),
+    );
   else
     res.status(400).json({
       status: 'error',
