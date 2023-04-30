@@ -180,6 +180,7 @@ app.get('/docs', (req, res, next) => {
 });
 
 app.get('/api/search', async (req, res, next) => {
+  req.query.page = 1;
   const query = req._parsedUrl.query.replace('value=', 'skey=');
   res.json(await dorarAPI(query, req, next));
 });
@@ -191,6 +192,8 @@ app.get('/site/search', async (req, res, next) => {
 
 app.get('/site/sharh', async (req, res, next) => {
   const text = req.query.value;
+  req.query.st ||= 'p'; // for more accurate search
+  req.query.page = 1;
 
   if (text)
     res.json(
