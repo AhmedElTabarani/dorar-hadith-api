@@ -33,10 +33,15 @@ module.exports = async (query, req, next) => {
         source,
         number_or_page,
         grade,
-        explainGrade,
+        explainGradeOrTakhrij,
       ] = [
         ...info.children[1].querySelectorAll('.primary-text-color'),
       ].map((el) => el.textContent.trim());
+
+      const [explainGrade, takhrij] =
+        req.tab === 'home'
+          ? [explainGradeOrTakhrij, undefined]
+          : [undefined, explainGradeOrTakhrij];
 
       const sharhId = info
         .querySelector('a[xplain]')
@@ -62,6 +67,7 @@ module.exports = async (query, req, next) => {
         number_or_page,
         grade,
         explainGrade,
+        takhrij,
         hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
           ? {
