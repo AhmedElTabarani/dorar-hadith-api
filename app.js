@@ -23,14 +23,14 @@ app.use((req, res, next) => {
   next();
 });
 
-// to chose the tab to search in /site/search
-// tab value can be 'home' (non-specialist) or 'specialist'
+// specialist value can be true or false
 app.use((req, res, next) => {
-  req.tab = req.query.tab || 'home';
-  req.tab =
-    req.query.tab?.toLowerCase() === 'specialist'
-      ? 'specialist'
-      : 'home';
+  req.isForSpecialist = req.query.specialist || false;
+  req.isForSpecialist =
+    req.query.specialist?.toLowerCase() === 'true' ? true : false;
+
+  // tab use in dorar site search
+  req.tab = req.isForSpecialist ? 'specialist' : 'home';
   next();
 });
 
@@ -168,7 +168,8 @@ app.get('/docs', (req, res, next) => {
       page: 'تحديد رقم الصفحة',
       removehtml:
         'حذف عناصر الـ HTML في الحديث كـ <span class="search-keys">...</span>',
-      tab: 'تستخدم فقط في "/site/search" لتحدد نوع الاحاديث هل هي للمتخصصين أم لا قيمها هي "specialist" للمتخصصين و "home" لغير المختصيين',
+      specialist:
+        'تستخدم لتحدد نوع الاحاديث هل هي للمتخصصين أم لا قيمها هي "true" للمتخصصين و "false" لغير المتخصصين، القيمة الافتراضية هي "false"',
       st: 'تحدد طريقة البحث',
       xclude: 'استبعاد بعض الكلمات من البحث',
       t: 'تحديد نطاق البحث',
