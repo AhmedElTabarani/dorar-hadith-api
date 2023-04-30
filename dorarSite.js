@@ -8,7 +8,7 @@ module.exports = async (query, req, next) => {
   try {
     const url = `https://www.dorar.net/hadith/search?${query}`;
 
-    if (cache.has(url)) return cache.get(url);
+    // if (cache.has(url)) return cache.get(url);
 
     const res = await nodeFetch(url);
     const html = decode(await res.text());
@@ -27,7 +27,14 @@ module.exports = async (query, req, next) => {
           .replace(/\d+\s+-/g, '')
           .trim();
 
-      const subtitles = [
+      const [
+        el_rawi,
+        el_mohdith,
+        source,
+        number_or_page,
+        grade,
+        explainGrade,
+      ] = [
         ...info.children[1].querySelectorAll('.primary-text-color'),
       ].map((el) => el.textContent.trim());
 
@@ -35,13 +42,26 @@ module.exports = async (query, req, next) => {
         .querySelector('a[xplain]')
         ?.getAttribute('xplain');
 
+      const mohdithId = info
+        .querySelector('a[view-card="mhd"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
+      const sourceId = info
+        .querySelector('a[view-card="book"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
       return {
         hadith,
-        el_rawi: subtitles[0],
-        el_mohdith: subtitles[1],
-        source: subtitles[2],
-        number_or_page: subtitles[3],
-        grade: subtitles[4],
+        el_rawi,
+        el_mohdith,
+        mohdithId,
+        source,
+        sourceId,
+        number_or_page,
+        grade,
+        explainGrade,
         hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
           ? {
@@ -53,7 +73,7 @@ module.exports = async (query, req, next) => {
       };
     });
 
-    cache.set(url, result);
+    // cache.set(url, result);
 
     return result;
   } catch (err) {

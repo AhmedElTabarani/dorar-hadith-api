@@ -60,9 +60,12 @@ app.get('/docs', (req, res, next) => {
             hadith: 'الحديث',
             el_rawi: 'الراوي',
             el_mohdith: 'المحدث',
+            mohdithId: 'رقم المحدث',
             source: 'المصدر',
+            sourceId: 'رقم المصدر',
             number_or_page: 'رقم الحديث او الصفحة',
             grade: 'درجة الصحة',
+            explainGrade: 'توضيح درجة الصحة',
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
               id: 'رقم الشرح',
@@ -84,6 +87,7 @@ app.get('/docs', (req, res, next) => {
             source: 'المصدر',
             number_or_page: 'رقم الحديث او الصفحة',
             grade: 'درجة الصحة',
+            takhrij: 'تخريج الحديث في كتب أخرى',
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
               id: 'رقم الشرح',
@@ -105,6 +109,7 @@ app.get('/docs', (req, res, next) => {
           source: 'المصدر',
           number_or_page: 'رقم الحديث او الصفحة',
           grade: 'درجة الصحة',
+          takhrij: 'تخريج الحديث في كتب أخرى',
           hasSharhMetadata: 'هل الحديث له شرح أم لا',
           sharhMetadata: {
             id: 'رقم الشرح',
@@ -124,6 +129,7 @@ app.get('/docs', (req, res, next) => {
           source: 'المصدر',
           number_or_page: 'رقم الحديث او الصفحة',
           grade: 'درجة الصحة',
+          takhrij: 'تخريج الحديث في كتب أخرى',
           hasSharhMetadata: 'هل الحديث له شرح أم لا',
           sharhMetadata: {
             id: 'رقم الشرح',

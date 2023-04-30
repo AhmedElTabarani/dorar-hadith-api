@@ -22,7 +22,7 @@ module.exports = async (sharhId, req, next) => {
       .textContent.replace(/\d+ -/g, '')
       .trim();
 
-    const subtitles = [
+    const [el_rawi, el_mohdith, source, number_or_page, grade, takhrij] = [
       ...doc.querySelectorAll('.primary-text-color'),
     ].map((el) => el.textContent.trim());
 
@@ -32,11 +32,12 @@ module.exports = async (sharhId, req, next) => {
 
     const result = {
       hadith,
-      el_rawi: subtitles[0],
-      el_mohdith: subtitles[1],
-      source: subtitles[2],
-      number_or_page: subtitles[3],
-      grade: subtitles[4],
+      el_rawi,
+      el_mohdith,
+      source,
+      number_or_page,
+      grade,
+      takhrij,
       hasSharhMetadata: true,
       sharhMetadata: {
         id: sharhId,
