@@ -8,7 +8,7 @@ module.exports = async (query, req, next) => {
   try {
     const url = `https://www.dorar.net/hadith/search?${query}`;
 
-    // if (cache.has(url)) return cache.get(url);
+    if (cache.has(url)) return cache.get(url);
 
     const res = await nodeFetch(url);
     const html = decode(await res.text());
@@ -73,7 +73,7 @@ module.exports = async (query, req, next) => {
       };
     });
 
-    // cache.set(url, result);
+    cache.set(url, result);
 
     return result;
   } catch (err) {
