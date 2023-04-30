@@ -64,6 +64,7 @@
         number_or_page: 'رقم الحديث او الصفحة',
         grade: 'درجة الصحة',
         explainGrade: 'توضيح درجة الصحة',
+        takhrij: 'تخريج الحديث في كتب أخرى',
         hasSharhMetadata: 'هل الحديث له شرح أم لا',
         sharhMetadata: {
             id: 'رقم الشرح',

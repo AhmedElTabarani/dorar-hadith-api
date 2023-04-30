@@ -38,6 +38,8 @@ module.exports = async (query, req, next) => {
         ...info.children[1].querySelectorAll('.primary-text-color'),
       ].map((el) => el.textContent.trim());
 
+      // explainGrade appear only in home tab
+      // takhrij appear only in specialist tab
       const [explainGrade, takhrij] =
         req.tab === 'home'
           ? [explainGradeOrTakhrij, undefined]
