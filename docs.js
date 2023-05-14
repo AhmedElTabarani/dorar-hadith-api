@@ -52,6 +52,13 @@ module.exports = (req, res, next) => {
               grade: 'درجة الصحة',
               explainGrade: 'توضيح درجة الصحة',
               takhrij: 'تخريج الحديث في كتب أخرى',
+              similarHadithDorar:
+                'رابط الأحاديث المشابهة في موقع الدرر',
+              sahihAlternateDorar: 'رابط الحديث الصحيح في موقع الدرر',
+              urlToGetSmilarHadith:
+                'رابط لكي تبحث عن الأحاديث المشابهة',
+              urlToGetSahihAlternate:
+                'رابط لكي تبحث عن الحديث الصحيح',
               hasSharhMetadata: 'هل الحديث له شرح أم لا',
               sharhMetadata: {
                 id: 'رقم الشرح',
@@ -61,6 +68,73 @@ module.exports = (req, res, next) => {
               },
             },
           ],
+        },
+      },
+      {
+        endpoint: '/v1/site/hadith/similar/:id',
+        example: '/v1/site/hadith/similar/5mtakqyd',
+        abstractResponse: {
+          metadata: {
+            length: 'عدد نتائج البحث',
+            isCached: 'هل هذه النتائج من الـ cache أم لا',
+          },
+          data: [
+            {
+              hadith: 'الحديث',
+              rawi: 'الراوي',
+              mohdith: 'المحدث',
+              mohdithId: 'رقم المحدث',
+              book: 'الكتاب',
+              bookId: 'رقم الكتاب',
+              numberOrPage: 'رقم الحديث او الصفحة',
+              grade: 'درجة الصحة',
+              explainGrade: 'توضيح درجة الصحة',
+              similarHadithDorar:
+                'رابط الأحاديث المشابهة في موقع الدرر',
+              sahihAlternateDorar: 'رابط الحديث الصحيح في موقع الدرر',
+              urlToGetSmilarHadith:
+                'رابط لكي تبحث عن الأحاديث المشابهة',
+              urlToGetSahihAlternate:
+                'رابط لكي تبحث عن الحديث الصحيح',
+              hasSharhMetadata: 'هل الحديث له شرح أم لا',
+              sharhMetadata: {
+                id: 'رقم الشرح',
+                isContainSharh:
+                  'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+                urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+              },
+            },
+          ],
+        },
+      },
+      {
+        endpoint: '/v1/site/hadith/alternate/:id',
+        example: '/v1/site/hadith/alternate/5mtakqyd',
+        abstractResponse: {
+          metadata: {
+            isCached: 'هل هذه النتائج من الـ cache أم لا',
+          },
+          data: {
+            hadith: 'الحديث',
+            rawi: 'الراوي',
+            mohdith: 'المحدث',
+            mohdithId: 'رقم المحدث',
+            book: 'الكتاب',
+            bookId: 'رقم الكتاب',
+            numberOrPage: 'رقم الحديث او الصفحة',
+            grade: 'درجة الصحة',
+            similarHadithDorar:
+              'رابط الأحاديث المشابهة في موقع الدرر',
+            urlToGetSmilarHadith:
+              'رابط لكي تبحث عن الأحاديث المشابهة',
+            hasSharhMetadata: 'هل الحديث له شرح أم لا',
+            sharhMetadata: {
+              id: 'رقم الشرح',
+              isContainSharh:
+                'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+              urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+            },
+          },
         },
       },
       {

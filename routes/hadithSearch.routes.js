@@ -10,4 +10,12 @@ router
   .route('/site/hadith/search')
   .get(HadithSearchController.searchUsingSiteDorar);
 
+router
+  .route('/site/hadith/similar/:id')
+  .get(HadithSearchController.getAllSimilarHadithUsingSiteDorar);
+
+router
+  .route('/site/hadith/alternate/:id')
+  .get(HadithSearchController.getAlternateHadithUsingSiteDorar);
+
 module.exports = router;

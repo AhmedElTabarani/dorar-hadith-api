@@ -143,6 +143,12 @@ class HadithSearchController {
         ?.getAttribute('card-link')
         ?.match(/\d+/)[0];
 
+      const [similarHadithDorar, sahihAlternateDorar] = info
+        .querySelectorAll(
+          'a[style="margin-right:5px;color:#3399ff;"]',
+        )
+        .map((el) => el.getAttribute('href') || undefined);
+
       return {
         hadith,
         rawi,
@@ -154,12 +160,24 @@ class HadithSearchController {
         grade,
         explainGrade,
         takhrij,
+        similarHadithDorar,
+        sahihAlternateDorar,
+        urlToGetSmilarHadith: similarHadithDorar
+          ? `/v1/site/hadith/similar/${
+              similarHadithDorar.match(/\/h\/(.*)\?/)[1]
+            }`
+          : undefined,
+        urlToGetSahihAlternate: sahihAlternateDorar
+          ? `/v1/site/hadith/alternate/${
+              sahihAlternateDorar.match(/\/h\/(.*)\?/)[1]
+            }`
+          : undefined,
         hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
           ? {
               id: sharhId,
               isContainSharh: false,
-              urlToGetSharh: `/v1/site/sharh/?id=${sharhId}`,
+              urlToGetSharh: `/v1/site/sharh/${sharhId}`,
             }
           : undefined,
       };
@@ -182,6 +200,206 @@ class HadithSearchController {
       isCached: false,
     });
   });
+
+  getAllSimilarHadithUsingSiteDorar = catchAsync(
+    async (req, res, next) => {
+      const similarId = req.params.id;
+      const url = `https://www.dorar.net/h/${similarId}?sims=1`;
+
+      if (cache.has(url)) {
+        const result = cache.get(url);
+        return sendSuccess(res, 200, result, {
+          ...cache.get(`metadata:${url}`),
+          isCached: true,
+        });
+      }
+
+      const data = await nodeFetch(url);
+      if (data.status === 404)
+        return next(
+          new Error(`Can't find similar hadith with this id`),
+        );
+
+      const html = decode(await data.text());
+      const doc = parseHTML(html).document;
+
+      const result = Array.from(
+        doc.querySelectorAll(`.border-bottom`),
+      )
+        .slice(1)
+        .map((info) => {
+          const hadith = info.children[0].textContent
+            .replace(/-\s*\:?\s*/g, '')
+            .trim();
+
+          const [
+            rawi,
+            mohdith,
+            book,
+            numberOrPage,
+            grade,
+            explainGrade,
+          ] = [
+            ...info.children[1].querySelectorAll(
+              '.primary-text-color',
+            ),
+          ].map((el) => el.textContent.trim());
+
+          let sharhId = info
+            .querySelector('a[xplain]')
+            ?.getAttribute('xplain');
+
+          sharhId = sharhId === '0' ? undefined : sharhId;
+
+          const mohdithId = info
+            .querySelector('a[view-card="mhd"]')
+            ?.getAttribute('card-link')
+            ?.match(/\d+/)[0];
+
+          const bookId = info
+            .querySelector('a[view-card="book"]')
+            ?.getAttribute('card-link')
+            ?.match(/\d+/)[0];
+
+          const [similarHadithDorar, sahihAlternateDorar] = info
+            .querySelectorAll(
+              'a[style="margin-right:5px;color:#3399ff;"]',
+            )
+            .map((el) => el.getAttribute('href') || undefined);
+
+          return {
+            hadith,
+            rawi,
+            mohdith,
+            mohdithId,
+            book,
+            bookId,
+            numberOrPage,
+            grade,
+            explainGrade,
+            similarHadithDorar,
+            sahihAlternateDorar,
+            urlToGetSmilarHadith: similarHadithDorar
+              ? `/v1/site/hadith/similar/${
+                  similarHadithDorar.match(/\/h\/(.*)\?/)[1]
+                }`
+              : undefined,
+            urlToGetSahihAlternate: sahihAlternateDorar
+              ? `/v1/site/hadith/alternate/${
+                  sahihAlternateDorar.match(/\/h\/(.*)\?/)[1]
+                }`
+              : undefined,
+            hasSharhMetadata: !!sharhId,
+            sharhMetadata: sharhId
+              ? {
+                  id: sharhId,
+                  isContainSharh: false,
+                  urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+                }
+              : undefined,
+          };
+        });
+
+      cache.set(url, result);
+
+      const metadata = {
+        length: result.length,
+      };
+      cache.set(`metadata:${url}`, metadata);
+
+      sendSuccess(res, 200, cache.get(url), {
+        ...metadata,
+        isCached: false,
+      });
+    },
+  );
+
+  getAlternateHadithUsingSiteDorar = catchAsync(
+    async (req, res, next) => {
+      const alternateId = req.params.id;
+      const url = `https://www.dorar.net/h/${alternateId}?alts=1`;
+
+      if (cache.has(url)) {
+        const result = cache.get(url);
+        return sendSuccess(res, 200, result, {
+          isCached: true,
+        });
+      }
+
+      const data = await nodeFetch(url);
+      if (data.status === 404)
+        return next(
+          new Error(`Can't find alternate hadith with this id`),
+        );
+
+      const html = decode(await data.text());
+      const doc = parseHTML(html).document;
+
+      const info = doc.querySelectorAll('.border-bottom')[1];
+
+      if (!info)
+        return next(
+          new Error('There is no alternate hadith with this id'),
+        );
+
+      const hadith = info.children[0].textContent
+        .replace(/-\s*\:?\s*/g, '')
+        .trim();
+
+      const [rawi, mohdith, book, numberOrPage, grade] = [
+        ...info.children[1].querySelectorAll('.primary-text-color'),
+      ].map((el) => el.textContent.trim());
+
+      const sharhId = info
+        .querySelector('a[xplain]')
+        ?.getAttribute('xplain');
+
+      const mohdithId = info
+        .querySelector('a[view-card="mhd"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
+      const bookId = info
+        .querySelector('a[view-card="book"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
+      const similarHadithDorar = info
+        .querySelector('a[style="margin-right:5px;color:#3399ff;"]')
+        ?.getAttribute('href');
+
+      const result = {
+        hadith,
+        rawi,
+        mohdith,
+        mohdithId,
+        book,
+        bookId,
+        numberOrPage,
+        grade,
+        similarHadithDorar,
+        urlToGetSmilarHadith: similarHadithDorar
+          ? `/v1/site/hadith/similar/${
+              similarHadithDorar.match(/\/h\/(.*)\?/)[1]
+            }`
+          : undefined,
+        hasSharhMetadata: !!sharhId,
+        sharhMetadata: sharhId
+          ? {
+              id: sharhId,
+              isContainSharh: false,
+              urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+            }
+          : undefined,
+      };
+
+      cache.set(url, result);
+
+      sendSuccess(res, 200, cache.get(url), {
+        isCached: false,
+      });
+    },
+  );
 }
 
 module.exports = new HadithSearchController();

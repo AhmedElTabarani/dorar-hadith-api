@@ -79,6 +79,10 @@
       "grade": "درجة الصحة",
       "explainGrade": "توضيح درجة الصحة",
       "takhrij": "تخريج الحديث في كتب أخرى",
+      "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
+      "sahihAlternateDorar": "رابط الحديث الصحيح في موقع الدرر",
+      "urlToGetSmilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
+      "urlToGetSahihAlternate": "رابط لكي تبحث عن الحديث الصحيح",
       "hasSharhMetadata": "هل الحديث له شرح أم لا",
       "sharhMetadata": {
         "id": "رقم الشرح",
@@ -87,6 +91,65 @@
       }
     }
   ]
+}
+```
+
+#### /v1/site/hadith/similar/:id
+
+يحضر لك أحاديث مشابهة المقابلة للـ `id`
+
+شكل الرد كـ `JSON`
+
+```json
+[
+  {
+    "hadith": "الحديث",
+    "rawi": "الراوي",
+    "mohdith": "المحدث",
+    "mohdithId": "رقم المحدث",
+    "book": "الكتاب",
+    "bookId": "رقم الكتاب",
+    "numberOrPage": "رقم الحديث او الصفحة",
+    "grade": "درجة الصحة",
+    "explainGrade": "توضيح درجة الصحة",
+    "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
+    "sahihAlternateDorar": "رابط الحديث الصحيح في موقع الدرر",
+    "urlToGetSmilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
+    "urlToGetSahihAlternate": "رابط لكي تبحث عن الحديث الصحيح",
+    "hasSharhMetadata": "هل الحديث له شرح أم لا",
+    "sharhMetadata": {
+      "id": "رقم الشرح",
+      "isContainSharh": "هل يحتوى هذا الرد على شرح الحديث أم لا؟",
+      "urlToGetSharh": "رابط لكي تبحث عن شرح الحديث"
+    }
+  }
+]
+```
+
+#### /v1/site/hadith/alternate/:id
+
+يحضر لك الحديث الصحيح المقابل للـ `id`
+
+شكل الرد كـ `JSON`
+
+```json
+{
+  "hadith": "الحديث",
+  "rawi": "الراوي",
+  "mohdith": "المحدث",
+  "mohdithId": "رقم المحدث",
+  "book": "الكتاب",
+  "bookId": "رقم الكتاب",
+  "numberOrPage": "رقم الحديث او الصفحة",
+  "grade": "درجة الصحة",
+  "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
+  "urlToGetSmilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
+  "hasSharhMetadata": "هل الحديث له شرح أم لا",
+  "sharhMetadata": {
+    "id": "رقم الشرح",
+    "isContainSharh": "هل يحتوى هذا الرد على شرح الحديث أم لا؟",
+    "urlToGetSharh": "رابط لكي تبحث عن شرح الحديث"
+  }
 }
 ```
 
