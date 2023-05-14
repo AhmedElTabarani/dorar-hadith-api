@@ -52,12 +52,18 @@ module.exports = (req, res, next) => {
               grade: 'درجة الصحة',
               explainGrade: 'توضيح درجة الصحة',
               takhrij: 'تخريج الحديث في كتب أخرى',
+              hadithId:
+                'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
+              hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+              hasAlternateHadithSahih:
+                'هل الحديث له حديث صحيح بديل أم لا',
               similarHadithDorar:
                 'رابط الأحاديث المشابهة في موقع الدرر',
-              sahihAlternateDorar: 'رابط الحديث الصحيح في موقع الدرر',
+              alternateHadithSahihDorar:
+                'رابط الحديث الصحيح في موقع الدرر',
               urlToGetSmilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
-              urlToGetSahihAlternate:
+              urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
               hasSharhMetadata: 'هل الحديث له شرح أم لا',
               sharhMetadata: {
@@ -89,12 +95,18 @@ module.exports = (req, res, next) => {
               numberOrPage: 'رقم الحديث او الصفحة',
               grade: 'درجة الصحة',
               explainGrade: 'توضيح درجة الصحة',
+              hadithId:
+                'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
+              hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+              hasAlternateHadithSahih:
+                'هل الحديث له حديث صحيح بديل أم لا',
               similarHadithDorar:
                 'رابط الأحاديث المشابهة في موقع الدرر',
-              sahihAlternateDorar: 'رابط الحديث الصحيح في موقع الدرر',
+              alternateHadithSahihDorar:
+                'رابط الحديث الصحيح في موقع الدرر',
               urlToGetSmilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
-              urlToGetSahihAlternate:
+              urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
               hasSharhMetadata: 'هل الحديث له شرح أم لا',
               sharhMetadata: {
@@ -123,6 +135,11 @@ module.exports = (req, res, next) => {
             bookId: 'رقم الكتاب',
             numberOrPage: 'رقم الحديث او الصفحة',
             grade: 'درجة الصحة',
+            hadithId:
+              'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
+            hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+            hasAlternateHadithSahih:
+              'هل الحديث له حديث صحيح بديل أم لا',
             similarHadithDorar:
               'رابط الأحاديث المشابهة في موقع الدرر',
             urlToGetSmilarHadith:

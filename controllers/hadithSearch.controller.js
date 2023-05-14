@@ -143,11 +143,17 @@ class HadithSearchController {
         ?.getAttribute('card-link')
         ?.match(/\d+/)[0];
 
-      const [similarHadithDorar, sahihAlternateDorar] = info
+      const [similarHadithDorar, alternateHadithSahihDorar] = info
         .querySelectorAll(
           'a[style="margin-right:5px;color:#3399ff;"]',
         )
         .map((el) => el.getAttribute('href') || undefined);
+
+      let hadithId;
+      if (similarHadithDorar)
+        hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
+      else if (alternateHadithSahihDorar)
+        hadith = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
 
       return {
         hadith,
@@ -160,17 +166,16 @@ class HadithSearchController {
         grade,
         explainGrade,
         takhrij,
+        hadithId,
+        hasSimilarHadith: !!similarHadithDorar,
+        hasAlternateHadithSahih: !!alternateHadithSahihDorar,
         similarHadithDorar,
-        sahihAlternateDorar,
+        alternateHadithSahihDorar,
         urlToGetSmilarHadith: similarHadithDorar
-          ? `/v1/site/hadith/similar/${
-              similarHadithDorar.match(/\/h\/(.*)\?/)[1]
-            }`
+          ? `/v1/site/hadith/similar/${hadithId}`
           : undefined,
-        urlToGetSahihAlternate: sahihAlternateDorar
-          ? `/v1/site/hadith/alternate/${
-              sahihAlternateDorar.match(/\/h\/(.*)\?/)[1]
-            }`
+        urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+          ? `/v1/site/hadith/alternate/${hadithId}`
           : undefined,
         hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
@@ -261,11 +266,18 @@ class HadithSearchController {
             ?.getAttribute('card-link')
             ?.match(/\d+/)[0];
 
-          const [similarHadithDorar, sahihAlternateDorar] = info
+          const [similarHadithDorar, alternateHadithSahihDorar] = info
             .querySelectorAll(
               'a[style="margin-right:5px;color:#3399ff;"]',
             )
             .map((el) => el.getAttribute('href') || undefined);
+
+          let hadithId;
+          if (similarHadithDorar)
+            hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
+          else if (alternateHadithSahihDorar)
+            hadith =
+              alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
 
           return {
             hadith,
@@ -277,17 +289,16 @@ class HadithSearchController {
             numberOrPage,
             grade,
             explainGrade,
+            hadithId,
+            hasSimilarHadith: !!similarHadithDorar,
+            hasAlternateHadithSahih: !!alternateHadithSahihDorar,
             similarHadithDorar,
-            sahihAlternateDorar,
+            alternateHadithSahihDorar,
             urlToGetSmilarHadith: similarHadithDorar
-              ? `/v1/site/hadith/similar/${
-                  similarHadithDorar.match(/\/h\/(.*)\?/)[1]
-                }`
+              ? `/v1/site/hadith/similar/${hadithId}`
               : undefined,
-            urlToGetSahihAlternate: sahihAlternateDorar
-              ? `/v1/site/hadith/alternate/${
-                  sahihAlternateDorar.match(/\/h\/(.*)\?/)[1]
-                }`
+            urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+              ? `/v1/site/hadith/alternate/${hadithId}`
               : undefined,
             hasSharhMetadata: !!sharhId,
             sharhMetadata: sharhId
@@ -368,6 +379,10 @@ class HadithSearchController {
         .querySelector('a[style="margin-right:5px;color:#3399ff;"]')
         ?.getAttribute('href');
 
+      let hadithId;
+      if (similarHadithDorar)
+        hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
+
       const result = {
         hadith,
         rawi,
@@ -377,11 +392,12 @@ class HadithSearchController {
         bookId,
         numberOrPage,
         grade,
+        hadithId,
+        hasSimilarHadith: !!similarHadithDorar,
+        hasAlternateHadithSahih: false,
         similarHadithDorar,
         urlToGetSmilarHadith: similarHadithDorar
-          ? `/v1/site/hadith/similar/${
-              similarHadithDorar.match(/\/h\/(.*)\?/)[1]
-            }`
+          ? `/v1/site/hadith/similar/${hadithId}`
           : undefined,
         hasSharhMetadata: !!sharhId,
         sharhMetadata: sharhId
