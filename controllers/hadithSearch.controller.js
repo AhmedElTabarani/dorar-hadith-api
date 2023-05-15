@@ -311,6 +311,11 @@ class HadithSearchController {
           };
         });
 
+      if (result.length === 0)
+        return next(
+          new Error(`Can't find similar hadith with this id`),
+        );
+
       cache.set(url, result);
 
       const metadata = {

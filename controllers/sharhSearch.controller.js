@@ -17,7 +17,7 @@ const getSharhById = async (sharhId) => {
 
   const hadith = doc
     .querySelector('article')
-    .textContent.replace(/\d+ -/g, '')
+    .textContent.replace(/-\s*/g, '')
     .trim();
 
   const [rawi, mohdith, book, numberOrPage, grade, takhrij] = [
