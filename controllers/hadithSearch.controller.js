@@ -230,91 +230,81 @@ class HadithSearchController {
 
       const result = Array.from(
         doc.querySelectorAll(`.border-bottom`),
-      )
-        .slice(1)
-        .map((info) => {
-          const hadith = info.children[0].textContent
-            .replace(/-\s*\:?\s*/g, '')
-            .trim();
+      ).map((info) => {
+        const hadith = info.children[0].textContent
+          .replace(/-\s*\:?\s*/g, '')
+          .trim();
 
-          const [
-            rawi,
-            mohdith,
-            book,
-            numberOrPage,
-            grade,
-            explainGrade,
-          ] = [
-            ...info.children[1].querySelectorAll(
-              '.primary-text-color',
-            ),
-          ].map((el) => el.textContent.trim());
+        const [
+          rawi,
+          mohdith,
+          book,
+          numberOrPage,
+          grade,
+          explainGrade,
+        ] = [
+          ...info.children[1].querySelectorAll('.primary-text-color'),
+        ].map((el) => el.textContent.trim());
 
-          let sharhId = info
-            .querySelector('a[xplain]')
-            ?.getAttribute('xplain');
+        let sharhId = info
+          .querySelector('a[xplain]')
+          ?.getAttribute('xplain');
 
-          sharhId = sharhId === '0' ? undefined : sharhId;
+        sharhId = sharhId === '0' ? undefined : sharhId;
 
-          const mohdithId = info
-            .querySelector('a[view-card="mhd"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)[0];
+        const mohdithId = info
+          .querySelector('a[view-card="mhd"]')
+          ?.getAttribute('card-link')
+          ?.match(/\d+/)[0];
 
-          const bookId = info
-            .querySelector('a[view-card="book"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)[0];
+        const bookId = info
+          .querySelector('a[view-card="book"]')
+          ?.getAttribute('card-link')
+          ?.match(/\d+/)[0];
 
-          const [similarHadithDorar, alternateHadithSahihDorar] = info
-            .querySelectorAll(
-              'a[style="margin-right:5px;color:#3399ff;"]',
-            )
-            .map((el) => el.getAttribute('href') || undefined);
+        const [similarHadithDorar, alternateHadithSahihDorar] = info
+          .querySelectorAll(
+            'a[style="margin-right:5px;color:#3399ff;"]',
+          )
+          .map((el) => el.getAttribute('href') || undefined);
 
-          let hadithId;
-          if (similarHadithDorar)
-            hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
-          else if (alternateHadithSahihDorar)
-            hadith =
-              alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
+        let hadithId;
+        if (similarHadithDorar)
+          hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
+        else if (alternateHadithSahihDorar)
+          hadith = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
 
-          return {
-            hadith,
-            rawi,
-            mohdith,
-            mohdithId,
-            book,
-            bookId,
-            numberOrPage,
-            grade,
-            explainGrade,
-            hadithId,
-            hasSimilarHadith: !!similarHadithDorar,
-            hasAlternateHadithSahih: !!alternateHadithSahihDorar,
-            similarHadithDorar,
-            alternateHadithSahihDorar,
-            urlToGetSmilarHadith: similarHadithDorar
-              ? `/v1/site/hadith/similar/${hadithId}`
-              : undefined,
-            urlToGetAlternateHadithSahih: alternateHadithSahihDorar
-              ? `/v1/site/hadith/alternate/${hadithId}`
-              : undefined,
-            hasSharhMetadata: !!sharhId,
-            sharhMetadata: sharhId
-              ? {
-                  id: sharhId,
-                  isContainSharh: false,
-                  urlToGetSharh: `/v1/site/sharh/${sharhId}`,
-                }
-              : undefined,
-          };
-        });
-
-      if (result.length === 0)
-        return next(
-          new Error(`Can't find similar hadith with this id`),
-        );
+        return {
+          hadith,
+          rawi,
+          mohdith,
+          mohdithId,
+          book,
+          bookId,
+          numberOrPage,
+          grade,
+          explainGrade,
+          hadithId,
+          hasSimilarHadith: !!similarHadithDorar,
+          hasAlternateHadithSahih: !!alternateHadithSahihDorar,
+          similarHadithDorar,
+          alternateHadithSahihDorar,
+          urlToGetSmilarHadith: similarHadithDorar
+            ? `/v1/site/hadith/similar/${hadithId}`
+            : undefined,
+          urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+            ? `/v1/site/hadith/alternate/${hadithId}`
+            : undefined,
+          hasSharhMetadata: !!sharhId,
+          sharhMetadata: sharhId
+            ? {
+                id: sharhId,
+                isContainSharh: false,
+                urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+              }
+            : undefined,
+        };
+      });
 
       cache.set(url, result);
 
