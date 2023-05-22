@@ -47,10 +47,10 @@ app.use('/v1', mohdithSearchRouter);
 app.use('/v1', bookSearchRouter);
 
 app.get('*', (req, res, next) => {
-  res.status(501).json({
+  res.status(404).json({
     status: 'error',
     message:
-      "There is no router for this url, Please check docs '/docs'",
+      "There is no router for this url, Please check /docs",
   });
 });
 
