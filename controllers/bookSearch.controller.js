@@ -49,8 +49,6 @@ class BookSearchController {
       };
 
       cache.set(url, result);
-
-      cache.set(url, result);
       sendSuccess(res, 200, result, {
         isCached: false,
       });

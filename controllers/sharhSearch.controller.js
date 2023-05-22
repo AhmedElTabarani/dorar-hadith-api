@@ -152,7 +152,7 @@ class SharhSearchController {
 
     cache.set(`metadata:${url}`, metadata);
 
-    sendSuccess(res, 200, cache.get(url), {
+    sendSuccess(res, 200, result, {
       ...metadata,
       isCached: false,
     });
