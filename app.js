@@ -39,6 +39,9 @@ app.use((req, res, next) => {
   next();
 });
 
+app.get('/', (req, res, next) => {
+  res.status(304).redirect('/docs');
+});
 app.get('/docs', docs);
 
 app.use('/v1', hadithSearchRouter);
@@ -49,8 +52,7 @@ app.use('/v1', bookSearchRouter);
 app.get('*', (req, res, next) => {
   res.status(404).json({
     status: 'error',
-    message:
-      "There is no router for this url, Please check /docs",
+    message: 'There is no router for this url, Please check /docs',
   });
 });
 
