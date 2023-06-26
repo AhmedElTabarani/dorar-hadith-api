@@ -1,5 +1,4 @@
 const nodeFetch = require('node-fetch');
-const getJSON = require('get-json');
 const { decode } = require('html-entities');
 const { parseHTML } = require('linkedom');
 
@@ -21,7 +20,8 @@ class HadithSearchController {
       });
     }
 
-    const data = await getJSON(url);
+    const _res = await nodeFetch(url);
+    const data = await _res.json();
     const html = decode(data.ahadith.result);
     const doc = parseHTML(html).document;
 
