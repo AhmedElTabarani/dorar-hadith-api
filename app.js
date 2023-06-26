@@ -40,7 +40,7 @@ app.use((req, res, next) => {
 });
 
 app.get('/', (req, res, next) => {
-  res.status(304).redirect('/docs');
+  res.status(302).redirect('/docs');
 });
 app.get('/docs', docs);
 
