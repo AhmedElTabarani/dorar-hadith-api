@@ -287,5 +287,67 @@ module.exports = (req, res, next) => {
       's[]': 'تحديد الكتب التي تريد البحث فيها',
       'rawi[]': 'تحديد اسماء الرواة التي تريدهم',
     },
+    data: [
+      {
+        endpoint: '/v1/data/book',
+        description: 'احضار كل الكتب المتاحة',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+      {
+        endpoint: '/v1/data/degree',
+        description: 'احضار كل درجات الحديث المتاحة',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+      {
+        endpoint: '/v1/data/methodSearch',
+        description: 'احضار كل طرق البحث المتاحة',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+      {
+        endpoint: '/v1/data/mohdith',
+        description: 'احضار كل المحدثين المتاحين',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+      {
+        endpoint: '/v1/data/rawi',
+        description: 'احضار كل الرواة المتاحين',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+      {
+        endpoint: '/v1/data/zoneSearch',
+        description: 'احضار كل نطاقات البحث المتاحة',
+        abstractResponse: [
+          {
+            key: 'الكلمة  المفتاحية',
+            value: 'القيمة',
+          },
+        ],
+      },
+    ],
   });
 };

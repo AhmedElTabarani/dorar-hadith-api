@@ -6,6 +6,7 @@ const hadithSearchRouter = require('./routes/hadithSearch.routes');
 const sharhSearchRouter = require('./routes/sharhSearch.routes');
 const mohdithSearchRouter = require('./routes/mohdithSearch.routes');
 const bookSearchRouter = require('./routes/bookSearch.routes');
+const dataRouter = require('./routes/data.routes');
 
 const app = express();
 app.use(cors());
@@ -48,6 +49,7 @@ app.use('/v1', hadithSearchRouter);
 app.use('/v1', sharhSearchRouter);
 app.use('/v1', mohdithSearchRouter);
 app.use('/v1', bookSearchRouter);
+app.use('/v1', dataRouter);
 
 app.get('*', (req, res, next) => {
   res.status(404).json({
