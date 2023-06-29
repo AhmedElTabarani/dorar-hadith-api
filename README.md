@@ -16,7 +16,7 @@
 
 ## Documentation
 
-### [Postman](https://www.postan.com/telecoms-architect-38511688/workspace/hadith-api/collection/14391446-6a1c5404-cc59-4d59-933d-c07547ee75ca?action=share&creator=14391446)
+### [Postman](https://www.postman.com/telecoms-architect-38511688/workspace/hadith-api/collection/14391446-6a1c5404-cc59-4d59-933d-c07547ee75ca?action=share&creator=14391446)
 
 ### Endpoints
 
