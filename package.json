@@ -17,6 +17,7 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.17.3",
+    "express-rate-limit": "^6.9.0",
     "html-entities": "^2.3.3",
     "linkedom": "^0.14.25",
     "node-cache": "^5.1.2",

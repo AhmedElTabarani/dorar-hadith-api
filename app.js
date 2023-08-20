@@ -1,4 +1,5 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const cors = require('cors');
 
 const docs = require('./docs');
@@ -10,6 +11,17 @@ const dataRouter = require('./routes/data.routes');
 
 const app = express();
 app.use(cors());
+app.use(rateLimit({ 
+  windowMs: 24 * 60 * 60 * 1000, // 24 hours
+  max: 300, // 300 requests per day
+  message: 'Rate limit exceeded. Please try again after 24 hours.',
+  handler: (req, res, next, option) => {
+    res.status(429).json({
+      status: 'error',
+      message: option.message,
+    });
+  },
+ }));
 
 const port = process.env.PORT || 5000;
 
