@@ -13,7 +13,7 @@ const app = express();
 app.use(cors());
 app.use(rateLimit({ 
   windowMs: 24 * 60 * 60 * 1000, // 24 hours
-  max: 300, // 300 requests per day
+  max: 100, // 100 requests per day
   message: 'Rate limit exceeded. Please try again after 24 hours.',
   handler: (req, res, next, option) => {
     res.status(429).json({
