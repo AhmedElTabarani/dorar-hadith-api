@@ -2,6 +2,8 @@ module.exports = (req, res, next) => {
   res.json({
     status: 'success',
     github: 'https://github.com/AhmedElTabarani/dorar-hadith-api',
+    postman:
+      'https://www.postman.com/crimson-robot-408440/workspace/hadith-api/collection/14391446-6a1c5404-cc59-4d59-933d-c07547ee75ca?action=share&creator=14391446',
     endpoints: [
       {
         endpoint: '/v1/api/hadith/search?value={text}&page={page}',

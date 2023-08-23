@@ -8,20 +8,23 @@ const sharhSearchRouter = require('./routes/sharhSearch.routes');
 const mohdithSearchRouter = require('./routes/mohdithSearch.routes');
 const bookSearchRouter = require('./routes/bookSearch.routes');
 const dataRouter = require('./routes/data.routes');
+const config = require('./config/config');
 
 const app = express();
 app.use(cors());
-app.use(rateLimit({ 
-  windowMs: 24 * 60 * 60 * 1000, // 24 hours
-  max: 100, // 100 requests per day
-  message: 'Rate limit exceeded. Please try again after 24 hours.',
-  handler: (req, res, next, option) => {
-    res.status(429).json({
-      status: 'error',
-      message: option.message,
-    });
-  },
- }));
+app.use(
+  rateLimit({
+    windowMs: config.rateLimitEach,
+    max: config.rateLimitMax,
+    message: 'Rate limit exceeded. Please try again later.',
+    handler: (req, res, next, option) => {
+      res.status(429).json({
+        status: 'error',
+        message: option.message,
+      });
+    },
+  }),
+);
 
 const port = process.env.PORT || 5000;
 
