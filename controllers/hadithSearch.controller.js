@@ -153,7 +153,7 @@ class HadithSearchController {
       if (similarHadithDorar)
         hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
       else if (alternateHadithSahihDorar)
-        hadith = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
+        hadithId = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
 
       return {
         hadith,
@@ -272,7 +272,8 @@ class HadithSearchController {
         if (similarHadithDorar)
           hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
         else if (alternateHadithSahihDorar)
-          hadith = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
+          hadithId =
+            alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
 
         return {
           hadith,
