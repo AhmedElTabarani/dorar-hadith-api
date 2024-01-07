@@ -171,7 +171,7 @@ class HadithSearchController {
         hasAlternateHadithSahih: !!alternateHadithSahihDorar,
         similarHadithDorar,
         alternateHadithSahihDorar,
-        urlToGetSmilarHadith: similarHadithDorar
+        urlToGetSimilarHadith: similarHadithDorar
           ? `/v1/site/hadith/similar/${hadithId}`
           : undefined,
         urlToGetAlternateHadithSahih: alternateHadithSahihDorar
@@ -290,7 +290,7 @@ class HadithSearchController {
           hasAlternateHadithSahih: !!alternateHadithSahihDorar,
           similarHadithDorar,
           alternateHadithSahihDorar,
-          urlToGetSmilarHadith: similarHadithDorar
+          urlToGetSimilarHadith: similarHadithDorar
             ? `/v1/site/hadith/similar/${hadithId}`
             : undefined,
           urlToGetAlternateHadithSahih: alternateHadithSahihDorar
@@ -392,7 +392,7 @@ class HadithSearchController {
         hasSimilarHadith: !!similarHadithDorar,
         hasAlternateHadithSahih: false,
         similarHadithDorar,
-        urlToGetSmilarHadith: similarHadithDorar
+        urlToGetSimilarHadith: similarHadithDorar
           ? `/v1/site/hadith/similar/${hadithId}`
           : undefined,
         hasSharhMetadata: !!sharhId,

@@ -63,7 +63,7 @@ module.exports = (req, res, next) => {
                 'رابط الأحاديث المشابهة في موقع الدرر',
               alternateHadithSahihDorar:
                 'رابط الحديث الصحيح في موقع الدرر',
-              urlToGetSmilarHadith:
+              urlToGetSimilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
               urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
@@ -106,7 +106,7 @@ module.exports = (req, res, next) => {
                 'رابط الأحاديث المشابهة في موقع الدرر',
               alternateHadithSahihDorar:
                 'رابط الحديث الصحيح في موقع الدرر',
-              urlToGetSmilarHadith:
+              urlToGetSimilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
               urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
@@ -144,7 +144,7 @@ module.exports = (req, res, next) => {
               'هل الحديث له حديث صحيح بديل أم لا',
             similarHadithDorar:
               'رابط الأحاديث المشابهة في موقع الدرر',
-            urlToGetSmilarHadith:
+            urlToGetSimilarHadith:
               'رابط لكي تبحث عن الأحاديث المشابهة',
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
