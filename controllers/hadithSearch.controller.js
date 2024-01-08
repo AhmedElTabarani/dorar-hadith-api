@@ -206,6 +206,105 @@ class HadithSearchController {
     });
   });
 
+  getOneHadithUsingSiteDorarById = catchAsync(
+    async (req, res, next) => {
+      const hadithId = req.params.id;
+      const url = `https://www.dorar.net/h/${hadithId}`;
+
+      if (cache.has(url)) {
+        const result = cache.get(url);
+        return sendSuccess(res, 200, result, {
+          ...cache.get(`metadata:${url}`),
+          isCached: true,
+        });
+      }
+
+      const data = await nodeFetch(url);
+      if (data.status === 404)
+        return next(
+          new Error(`Can't find similar hadith with this id`),
+        );
+
+      const html = decode(await data.text());
+      const doc = parseHTML(html).document;
+
+      const info = doc.querySelector(`.border-bottom`);
+      const hadith = info.children[0].textContent
+        .replace(/-\s*\:?\s*/g, '')
+        .trim();
+
+      const [rawi, mohdith, book, numberOrPage, grade, explainGrade] =
+        [...info.querySelectorAll('.primary-text-color')].map((el) =>
+          el.textContent.trim(),
+        );
+
+      let sharhId = info
+        .querySelector('a[xplain]')
+        ?.getAttribute('xplain');
+
+      sharhId = sharhId === '0' ? undefined : sharhId;
+
+      const mohdithId = info
+        .querySelector('a[view-card="mhd"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
+      const bookId = info
+        .querySelector('a[view-card="book"]')
+        ?.getAttribute('card-link')
+        ?.match(/\d+/)[0];
+
+      const [similarHadithDorar, alternateHadithSahihDorar] = info
+        .querySelectorAll(
+          'a[style="margin-right:5px;color:#3399ff;"]',
+        )
+        .map((el) => el.getAttribute('href') || undefined);
+
+      const result = {
+        hadith,
+        rawi,
+        mohdith,
+        mohdithId,
+        book,
+        bookId,
+        numberOrPage,
+        grade,
+        explainGrade,
+        hadithId,
+        hasSimilarHadith: !!similarHadithDorar,
+        hasAlternateHadithSahih: !!alternateHadithSahihDorar,
+        similarHadithDorar,
+        alternateHadithSahihDorar,
+        urlToGetSimilarHadith: similarHadithDorar
+          ? `/v1/site/hadith/similar/${hadithId}`
+          : undefined,
+        urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+          ? `/v1/site/hadith/alternate/${hadithId}`
+          : undefined,
+        hasSharhMetadata: !!sharhId,
+        sharhMetadata: sharhId
+          ? {
+              id: sharhId,
+              isContainSharh: false,
+              urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+            }
+          : undefined,
+      };
+
+      cache.set(url, result);
+
+      const metadata = {
+        length: result.length,
+      };
+      cache.set(`metadata:${url}`, metadata);
+
+      sendSuccess(res, 200, result, {
+        ...metadata,
+        isCached: false,
+      });
+    },
+  );
+
   getAllSimilarHadithUsingSiteDorar = catchAsync(
     async (req, res, next) => {
       const similarId = req.params.id;
