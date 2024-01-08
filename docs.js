@@ -79,6 +79,46 @@ module.exports = (req, res, next) => {
         },
       },
       {
+        endpoint: '/v1/site/hadith/:id',
+        example: '/v1/site/hadith/5mtakqyd',
+        abstractResponse: {
+          metadata: {
+            isCached: 'هل هذه النتائج من الـ cache أم لا',
+          },
+          data: {
+            hadith: 'الحديث',
+            rawi: 'الراوي',
+            mohdith: 'المحدث',
+            mohdithId: 'رقم المحدث',
+            book: 'الكتاب',
+            bookId: 'رقم الكتاب',
+            numberOrPage: 'رقم الحديث او الصفحة',
+            grade: 'درجة الصحة',
+            explainGrade: 'توضيح درجة الصحة',
+            hadithId:
+              'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
+            hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+            hasAlternateHadithSahih:
+              'هل الحديث له حديث صحيح بديل أم لا',
+            similarHadithDorar:
+              'رابط الأحاديث المشابهة في موقع الدرر',
+            alternateHadithSahihDorar:
+              'رابط الحديث الصحيح في موقع الدرر',
+            urlToGetSimilarHadith:
+              'رابط لكي تبحث عن الأحاديث المشابهة',
+            urlToGetAlternateHadithSahih:
+              'رابط لكي تبحث عن الحديث الصحيح',
+            hasSharhMetadata: 'هل الحديث له شرح أم لا',
+            sharhMetadata: {
+              id: 'رقم الشرح',
+              isContainSharh:
+                'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+              urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
+            },
+          },
+        },
+      },
+      {
         endpoint: '/v1/site/hadith/similar/:id',
         example: '/v1/site/hadith/similar/5mtakqyd',
         abstractResponse: {

@@ -18,4 +18,8 @@ router
   .route('/site/hadith/alternate/:id')
   .get(HadithSearchController.getAlternateHadithUsingSiteDorar);
 
+router
+  .route('/site/hadith/:id')
+  .get(HadithSearchController.getOneHadithUsingSiteDorarById);
+
 module.exports = router;
