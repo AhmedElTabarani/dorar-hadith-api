@@ -222,7 +222,7 @@ class HadithSearchController {
       const data = await nodeFetch(url);
       if (data.status === 404)
         return next(
-          new Error(`Can't find similar hadith with this id`),
+          new Error(`Can't find hadith with this id`),
         );
 
       const html = decode(await data.text());
