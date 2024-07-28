@@ -1,4 +1,4 @@
 module.exports = (info) => {
-  const similarHadith = info.querySelector('a[tag]');
-  return similarHadith?.getAttribute('tag');
+  const hadithId = info.querySelector('a[tag]');
+  return hadithId?.getAttribute('tag');
 };
