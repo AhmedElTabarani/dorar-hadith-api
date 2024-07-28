@@ -5,6 +5,9 @@ const { parseHTML } = require('linkedom');
 const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
+const getSimilarHadithDorar = require('../utils/getSimilarHadithDorar');
+const getHadithId = require('../utils/getHadithId');
+const getAlternateHadithSahihDorar = require('../utils/getAlternateHadithSahihDorar');
 
 class HadithSearchController {
   searchUsingAPIDorar = catchAsync(async (req, res, next) => {
@@ -143,17 +146,12 @@ class HadithSearchController {
         ?.getAttribute('card-link')
         ?.match(/\d+/)[0];
 
-      const [similarHadithDorar, alternateHadithSahihDorar] = info
-        .querySelectorAll(
-          'a[style="margin-right:5px;color:#3399ff;"]',
-        )
-        .map((el) => el.getAttribute('href') || undefined);
+      const [similarHadithDorar, alternateHadithSahihDorar] = [
+        getSimilarHadithDorar(info),
+        getAlternateHadithSahihDorar(info),
+      ];
 
-      let hadithId;
-      if (similarHadithDorar)
-        hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
-      else if (alternateHadithSahihDorar)
-        hadithId = alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
+      const hadithId = getHadithId(info);
 
       return {
         hadith,
@@ -221,9 +219,7 @@ class HadithSearchController {
 
       const data = await nodeFetch(url);
       if (data.status === 404)
-        return next(
-          new Error(`Can't find hadith with this id`),
-        );
+        return next(new Error(`Can't find hadith with this id`));
 
       const html = decode(await data.text());
       const doc = parseHTML(html).document;
@@ -254,11 +250,10 @@ class HadithSearchController {
         ?.getAttribute('card-link')
         ?.match(/\d+/)[0];
 
-      const [similarHadithDorar, alternateHadithSahihDorar] = info
-        .querySelectorAll(
-          'a[style="margin-right:5px;color:#3399ff;"]',
-        )
-        .map((el) => el.getAttribute('href') || undefined);
+      const [similarHadithDorar, alternateHadithSahihDorar] = [
+        getSimilarHadithDorar(info),
+        getAlternateHadithSahihDorar(info),
+      ];
 
       const result = {
         hadith,
@@ -361,18 +356,12 @@ class HadithSearchController {
           ?.getAttribute('card-link')
           ?.match(/\d+/)[0];
 
-        const [similarHadithDorar, alternateHadithSahihDorar] = info
-          .querySelectorAll(
-            'a[style="margin-right:5px;color:#3399ff;"]',
-          )
-          .map((el) => el.getAttribute('href') || undefined);
+        const [similarHadithDorar, alternateHadithSahihDorar] = [
+          getSimilarHadithDorar(info),
+          getAlternateHadithSahihDorar(info),
+        ];
 
-        let hadithId;
-        if (similarHadithDorar)
-          hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
-        else if (alternateHadithSahihDorar)
-          hadithId =
-            alternateHadithSahihDorar.match(/\/h\/(.*)\?/)[1];
+        const hadithId = getHadithId(info);
 
         return {
           hadith,
@@ -470,13 +459,9 @@ class HadithSearchController {
         ?.getAttribute('card-link')
         ?.match(/\d+/)[0];
 
-      const similarHadithDorar = info
-        .querySelector('a[style="margin-right:5px;color:#3399ff;"]')
-        ?.getAttribute('href');
+      const similarHadithDorar = getSimilarHadithDorar(info);
 
-      let hadithId;
-      if (similarHadithDorar)
-        hadithId = similarHadithDorar.match(/\/h\/(.*)\?/)[1];
+      const hadithId = getHadithId(info);
 
       const result = {
         hadith,
