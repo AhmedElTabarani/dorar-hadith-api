@@ -487,3 +487,17 @@ components:
               type: string
             editionYear:
               type: string
+    SiteSimilarHadithResponse:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            length:
+              type: integer
+            isCached:
+              type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteHadithItem'
