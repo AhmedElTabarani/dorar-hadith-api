@@ -10,6 +10,10 @@ const bookSearchRouter = require('./routes/bookSearch.routes');
 const dataRouter = require('./routes/data.routes');
 const config = require('./config/config');
 
+const swaggerUi = require('swagger-ui-express');
+const YAML = require('yamljs');
+const swaggerDocument = YAML.load('api-docs/openapi.yaml');
+
 const app = express();
 app.use(cors());
 app.use(
@@ -27,6 +31,9 @@ app.use(
 );
 
 const port = process.env.PORT || 5000;
+
+// Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // to delete elements from hadith text or not
 // including this `<span class="search-keys">...</span>`
