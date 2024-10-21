@@ -196,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SiteHadithSearchResponse'
+                $ref: '#/components/schemas/SiteSimilarHadithResponse'
 
   /site/hadith/alternate/{id}:
     get:
