@@ -10,7 +10,7 @@ servers:
 paths:
   /api/hadith/search:
     get:
-      summary: Search for hadiths
+      summary: Search for hadiths using Dorar.net API
       parameters:
         - in: query
           name: value
@@ -84,11 +84,89 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HadithSearchResponse'
+                $ref: '#/components/schemas/APIHadithSearchResponse'
+
+  /site/hadith/search:
+    get:
+      summary: Search for hadiths using site data
+      parameters:
+        - in: query
+          name: value
+          schema:
+            type: string
+          required: true
+          description: Search query for hadith text
+        - in: query
+          name: page
+          schema:
+            type: integer
+          description: Page number for pagination
+        - in: query
+          name: removehtml
+          schema:
+            type: boolean
+          description: Remove HTML tags from results
+        - in: query
+          name: specialist
+          schema:
+            type: boolean
+          description: Include specialist hadiths
+        - in: query
+          name: xclude
+          schema:
+            type: string
+          description: Words or phrases to exclude from search
+        - in: query
+          name: st
+          schema:
+            type: string
+            enum: [w, a, p]
+          description: Search type (w=all words, a=any word, p=exact phrase)
+        - in: query
+          name: t
+          schema:
+            type: string
+            enum: ['*', '0', '1', '2', '3']
+          description: Search scope
+        - in: query
+          name: d[]
+          schema:
+            type: array
+            items:
+              type: string
+          description: Hadith degree
+        - in: query
+          name: m[]
+          schema:
+            type: array
+            items:
+              type: string
+          description: Muhadith (narrator) IDs
+        - in: query
+          name: s[]
+          schema:
+            type: array
+            items:
+              type: string
+          description: Book IDs
+        - in: query
+          name: rawi[]
+          schema:
+            type: array
+            items:
+              type: string
+          description: Rawi (transmitter) IDs
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteHadithSearchResponse'
 
   /site/hadith/{id}:
     get:
-      summary: Get a specific hadith by ID
+      summary: Get a specific hadith by ID from site
       parameters:
         - in: path
           name: id
@@ -101,7 +179,41 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SingleHadithResponse'
+                $ref: '#/components/schemas/SiteSingleHadithResponse'
+
+  /site/hadith/similar/{id}:
+    get:
+      summary: Get similar hadiths by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteHadithSearchResponse'
+
+  /site/hadith/alternate/{id}:
+    get:
+      summary: Get alternate sahih hadith by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteSingleHadithResponse'
 
   /site/sharh/{id}:
     get:
@@ -109,6 +221,23 @@ paths:
       parameters:
         - in: path
           name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharhResponse'
+
+  /site/sharh/text/{text}:
+    get:
+      summary: Get sharh (explanation) for a hadith by text
+      parameters:
+        - in: path
+          name: text
           required: true
           schema:
             type: string
@@ -156,7 +285,7 @@ paths:
 
 components:
   schemas:
-    HadithSearchResponse:
+    APIHadithSearchResponse:
       type: object
       properties:
         metadata:
@@ -173,9 +302,9 @@ components:
         data:
           type: array
           items:
-            $ref: '#/components/schemas/HadithItem'
+            $ref: '#/components/schemas/APIHadithItem'
 
-    HadithItem:
+    APIHadithItem:
       type: object
       properties:
         hadith:
@@ -191,7 +320,81 @@ components:
         grade:
           type: string
 
-    SingleHadithResponse:
+    SiteHadithSearchResponse:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            length:
+              type: integer
+            page:
+              type: integer
+            removeHTML:
+              type: boolean
+            specialist:
+              type: boolean
+            numberOfNonSpecialist:
+              type: integer
+            numberOfSpecialist:
+              type: integer
+            isCached:
+              type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteHadithItem'
+
+    SiteHadithItem:
+      type: object
+      properties:
+        hadith:
+          type: string
+        rawi:
+          type: string
+        mohdith:
+          type: string
+        mohdithId:
+          type: string
+        book:
+          type: string
+        bookId:
+          type: string
+        numberOrPage:
+          type: string
+        grade:
+          type: string
+        explainGrade:
+          type: string
+        takhrij:
+          type: string
+        hadithId:
+          type: string
+        hasSimilarHadith:
+          type: boolean
+        hasAlternateHadithSahih:
+          type: boolean
+        similarHadithDorar:
+          type: string
+        alternateHadithSahihDorar:
+          type: string
+        urlToGetSimilarHadith:
+          type: string
+        urlToGetAlternateHadithSahih:
+          type: string
+        hasSharhMetadata:
+          type: boolean
+        sharhMetadata:
+          type: object
+          properties:
+            id:
+              type: string
+            isContainSharh:
+              type: boolean
+            urlToGetSharh:
+              type: string
+
+    SiteSingleHadithResponse:
       type: object
       properties:
         metadata:
@@ -200,7 +403,7 @@ components:
             isCached:
               type: boolean
         data:
-          $ref: '#/components/schemas/HadithItem'
+          $ref: '#/components/schemas/SiteHadithItem'
 
     SharhResponse:
       type: object
@@ -227,6 +430,8 @@ components:
               type: string
             takhrij:
               type: string
+            hasSharhMetadata:
+              type: boolean
             sharhMetadata:
               type: object
               properties:
