@@ -21,7 +21,9 @@
     "html-entities": "^2.3.3",
     "linkedom": "^0.14.25",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.9"
+    "node-fetch": "^2.6.9",
+    "swagger-ui-express": "^5.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15"
