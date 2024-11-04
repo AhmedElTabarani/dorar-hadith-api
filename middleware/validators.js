@@ -93,10 +93,36 @@ const validateSharhText = [
   validateRequest
 ];
 
+// Validation rules for book ID
+const validateBookId = [
+  param('id')
+    .notEmpty()
+    .withMessage('Book ID is required')
+    .isString()
+    .trim()
+    .matches(/^[0-9]+$/)
+    .withMessage('Invalid book ID format'),
+  validateRequest
+];
+
+// Validation rules for mohdith ID
+const validateMohdithId = [
+  param('id')
+    .notEmpty()
+    .withMessage('Mohdith ID is required')
+    .isString()
+    .trim()
+    .matches(/^[0-9]+$/)
+    .withMessage('Invalid mohdith ID format'),
+  validateRequest
+];
+
 module.exports = {
   validateHadithSearch,
   validateHadithId,
   validateSharhSearch,
   validateSharhId,
-  validateSharhText
+  validateSharhText,
+  validateBookId,
+  validateMohdithId
 };

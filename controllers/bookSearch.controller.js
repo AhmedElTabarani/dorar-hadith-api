@@ -1,17 +1,19 @@
-const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { parseHTML } = require('linkedom');
 
 const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
+const AppError = require('../utils/AppError');
+const fetchWithTimeout = require('../utils/fetchWithTimeout');
 
 class BookSearchController {
   getOneBookByIdUsingSiteDorar = catchAsync(
     async (req, res, next) => {
       const bookId = req.params.id;
-      if (!bookId)
-        return next(new Error(`Can't find book with this id`));
+      if (!bookId) {
+        throw new AppError('Book ID is required', 400);
+      }
 
       const url = `https://www.dorar.net/hadith/book-card/${bookId}`;
 
@@ -22,11 +24,8 @@ class BookSearchController {
         });
       }
 
-      const data = await nodeFetch(url);
-      if (data.status === 404)
-        return next(new Error(`Can't find book with this id`));
-
-      const html = decode(await data.json());
+      const response = await fetchWithTimeout(url);
+      const html = decode(await response.json());
       const doc = parseHTML(html).document;
 
       const name = doc
