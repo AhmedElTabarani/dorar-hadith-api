@@ -5,117 +5,158 @@ const { parseHTML } = require('linkedom');
 const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
+const AppError = require('../utils/AppError');
+
+// Utility function for making fetch requests with timeout
+const fetchWithTimeout = async (url, options = {}) => {
+  const timeout = 15000; // 15 seconds timeout
+  const controller = new AbortController();
+  const id = setTimeout(() => controller.abort(), timeout);
+
+  try {
+    const response = await nodeFetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    clearTimeout(id);
+
+    if (!response.ok) {
+      throw new AppError(`Failed to fetch data: ${response.statusText}`, response.status);
+    }
+
+    return response;
+  } catch (error) {
+    clearTimeout(id);
+    if (error.name === 'AbortError') {
+      throw new AppError('Request timeout. Please try again later.', 408);
+    }
+    throw error;
+  }
+};
 
 const getSharhById = async (sharhId) => {
+  if (!sharhId) {
+    throw new AppError('Sharh ID is required', 400);
+  }
+
   const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
 
-  const data = await nodeFetch(url);
-  if (data.status === 404) throw new Error('Sharh not found');
+  const response = await fetchWithTimeout(url);
+  if (response.status === 404) {
+    throw new AppError('Sharh not found', 404);
+  }
 
-  const html = decode(await data.text());
+  const html = decode(await response.text());
   const doc = parseHTML(html).document;
 
-  const hadith = doc
-    .querySelector('article')
-    .textContent.replace(/-\s*/g, '')
-    .trim();
+  const article = doc.querySelector('article');
+  if (!article) {
+    throw new AppError('Invalid response structure from Dorar', 502);
+  }
 
-  const [rawi, mohdith, book, numberOrPage, grade, takhrij] = [
-    ...doc.querySelectorAll('.primary-text-color'),
-  ].map((el) => el.textContent.trim());
+  try {
+    const hadith = article.textContent.replace(/-\s*/g, '').trim();
 
-  const sharh = doc
-    .querySelector('.text-justify')
-    .nextElementSibling.textContent.trim();
+    const [rawi, mohdith, book, numberOrPage, grade, takhrij] = [
+      ...doc.querySelectorAll('.primary-text-color'),
+    ].map((el) => el.textContent.trim());
 
-  const result = {
-    hadith,
-    rawi,
-    mohdith,
-    book,
-    numberOrPage,
-    grade,
-    takhrij,
-    hasSharhMetadata: true,
-    sharhMetadata: {
-      id: sharhId,
-      isContainSharh: true,
-      urlToGetSharhById: `/v1/site/sharh/${sharhId}`,
-      sharh,
-    },
-  };
+    const sharhElement = doc.querySelector('.text-justify')?.nextElementSibling;
+    if (!sharhElement) {
+      throw new AppError('Sharh content not found', 404);
+    }
 
-  return result;
+    const sharh = sharhElement.textContent.trim();
+
+    const result = {
+      hadith,
+      rawi,
+      mohdith,
+      book,
+      numberOrPage,
+      grade,
+      takhrij,
+      hasSharhMetadata: true,
+      sharhMetadata: {
+        id: sharhId,
+        isContainSharh: true,
+        urlToGetSharhById: `/v1/site/sharh/${sharhId}`,
+        sharh,
+      },
+    };
+
+    return result;
+  } catch (error) {
+    throw new AppError('Error parsing sharh data', 502);
+  }
 };
 
 class SharhSearchController {
-  getOneSharhByIdUsingSiteDorar = catchAsync(
-    async (req, res, next) => {
-      const sharhId = req.params.id;
-      if (!sharhId) return next(new Error('Id of sharh is required'));
+  getOneSharhByIdUsingSiteDorar = catchAsync(async (req, res, next) => {
+    const sharhId = req.params.id;
+    const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
 
-      const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
-
-      if (cache.has(url)) {
-        const result = cache.get(url);
-        return sendSuccess(res, 200, result, {
-          isCached: true,
-        });
-      }
-
-      const result = await getSharhById(sharhId);
-
-      cache.set(url, result);
-      sendSuccess(res, 200, result, {
-        isCached: false,
+    if (cache.has(url)) {
+      const result = cache.get(url);
+      return sendSuccess(res, 200, result, {
+        isCached: true,
       });
-    },
-  );
+    }
 
-  getOneSharhByTextUsingSiteDorar = catchAsync(
-    async (req, res, next) => {
-      const text = req.params.text;
-      if (!text) return next(new Error('Text of sharh is required'));
+    const result = await getSharhById(sharhId);
+    cache.set(url, result);
 
-      const url = `https://www.dorar.net/hadith/search?q=${text}${
-        req.tab === 'specialist' ? '&all' : ''
-      }`;
+    sendSuccess(res, 200, result, {
+      isCached: false,
+    });
+  });
 
-      if (cache.has(url)) {
-        const result = cache.get(url);
-        return sendSuccess(res, 200, result, {
-          specialist: req.isForSpecialist,
-          isCached: true,
-        });
-      }
+  getOneSharhByTextUsingSiteDorar = catchAsync(async (req, res, next) => {
+    const text = req.params.text;
+    if (!text) {
+      throw new AppError('Text of sharh is required', 400);
+    }
 
-      const data = await nodeFetch(url);
-      const html = decode(await data.text());
-      const doc = parseHTML(html).document.querySelector(
-        `#${req.tab}`,
-      );
+    const url = `https://www.dorar.net/hadith/search?q=${text}${
+      req.tab === 'specialist' ? '&all' : ''
+    }`;
 
-      const sharhId = doc
-        .querySelector('a[xplain]')
-        ?.getAttribute('xplain');
-
-      const result = await getSharhById(sharhId);
-
-      cache.set(url, result);
-
-      sendSuccess(res, 200, result, {
+    if (cache.has(url)) {
+      const result = cache.get(url);
+      return sendSuccess(res, 200, result, {
         specialist: req.isForSpecialist,
-        isCached: false,
+        isCached: true,
       });
-    },
-  );
+    }
+
+    const response = await fetchWithTimeout(url);
+    const html = decode(await response.text());
+    const doc = parseHTML(html).document;
+
+    const tabElement = doc.querySelector(`#${req.tab}`);
+    if (!tabElement) {
+      throw new AppError('Invalid response structure from Dorar', 502);
+    }
+
+    const sharhId = tabElement.querySelector('a[xplain]')?.getAttribute('xplain');
+    if (!sharhId) {
+      throw new AppError('No sharh found for the given text', 404);
+    }
+
+    const result = await getSharhById(sharhId);
+    cache.set(url, result);
+
+    sendSuccess(res, 200, result, {
+      specialist: req.isForSpecialist,
+      isCached: false,
+    });
+  });
 
   getAllSharhUsingSiteDorar = catchAsync(async (req, res, next) => {
     const query = req._parsedUrl.query?.replace('value=', 'q=') || '';
     const url = `https://www.dorar.net/hadith/search?${query}${
       req.tab === 'specialist' ? '&all' : ''
     }`;
-    console.log(url);
 
     if (cache.has(url)) {
       const result = cache.get(url);
@@ -125,37 +166,46 @@ class SharhSearchController {
       });
     }
 
-    const data = await nodeFetch(url);
-    const html = decode(await data.text());
+    const response = await fetchWithTimeout(url);
+    const html = decode(await response.text());
     const doc = parseHTML(html).document;
 
-    const result = await Promise.all(
-      Array.from(doc.querySelectorAll(`#${req.tab} .border-bottom`))
-        .map((info) => {
-          const sharhId = info
-            .querySelector('a[xplain]')
-            ?.getAttribute('xplain');
-          return sharhId;
-        })
-        .filter((sharhId) => sharhId !== undefined)
-        .map((sharhId) => getSharhById(sharhId)),
-    );
+    const tabElement = doc.querySelector(`#${req.tab}`);
+    if (!tabElement) {
+      throw new AppError('Invalid response structure from Dorar', 502);
+    }
 
-    cache.set(url, result);
+    const sharhIds = Array.from(doc.querySelectorAll(`#${req.tab} .border-bottom`))
+      .map((info) => info.querySelector('a[xplain]')?.getAttribute('xplain'))
+      .filter((id) => id !== undefined && id !== '0');
 
-    const metadata = {
-      length: result.length,
-      page: req.query.page,
-      removeHTML: req.isRemoveHTML,
-      specialist: req.isForSpecialist,
-    };
+    if (sharhIds.length === 0) {
+      throw new AppError('No sharh found for the given search', 404);
+    }
 
-    cache.set(`metadata:${url}`, metadata);
+    try {
+      const result = await Promise.all(
+        sharhIds.map((sharhId) => getSharhById(sharhId))
+      );
 
-    sendSuccess(res, 200, result, {
-      ...metadata,
-      isCached: false,
-    });
+      cache.set(url, result);
+
+      const metadata = {
+        length: result.length,
+        page: req.query.page,
+        removeHTML: req.isRemoveHTML,
+        specialist: req.isForSpecialist,
+      };
+
+      cache.set(`metadata:${url}`, metadata);
+
+      sendSuccess(res, 200, result, {
+        ...metadata,
+        isCached: false,
+      });
+    } catch (error) {
+      throw new AppError('Error fetching sharh data', 502);
+    }
   });
 }
 

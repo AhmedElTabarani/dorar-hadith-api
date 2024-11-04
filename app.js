@@ -1,6 +1,8 @@
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const cors = require('cors');
+const helmet = require('helmet');
+const timeout = require('connect-timeout');
 
 const docs = require('./docs');
 const hadithSearchRouter = require('./routes/hadithSearch.routes');
@@ -9,60 +11,62 @@ const mohdithSearchRouter = require('./routes/mohdithSearch.routes');
 const bookSearchRouter = require('./routes/bookSearch.routes');
 const dataRouter = require('./routes/data.routes');
 const config = require('./config/config');
+const errorHandler = require('./middleware/errorHandler');
+const AppError = require('./utils/AppError');
 
 const swaggerUi = require('swagger-ui-express');
 const YAML = require('yamljs');
 const swaggerDocument = YAML.load('api-docs/openapi.yaml');
 
 const app = express();
+
+// Security Middleware
+app.use(helmet());
 app.use(cors());
+app.use(timeout('30s'));
+app.use(express.json({ limit: '10kb' }));
+
+// Rate Limiting
 app.use(
   rateLimit({
     windowMs: config.rateLimitEach,
     max: config.rateLimitMax,
     message: 'Rate limit exceeded. Please try again later.',
     handler: (req, res, next, option) => {
-      res.status(429).json({
-        status: 'error',
-        message: option.message,
-      });
+      next(new AppError(option.message, 429));
     },
   }),
 );
 
-const port = process.env.PORT || 5000;
-
-// Serve Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
-// to delete elements from hadith text or not
-// including this `<span class="search-keys">...</span>`
+// Request Processing Middleware
 app.use((req, res, next) => {
+  // Handle timeout
+  if (req.timedout) {
+    return next(new AppError('Request timeout', 408));
+  }
+
+  // Process removeHTML parameter
   req.isRemoveHTML = req.query.removehtml || true;
   req.isRemoveHTML =
     req.query.removehtml?.toLowerCase() === 'false' ? false : true;
-  next();
-});
 
-// specialist value can be true or false
-app.use((req, res, next) => {
+  // Process specialist parameter
   req.isForSpecialist = req.query.specialist || false;
   req.isForSpecialist =
     req.query.specialist?.toLowerCase() === 'true' ? true : false;
-
-  // tab use in dorar site search
   req.tab = req.isForSpecialist ? 'specialist' : 'home';
+
+  // Set default page
+  req.query.page = parseInt(req.query.page || 1);
+  if (isNaN(req.query.page) || req.query.page < 1) {
+    return next(new AppError('Page must be a positive integer', 400));
+  }
+
   next();
 });
 
-// set default page
-app.use((req, res, next) => {
-  req.query.page ||= 1;
-  req.query.page = +req.query.page;
-  next();
-});
-
-app.get('/', (req, res, next) => {
+// Routes
+app.get('/', (req, res) => {
   res.status(302).redirect('/docs');
 });
 app.get('/docs', docs);
@@ -73,20 +77,17 @@ app.use('/v1', mohdithSearchRouter);
 app.use('/v1', bookSearchRouter);
 app.use('/v1', dataRouter);
 
-app.get('*', (req, res, next) => {
-  res.status(404).json({
-    status: 'error',
-    message: 'There is no router for this url, Please check /docs',
-  });
+// 404 Handler
+app.all('*', (req, res, next) => {
+  next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-app.use((err, req, res, next) => {
-  res.status(400).json({
-    status: 'error',
-    message: err.message,
-  });
-});
+// Set NODE_ENV for testing if not set
+if (!process.env.NODE_ENV) {
+  process.env.NODE_ENV = 'development';
+}
 
-app.listen(port, () =>
-  console.log(`Server is listening at http://localhost:${port}`),
-);
+// Global Error Handler
+app.use(errorHandler);
+
+module.exports = app;
