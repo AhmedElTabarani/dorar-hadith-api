@@ -85,7 +85,7 @@ describe('Hadith Search API Integration Tests', () => {
 
       expect(response.status).toBe(502);
       expect(response.body.status).toBe('error');
-      expect(response.body.message).toContain('parsing');
+      expect(response.body.message).toContain('Invalid response from Dorar API');
     });
   });
 

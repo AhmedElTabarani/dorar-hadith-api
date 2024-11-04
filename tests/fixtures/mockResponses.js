@@ -77,9 +77,8 @@ const mockServerErrorResponse = {
 
 // Mock malformed responses for error handling testing
 const mockMalformedHadithResponse = {
-  ahadith: {
-    result: '<div>Invalid structure</div>'
-  }
+  // Simulate malformed response by omitting the 'ahadith' property
+  // This should trigger 'Invalid response from Dorar API' error
 };
 
 const mockMalformedSharhResponse = '<div>Invalid structure</div>';

@@ -15,9 +15,18 @@ const getSharhById = async (sharhId) => {
 
   const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
 
-  const response = await fetchWithTimeout(url);
-  if (response.status === 404) {
-    throw new AppError('Sharh not found', 404);
+  let response;
+  try {
+    response = await fetchWithTimeout(url);
+  } catch (error) {
+    if (
+      error.statusCode === 404 ||
+      error.status === 404 ||
+      error.message.includes('Not Found')
+    ) {
+      throw new AppError('Sharh not found', 404);
+    }
+    throw error;
   }
 
   const html = decode(await response.text());
