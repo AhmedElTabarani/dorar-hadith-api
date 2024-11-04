@@ -1,26 +1,5 @@
 const AppError = require('../utils/AppError');
 
-const handleCastErrorDB = err => {
-  const message = `Invalid ${err.path}: ${err.value}`;
-  return new AppError(message, 400);
-};
-
-const handleValidationError = err => {
-  const errors = Object.values(err.errors).map(el => el.message);
-  const message = `Invalid input data. ${errors.join('. ')}`;
-  return new AppError(message, 400);
-};
-
-const handleFetchError = err => {
-  if (err.statusCode === 404) {
-    return new AppError('not found', 404);
-  }
-  if (err.message.includes('Failed to fetch')) {
-    return new AppError('Service unavailable', 503);
-  }
-  return new AppError('Failed to fetch data', 502);
-};
-
 const handleTimeoutError = err => {
   return new AppError('Request timeout', 408);
 };
@@ -69,16 +48,8 @@ module.exports = (err, req, res, next) => {
     error.message = err.message;
     error.statusCode = err.statusCode;
 
-    if (err.name === 'CastError') error = handleCastErrorDB(error);
-    if (err.name === 'ValidationError') error = handleValidationError(error);
-    if (err.name === 'FetchError' || err.message.includes('fetch')) error = handleFetchError(error);
     if (err.name === 'TimeoutError' || err.code === 'ECONNABORTED') error = handleTimeoutError(error);
     if (err.message.includes('parsing')) error = handleParsingError(error);
-
-    // Special case for sharh not found
-    if (err.statusCode === 404 && req.originalUrl.includes('/sharh')) {
-      error.message = 'Sharh not found';
-    }
 
     sendErrorProd(error, res);
   }

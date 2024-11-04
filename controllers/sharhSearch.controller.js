@@ -6,33 +6,7 @@ const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
 const AppError = require('../utils/AppError');
-
-// Utility function for making fetch requests with timeout
-const fetchWithTimeout = async (url, options = {}) => {
-  const timeout = 15000; // 15 seconds timeout
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-
-  try {
-    const response = await nodeFetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(id);
-
-    if (!response.ok) {
-      throw new AppError(`Failed to fetch data: ${response.statusText}`, response.status);
-    }
-
-    return response;
-  } catch (error) {
-    clearTimeout(id);
-    if (error.name === 'AbortError') {
-      throw new AppError('Request timeout. Please try again later.', 408);
-    }
-    throw error;
-  }
-};
+const fetchWithTimeout = require('../utils/fetchWithTimeout');
 
 const getSharhById = async (sharhId) => {
   if (!sharhId) {
@@ -140,7 +114,10 @@ class SharhSearchController {
 
     const sharhId = tabElement.querySelector('a[xplain]')?.getAttribute('xplain');
     if (!sharhId) {
-      throw new AppError('No sharh found for the given text', 404);
+      return sendSuccess(res, 200, [], {
+        specialist: req.isForSpecialist,
+        isCached: false,
+      });
     }
 
     const result = await getSharhById(sharhId);
@@ -180,7 +157,13 @@ class SharhSearchController {
       .filter((id) => id !== undefined && id !== '0');
 
     if (sharhIds.length === 0) {
-      throw new AppError('No sharh found for the given search', 404);
+      return sendSuccess(res, 200, [], {
+        length: 0,
+        page: req.query.page,
+        removeHTML: req.isRemoveHTML,
+        specialist: req.isForSpecialist,
+        isCached: false,
+      });
     }
 
     try {

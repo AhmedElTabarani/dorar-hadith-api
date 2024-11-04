@@ -9,33 +9,7 @@ const getSimilarHadithDorar = require('../utils/getSimilarHadithDorar');
 const getHadithId = require('../utils/getHadithId');
 const getAlternateHadithSahihDorar = require('../utils/getAlternateHadithSahihDorar');
 const AppError = require('../utils/AppError');
-
-// Utility function for making fetch requests with timeout
-const fetchWithTimeout = async (url, options = {}) => {
-  const timeout = 15000; // 15 seconds timeout
-  const controller = new AbortController();
-  const id = setTimeout(() => controller.abort(), timeout);
-
-  try {
-    const response = await nodeFetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    clearTimeout(id);
-
-    if (!response.ok) {
-      throw new AppError(`Failed to fetch data: ${response.statusText}`, response.status);
-    }
-
-    return response;
-  } catch (error) {
-    clearTimeout(id);
-    if (error.name === 'AbortError') {
-      throw new AppError('Request timeout. Please try again later.', 408);
-    }
-    throw error;
-  }
-};
+const fetchWithTimeout = require('../utils/fetchWithTimeout');
 
 class HadithSearchController {
   searchUsingAPIDorar = catchAsync(async (req, res, next) => {
@@ -96,10 +70,6 @@ class HadithSearchController {
         return null;
       }
     }).filter(Boolean); // Remove any null results from parsing errors
-
-    if (result.length === 0) {
-      throw new AppError('No results found or error parsing response', 404);
-    }
 
     cache.set(url, result);
 
@@ -234,10 +204,6 @@ class HadithSearchController {
         return null;
       }
     }).filter(Boolean); // Remove any null results from parsing errors
-
-    if (result.length === 0) {
-      throw new AppError('No results found or error parsing response', 404);
-    }
 
     cache.set(url, result);
 
@@ -457,10 +423,6 @@ class HadithSearchController {
         return null;
       }
     }).filter(Boolean);
-
-    if (result.length === 0) {
-      throw new AppError('No similar hadiths found or error parsing response', 404);
-    }
 
     cache.set(url, result);
 

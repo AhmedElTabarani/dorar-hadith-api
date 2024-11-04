@@ -77,12 +77,15 @@ app.use('/v1', mohdithSearchRouter);
 app.use('/v1', bookSearchRouter);
 app.use('/v1', dataRouter);
 
+// Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
 // 404 Handler
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server!`, 404));
 });
 
-// Set NODE_ENV for testing if not set
+// Set NODE_ENV for development if not set
 if (!process.env.NODE_ENV) {
   process.env.NODE_ENV = 'development';
 }
