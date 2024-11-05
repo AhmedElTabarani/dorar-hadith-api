@@ -14,20 +14,7 @@ const getSharhById = async (sharhId) => {
   }
 
   const url = `https://www.dorar.net/hadith/sharh/${sharhId}`;
-
-  let response;
-  try {
-    response = await fetchWithTimeout(url);
-  } catch (error) {
-    if (
-      error.statusCode === 404 ||
-      error.status === 404 ||
-      error.message.includes('Not Found')
-    ) {
-      throw new AppError('Sharh not found', 404);
-    }
-    throw error;
-  }
+  const response = await fetchWithTimeout(url);
 
   const html = decode(await response.text());
   const doc = parseHTML(html).document;
@@ -123,10 +110,7 @@ class SharhSearchController {
 
     const sharhId = tabElement.querySelector('a[xplain]')?.getAttribute('xplain');
     if (!sharhId) {
-      return sendSuccess(res, 200, [], {
-        specialist: req.isForSpecialist,
-        isCached: false,
-      });
+      throw new AppError('No sharh found for the given text', 404);
     }
 
     const result = await getSharhById(sharhId);
@@ -175,29 +159,25 @@ class SharhSearchController {
       });
     }
 
-    try {
-      const result = await Promise.all(
-        sharhIds.map((sharhId) => getSharhById(sharhId))
-      );
+    const result = await Promise.all(
+      sharhIds.map((sharhId) => getSharhById(sharhId))
+    );
 
-      cache.set(url, result);
+    cache.set(url, result);
 
-      const metadata = {
-        length: result.length,
-        page: req.query.page,
-        removeHTML: req.isRemoveHTML,
-        specialist: req.isForSpecialist,
-      };
+    const metadata = {
+      length: result.length,
+      page: req.query.page,
+      removeHTML: req.isRemoveHTML,
+      specialist: req.isForSpecialist,
+    };
 
-      cache.set(`metadata:${url}`, metadata);
+    cache.set(`metadata:${url}`, metadata);
 
-      sendSuccess(res, 200, result, {
-        ...metadata,
-        isCached: false,
-      });
-    } catch (error) {
-      throw new AppError('Error fetching sharh data', 502);
-    }
+    sendSuccess(res, 200, result, {
+      ...metadata,
+      isCached: false,
+    });
   });
 }
 

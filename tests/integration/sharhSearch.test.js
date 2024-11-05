@@ -52,6 +52,26 @@ describe('Sharh Search API Integration Tests', () => {
       expect(response.body.message).toContain('Sharh not found');
     });
 
+    test('should return 404 when no sharh found for text search', async () => {
+      nock('https://www.dorar.net')
+        .get('/hadith/search')
+        .query(true)
+        .reply(200, `
+          <div id="home">
+            <div class="border-bottom">
+              <!-- No xplain attribute -->
+            </div>
+          </div>
+        `);
+
+      const response = await request(app)
+        .get('/v1/site/sharh/text/validtext');
+
+      expect(response.status).toBe(404);
+      expect(response.body.status).toBe('fail');
+      expect(response.body.message).toContain('No sharh found for the given text');
+    });
+
     test('should handle network timeouts', async () => {
       nock('https://www.dorar.net')
         .get('/hadith/sharh/123')
@@ -124,6 +144,28 @@ describe('Sharh Search API Integration Tests', () => {
       expect(response.body.status).toBe('success');
       expect(response.body.data).toHaveProperty('hadith');
       expect(response.body.data.sharhMetadata).toHaveProperty('sharh');
+    });
+
+    test('should return empty array for search with no results', async () => {
+      nock('https://www.dorar.net')
+        .get('/hadith/search')
+        .query(true)
+        .reply(200, `
+          <div id="home">
+            <div class="border-bottom">
+              <!-- No xplain attribute -->
+            </div>
+          </div>
+        `);
+
+      const response = await request(app)
+        .get('/v1/site/sharh/search')
+        .query({ value: 'test' });
+
+      expect(response.status).toBe(200);
+      expect(response.body.status).toBe('success');
+      expect(response.body.data).toEqual([]);
+      expect(response.body.metadata.length).toBe(0);
     });
 
     test('should handle search with specialist mode', async () => {

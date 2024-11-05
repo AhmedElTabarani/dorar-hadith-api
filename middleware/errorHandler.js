@@ -8,6 +8,20 @@ const handleParsingError = err => {
   return new AppError('Error parsing response', 502);
 };
 
+const handleNotFoundError = (err, req) => {
+  // Extract resource type and context from URL
+  const path = req.path.toLowerCase();
+  if (path.includes('sharh')) {
+    if (path.includes('text/')) {
+      return new AppError('No sharh found for the given text', 404);
+    }
+    return new AppError('Sharh not found', 404);
+  } else if (path.includes('hadith')) {
+    return new AppError('Hadith not found', 404);
+  }
+  return new AppError('Resource not found', 404);
+};
+
 const sendErrorDev = (err, res) => {
   res.status(err.statusCode).json({
     status: err.status,
@@ -50,6 +64,11 @@ module.exports = (err, req, res, next) => {
 
     if (err.name === 'TimeoutError' || err.code === 'ECONNABORTED') error = handleTimeoutError(error);
     if (err.message.includes('parsing')) error = handleParsingError(error);
+    if (
+      error.statusCode === 404 || 
+      error.status === 404 || 
+      error.message.includes('Not Found')
+    ) error = handleNotFoundError(error, req);
 
     sendErrorProd(error, res);
   }

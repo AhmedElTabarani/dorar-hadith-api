@@ -25,25 +25,9 @@ class HadithSearchController {
     }
 
     let response;
-    try {
-      response = await fetchWithTimeout(url);
-    } catch (error) {
-      if (
-        error.statusCode === 404 ||
-        error.status === 404 ||
-        error.message.includes('Not Found')
-      ) {
-        throw new AppError('Hadith not found', 404);
-      }
-      throw error;
-    }
+    response = await fetchWithTimeout(url);
 
-    let data;
-    try {
-      data = await response.json();
-    } catch (error) {
-      throw new AppError('Invalid JSON response from Dorar API', 502);
-    }
+    const data = await response.json();
 
     if (!data.ahadith?.result) {
       throw new AppError('Invalid response from Dorar API', 502);
@@ -59,7 +43,7 @@ class HadithSearchController {
     }
 
     let result;
-    try {
+    
       result = Array.from(doc.querySelectorAll('.hadith-info'))
         .map((info) => {
           try {
@@ -96,13 +80,7 @@ class HadithSearchController {
           }
         })
         .filter(Boolean); // Remove any null results from parsing errors
-    } catch (error) {
-      throw new AppError('Error processing hadith data', 502);
-    }
 
-    if (result.length === 0) {
-      throw new AppError('No hadith found in the response', 502);
-    }
 
     cache.set(url, result);
 
@@ -135,18 +113,8 @@ class HadithSearchController {
     }
 
     let response;
-    try {
-      response = await fetchWithTimeout(url);
-    } catch (error) {
-      if (
-        error.statusCode === 404 ||
-        error.status === 404 ||
-        error.message.includes('Not Found')
-      ) {
-        throw new AppError('Hadith not found', 404);
-      }
-      throw error;
-    }
+    response = await fetchWithTimeout(url);
+    
 
     const html = decode(await response.text());
     const doc = parseHTML(html).document;
