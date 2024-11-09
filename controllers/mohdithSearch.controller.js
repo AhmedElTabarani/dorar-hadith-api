@@ -1,17 +1,19 @@
-const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { parseHTML } = require('linkedom');
 
 const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
+const AppError = require('../utils/AppError');
+const fetchWithTimeout = require('../utils/fetchWithTimeout');
 
 class MohdithSearchController {
   getOneMohdithByIdUsingSiteDorar = catchAsync(
     async (req, res, next) => {
       const mohdithId = req.params.id;
-      if (!mohdithId)
-        return next(new Error(`Can't find mohdith with this id`));
+      if (!mohdithId) {
+        throw new AppError('Mohdith ID is required', 400);
+      }
 
       const url = `https://www.dorar.net/hadith/mhd/${mohdithId}`;
 
@@ -22,11 +24,8 @@ class MohdithSearchController {
         });
       }
 
-      const data = await nodeFetch(url);
-      if (data.status === 404)
-        return next(new Error(`Can't find mohdith with this id`));
-
-      const html = decode(await data.text());
+      const response = await fetchWithTimeout(url);
+      const html = decode(await response.text());
       const doc = parseHTML(html).document;
 
       const h4 = doc.querySelector('h4');
