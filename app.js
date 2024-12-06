@@ -23,8 +23,8 @@ const app = express();
 // Security Middleware
 app.use(helmet());
 app.use(cors());
-app.use(timeout('30s'));
-app.use(express.json({ limit: '10kb' }));
+app.use(timeout(config.expressTimeout));
+app.use(express.json({ limit: config.expressJsonLimit }));
 
 // Rate Limiting
 app.use(
@@ -49,6 +49,8 @@ app.use((req, res, next) => {
   req.isRemoveHTML = req.query.removehtml || true;
   req.isRemoveHTML =
     req.query.removehtml?.toLowerCase() === 'false' ? false : true;
+  
+  delete req.query.removehtml;
 
   // Process specialist parameter
   req.isForSpecialist = req.query.specialist || false;
@@ -56,12 +58,7 @@ app.use((req, res, next) => {
     req.query.specialist?.toLowerCase() === 'true' ? true : false;
   req.tab = req.isForSpecialist ? 'specialist' : 'home';
 
-  // Set default page
-  req.query.page = parseInt(req.query.page || 1);
-  if (isNaN(req.query.page) || req.query.page < 1) {
-    return next(new AppError('Page must be a positive integer', 400));
-  }
-
+  delete req.query.specialist;
   next();
 });
 

@@ -14,25 +14,14 @@ const validateRequest = (req, res, next) => {
 // Validation rules for hadith search
 const validateHadithSearch = [
   query('page')
-    .optional()
+    .default(1)
     .isInt({ min: 1 })
     .withMessage('Page must be a positive integer'),
-  query('removehtml')
-    .optional()
-    .isBoolean()
-    .withMessage('removehtml must be true or false'),
-  query('specialist')
-    .optional()
-    .isBoolean()
-    .withMessage('specialist must be true or false'),
   query('value')
-    .optional()
     .isString()
     .trim()
     .notEmpty()
-    .withMessage('Search value cannot be empty')
-    .isLength({ max: 500 })
-    .withMessage('Search value is too long'),
+    .withMessage('Search value cannot be empty'),
   validateRequest
 ];
 
@@ -51,21 +40,14 @@ const validateHadithId = [
 // Validation rules for sharh search
 const validateSharhSearch = [
   query('page')
-    .optional()
+    .default(1)
     .isInt({ min: 1 })
     .withMessage('Page must be a positive integer'),
-  query('specialist')
-    .optional()
-    .isBoolean()
-    .withMessage('specialist must be true or false'),
   query('value')
-    .optional()
     .isString()
     .trim()
     .notEmpty()
-    .withMessage('Search value cannot be empty')
-    .isLength({ max: 500 })
-    .withMessage('Search value is too long'),
+    .withMessage('Search value cannot be empty'),
   validateRequest
 ];
 
@@ -84,12 +66,10 @@ const validateSharhId = [
 // Validation rules for sharh text
 const validateSharhText = [
   param('text')
-    .notEmpty()
-    .withMessage('Sharh text is required')
-    .isString()
-    .trim()
-    .isLength({ min: 3, max: 500 })
-    .withMessage('Sharh text must be between 3 and 500 characters'),
+  .isString()
+  .trim()
+  .notEmpty()
+  .withMessage('Search text cannot be empty'),
   validateRequest
 ];
 

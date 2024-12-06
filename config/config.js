@@ -24,4 +24,22 @@ module.exports = config = {
    * @example 5 * 1000 // 5 seconds
    */
   cacheEach: 5,
+
+  /** @type {number}
+   * @description timeout for fetch requests
+   * @default 15000 // 15 seconds
+   */
+  fetchTimeout: 15000,
+
+  /** @type {string}
+   * @description timeout for express timeout middleware
+   * @default 30s // 30 seconds
+   */
+  expressTimeout: '30s',
+
+  /** @type {string}
+   * @description limit for express.json middleware
+   * @default 10kb
+   */
+  expressJsonLimit: '10kb',
 };
