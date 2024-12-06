@@ -1,4 +1,3 @@
-const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { parseHTML } = require('linkedom');
 
@@ -7,6 +6,7 @@ const sendSuccess = require('../utils/sendSuccess');
 const cache = require('../utils/cache');
 const AppError = require('../utils/AppError');
 const fetchWithTimeout = require('../utils/fetchWithTimeout');
+const serializeQueryParams = require('../utils/serializeQueryParams');
 
 const getSharhById = async (sharhId) => {
   if (!sharhId) {
@@ -123,7 +123,7 @@ class SharhSearchController {
   });
 
   getAllSharhUsingSiteDorar = catchAsync(async (req, res, next) => {
-    const query = req._parsedUrl.query?.replace('value=', 'q=') || '';
+    const query = serializeQueryParams(req.query).replace('value=', 'q=') || '';
     const url = `https://www.dorar.net/hadith/search?${query}${
       req.tab === 'specialist' ? '&all' : ''
     }`;

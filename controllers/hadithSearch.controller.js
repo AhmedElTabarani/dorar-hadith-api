@@ -1,4 +1,3 @@
-const nodeFetch = require('node-fetch');
 const { decode } = require('html-entities');
 const { parseHTML } = require('linkedom');
 
@@ -10,10 +9,11 @@ const getHadithId = require('../utils/getHadithId');
 const getAlternateHadithSahihDorar = require('../utils/getAlternateHadithSahihDorar');
 const AppError = require('../utils/AppError');
 const fetchWithTimeout = require('../utils/fetchWithTimeout');
+const serializeQueryParams = require('../utils/serializeQueryParams');
 
 class HadithSearchController {
   searchUsingAPIDorar = catchAsync(async (req, res, next) => {
-    const query = req._parsedUrl.query?.replace('value=', 'skey=') || '';
+    const query = serializeQueryParams(req.query).replace('value=', 'skey=') || '';
     const url = `https://dorar.net/dorar_api.json?${query}`;
 
     if (cache.has(url)) {
@@ -91,7 +91,7 @@ class HadithSearchController {
   });
 
   searchUsingSiteDorar = catchAsync(async (req, res, next) => {
-    const query = req._parsedUrl.query?.replace('value=', 'q=') || '';
+    const query = serializeQueryParams(req.query).replace('value=', 'q=') || '';
     const url = `https://www.dorar.net/hadith/search?${query}${
       req.tab === 'specialist' ? '&all' : ''
     }`;
