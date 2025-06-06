@@ -40,23 +40,26 @@ function parseHadithInfo(infoElement) {
       const label = normalizeText(strong.textContent);
 
       for (const [key, expectedLabel] of Object.entries(labelsMap)) {
-      if (label.includes(expectedLabel)) {
-        const span = strong.querySelector('span');
-        if (span) {
-          result[key] = span.textContent.trim();
-        }
-
-        // Also extract link info for mohdith and book
-        const link = strong.querySelector('a');
-        if (key === 'mohdith' && link?.hasAttribute('card-link')) {
-          result.mohdithId = link.getAttribute('card-link')?.match(/\d+/)?.[0] || null;
-        }
-        if (key === 'book' && link?.hasAttribute('card-link')) {
-          result.bookId = link.getAttribute('card-link')?.match(/\d+/)?.[0] || null;
-        }
+          if (label.includes(expectedLabel)) {
+              const span = strong.querySelector('span');
+              if (span) {
+                  result[key] = span.textContent.trim();
+              }
+          }
       }
     }
-  }
+
+    // Extract mohdithId
+    const mohdithLink = infoElement.querySelector('a[view-card="mhd"]');
+    if (mohdithLink) {
+    result.mohdithId = mohdithLink.getAttribute('card-link')?.match(/\d+/)?.[0] || null;
+    }
+
+    // Extract bookId
+    const bookLink = infoElement.querySelector('a[view-card="book"]');
+    if (bookLink) {
+    result.bookId = bookLink.getAttribute('card-link')?.match(/\d+/)?.[0] || null;
+    }
 
   // Extract sharhId if available
   const sharhElement = infoElement.querySelector('a[xplain]');
