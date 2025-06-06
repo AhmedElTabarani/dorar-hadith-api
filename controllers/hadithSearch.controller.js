@@ -258,6 +258,7 @@ class HadithSearchController {
       numberOrPage,
       grade,
       explainGrade,
+      takhrij,
       sharhId
     } = parsedInfo;
 
@@ -277,6 +278,7 @@ class HadithSearchController {
       numberOrPage,
       grade,
       explainGrade,
+      takhrij,
       hadithId,
       hasSimilarHadith: !!similarHadithDorar,
       hasAlternateHadithSahih: !!alternateHadithSahihDorar,
@@ -349,6 +351,7 @@ class HadithSearchController {
             numberOrPage,
             grade,
             explainGrade,
+            takhrij,
             sharhId
           } = parsedInfo;
 
@@ -370,6 +373,7 @@ class HadithSearchController {
             numberOrPage,
             grade,
             explainGrade,
+            takhrij,
             hadithId,
             hasSimilarHadith: !!similarHadithDorar,
             hasAlternateHadithSahih: !!alternateHadithSahihDorar,
@@ -448,6 +452,8 @@ class HadithSearchController {
       bookId,
       numberOrPage,
       grade,
+      explainGrade,
+      takhrij,
       sharhId
     } = parsedInfo;
 
@@ -467,6 +473,8 @@ class HadithSearchController {
       bookId,
       numberOrPage,
       grade,
+      explainGrade,
+      takhrij,
       hadithId,
       hasSimilarHadith: !!similarHadithDorar,
       hasAlternateHadithSahih: false,
