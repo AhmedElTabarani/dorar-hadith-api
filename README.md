@@ -60,6 +60,7 @@ http://localhost:5000
 لعرض وثائق API التفاعلية:
 
 1. قم بتشغيل الخادم:
+
    ```
    npm run dev
    ```
@@ -70,7 +71,6 @@ http://localhost:5000
    ```
 
 ستجد هنا واجهة Swagger UI التي تتيح لك استكشاف جميع نقاط النهاية المتاحة واختبار الـ API مباشرة من المتصفح.
-
 
 ### Endpoints
 
@@ -138,10 +138,13 @@ http://localhost:5000
       "hadithId": "رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح",
       "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
       "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
+      "hasUsulHadith": "هل الحديث له أصول أم لا",
       "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
       "alternateHadithSahihDorar": "رابط الحديث الصحيح في موقع الدرر",
+      "usulHadithDorar": "رابط أصول الحديث في موقع الدرر",
       "urlToGetSimilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
       "urlToGetAlternateHadithSahih": "رابط لكي تبحث عن الحديث الصحيح",
+      "urlToGetUsulHadith": "رابط لكي تبحث عن أصول الحديث",
       "hasSharhMetadata": "هل الحديث له شرح أم لا",
       "sharhMetadata": {
         "id": "رقم الشرح",
@@ -179,10 +182,13 @@ http://localhost:5000
       "hadithId": "رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح",
       "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
       "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
+      "hasUsulHadith": "هل الحديث له أصول أم لا",
       "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
       "alternateHadithSahihDorar": "رابط الحديث الصحيح في موقع الدرر",
+      "usulHadithDorar": "رابط أصول الحديث في موقع الدرر",
       "urlToGetSimilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
       "urlToGetAlternateHadithSahih": "رابط لكي تبحث عن الحديث الصحيح",
+      "urlToGetUsulHadith": "رابط لكي تبحث عن أصول الحديث",
       "hasSharhMetadata": "هل الحديث له شرح أم لا",
       "sharhMetadata": {
         "id": "رقم الشرح",
@@ -218,10 +224,13 @@ http://localhost:5000
     "hadithId": "رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح",
     "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
     "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
+    "hasUsulHadith": "هل الحديث له أصول أم لا",
     "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
     "alternateHadithSahihDorar": "رابط الحديث الصحيح في موقع الدرر",
+    "usulHadithDorar": "رابط أصول الحديث في موقع الدرر",
     "urlToGetSimilarHadith": "رابط لكي تبحث عن الأحاديث المشابهة",
     "urlToGetAlternateHadithSahih": "رابط لكي تبحث عن الحديث الصحيح",
+    "urlToGetUsulHadith": "رابط لكي تبحث عن أصول الحديث",
     "hasSharhMetadata": "هل الحديث له شرح أم لا",
     "sharhMetadata": {
       "id": "رقم الشرح",
@@ -262,6 +271,45 @@ http://localhost:5000
       "id": "رقم الشرح",
       "isContainSharh": "هل يحتوى هذا الرد على شرح الحديث أم لا؟",
       "urlToGetSharh": "رابط لكي تبحث عن شرح الحديث"
+    }
+  }
+}
+```
+
+#### /v1/site/hadith/usul/:id
+
+يحضر لك أصول الحديث وطرق إخراجه للـ `id` المعطى
+
+شكل الرد كـ `JSON`
+
+```json
+{
+  "metadata": {
+    "isCached": "هل هذه النتائج من الـ cache أم لا"
+  },
+  "data": {
+    "hadith": "الحديث الأساسي",
+    "rawi": "الراوي",
+    "mohdith": "المحدث",
+    "mohdithId": "رقم المحدث",
+    "book": "الكتاب",
+    "bookId": "رقم الكتاب",
+    "numberOrPage": "رقم الحديث او الصفحة",
+    "grade": "درجة الصحة",
+    "explainGrade": "توضيح درجة الصحة",
+    "hadithId": "رقم الحديث",
+    "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
+    "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
+    "hasUsulHadith": "هل الحديث له أصول أم لا",
+    "usulHadith": {
+      "sources": [
+        {
+          "source": "مصدر الحديث مع الصفحة",
+          "chain": "سلسلة الرواة",
+          "hadithText": "نص الحديث"
+        }
+      ],
+      "count": "عدد المصادر"
     }
   }
 }

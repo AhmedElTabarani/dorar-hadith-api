@@ -24,6 +24,10 @@ router
   .get(validateHadithId, HadithSearchController.getAlternateHadithUsingSiteDorar);
 
 router
+  .route('/site/hadith/usul/:id')
+  .get(validateHadithId, HadithSearchController.getUsulHadithUsingSiteDorar);
+
+router
   .route('/site/hadith/:id')
   .get(validateHadithId, HadithSearchController.getOneHadithUsingSiteDorarById);
 

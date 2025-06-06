@@ -59,14 +59,19 @@ module.exports = (req, res, next) => {
               hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
               hasAlternateHadithSahih:
                 'هل الحديث له حديث صحيح بديل أم لا',
+              hasUsulHadith: 'هل الحديث له أصول أم لا',
               similarHadithDorar:
                 'رابط الأحاديث المشابهة في موقع الدرر',
               alternateHadithSahihDorar:
                 'رابط الحديث الصحيح في موقع الدرر',
+              usulHadithDorar:
+                'رابط أصول الحديث في موقع الدرر',
               urlToGetSimilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
               urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
+              urlToGetUsulHadith:
+                'رابط لكي تبحث عن أصول الحديث',
               hasSharhMetadata: 'هل الحديث له شرح أم لا',
               sharhMetadata: {
                 id: 'رقم الشرح',
@@ -100,14 +105,19 @@ module.exports = (req, res, next) => {
             hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
             hasAlternateHadithSahih:
               'هل الحديث له حديث صحيح بديل أم لا',
+            hasUsulHadith: 'هل الحديث له أصول أم لا',
             similarHadithDorar:
               'رابط الأحاديث المشابهة في موقع الدرر',
             alternateHadithSahihDorar:
               'رابط الحديث الصحيح في موقع الدرر',
+            usulHadithDorar:
+              'رابط أصول الحديث في موقع الدرر',
             urlToGetSimilarHadith:
               'رابط لكي تبحث عن الأحاديث المشابهة',
             urlToGetAlternateHadithSahih:
               'رابط لكي تبحث عن الحديث الصحيح',
+            urlToGetUsulHadith:
+              'رابط لكي تبحث عن أصول الحديث',
             hasSharhMetadata: 'هل الحديث له شرح أم لا',
             sharhMetadata: {
               id: 'رقم الشرح',
@@ -142,14 +152,19 @@ module.exports = (req, res, next) => {
               hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
               hasAlternateHadithSahih:
                 'هل الحديث له حديث صحيح بديل أم لا',
+              hasUsulHadith: 'هل الحديث له أصول أم لا',
               similarHadithDorar:
                 'رابط الأحاديث المشابهة في موقع الدرر',
               alternateHadithSahihDorar:
                 'رابط الحديث الصحيح في موقع الدرر',
+              usulHadithDorar:
+                'رابط أصول الحديث في موقع الدرر',
               urlToGetSimilarHadith:
                 'رابط لكي تبحث عن الأحاديث المشابهة',
               urlToGetAlternateHadithSahih:
                 'رابط لكي تبحث عن الحديث الصحيح',
+              urlToGetUsulHadith:
+                'رابط لكي تبحث عن أصول الحديث',
               hasSharhMetadata: 'هل الحديث له شرح أم لا',
               sharhMetadata: {
                 id: 'رقم الشرح',
@@ -193,6 +208,41 @@ module.exports = (req, res, next) => {
                 'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
               urlToGetSharh: 'رابط لكي تبحث عن شرح الحديث',
             },
+          },
+        },
+      },
+      {
+        endpoint: '/v1/site/hadith/usul/:id',
+        example: '/v1/site/hadith/usul/5mtakqyd',
+        abstractResponse: {
+          metadata: {
+            isCached: 'هل هذه النتائج من الـ cache أم لا',
+          },
+          data: {
+            hadith: 'الحديث الأساسي',
+            rawi: 'الراوي',
+            mohdith: 'المحدث',
+            mohdithId: 'رقم المحدث',
+            book: 'الكتاب',
+            bookId: 'رقم الكتاب',
+            numberOrPage: 'رقم الحديث او الصفحة',
+            grade: 'درجة الصحة',
+            explainGrade: 'توضيح درجة الصحة',
+            hadithId: 'رقم الحديث',
+            hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+            hasAlternateHadithSahih:
+              'هل الحديث له حديث صحيح بديل أم لا',
+            hasUsulHadith: 'هل الحديث له أصول أم لا',
+            usulHadith: {
+              sources: [
+                {
+                  source: 'مصدر الحديث مع الصفحة',
+                  chain: 'سلسلة الرواة',
+                  hadithText: 'نص الحديث'
+                }
+              ],
+              count: 'عدد المصادر'
+            }
           },
         },
       },
