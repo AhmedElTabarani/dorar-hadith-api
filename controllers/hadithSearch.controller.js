@@ -7,6 +7,7 @@ const cache = require('../utils/cache');
 const getSimilarHadithDorar = require('../utils/getSimilarHadithDorar');
 const getHadithId = require('../utils/getHadithId');
 const getAlternateHadithSahihDorar = require('../utils/getAlternateHadithSahihDorar');
+const { parseHadithInfo } = require('../utils/parseHadithInfo');
 const AppError = require('../utils/AppError');
 const fetchWithTimeout = require('../utils/fetchWithTimeout');
 const serializeQueryParams = require('../utils/serializeQueryParams');
@@ -138,33 +139,19 @@ class HadithSearchController {
               .replace(/\d+\s+-/g, '')
               .trim();
 
-          const [
+          const parsedInfo = parseHadithInfo(info.children[1]);
+          const {
             rawi,
             mohdith,
+            mohdithId,
             book,
+            bookId,
             numberOrPage,
             grade,
-            explainGradeOrTakhrij,
-          ] = [
-            ...info.children[1].querySelectorAll('.primary-text-color'),
-          ].map((el) => el.textContent.trim());
-
-          const [explainGrade, takhrij] =
-            req.tab === 'home'
-              ? [explainGradeOrTakhrij, undefined]
-              : [undefined, explainGradeOrTakhrij];
-
-          const sharhId = info.querySelector('a[xplain]')?.getAttribute('xplain');
-
-          const mohdithId = info
-            .querySelector('a[view-card="mhd"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)?.[0];
-
-          const bookId = info
-            .querySelector('a[view-card="book"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)?.[0];
+            explainGrade,
+            takhrij,
+            sharhId
+          } = parsedInfo;
 
           const [similarHadithDorar, alternateHadithSahihDorar] = [
             getSimilarHadithDorar(info),
@@ -254,22 +241,18 @@ class HadithSearchController {
       .replace(/-\s*\:?\s*/g, '')
       .trim();
 
-    const [rawi, mohdith, book, numberOrPage, grade, explainGrade] = [
-      ...info.querySelectorAll('.primary-text-color'),
-    ].map((el) => el.textContent.trim());
-
-    let sharhId = info.querySelector('a[xplain]')?.getAttribute('xplain');
-    sharhId = sharhId === '0' ? undefined : sharhId;
-
-    const mohdithId = info
-      .querySelector('a[view-card="mhd"]')
-      ?.getAttribute('card-link')
-      ?.match(/\d+/)?.[0];
-
-    const bookId = info
-      .querySelector('a[view-card="book"]')
-      ?.getAttribute('card-link')
-      ?.match(/\d+/)?.[0];
+    const parsedInfo = parseHadithInfo(info);
+    const {
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      explainGrade,
+      sharhId
+    } = parsedInfo;
 
     const [similarHadithDorar, alternateHadithSahihDorar] = [
       getSimilarHadithDorar(info),
@@ -343,22 +326,18 @@ class HadithSearchController {
             .replace(/-\s*\:?\s*/g, '')
             .trim();
 
-          const [rawi, mohdith, book, numberOrPage, grade, explainGrade] = [
-            ...info.children[1].querySelectorAll('.primary-text-color'),
-          ].map((el) => el.textContent.trim());
-
-          let sharhId = info.querySelector('a[xplain]')?.getAttribute('xplain');
-          sharhId = sharhId === '0' ? undefined : sharhId;
-
-          const mohdithId = info
-            .querySelector('a[view-card="mhd"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)?.[0];
-
-          const bookId = info
-            .querySelector('a[view-card="book"]')
-            ?.getAttribute('card-link')
-            ?.match(/\d+/)?.[0];
+          const parsedInfo = parseHadithInfo(info.children[1]);
+          const {
+            rawi,
+            mohdith,
+            mohdithId,
+            book,
+            bookId,
+            numberOrPage,
+            grade,
+            explainGrade,
+            sharhId
+          } = parsedInfo;
 
           const [similarHadithDorar, alternateHadithSahihDorar] = [
             getSimilarHadithDorar(info),
@@ -441,21 +420,17 @@ class HadithSearchController {
       .replace(/-\s*\:?\s*/g, '')
       .trim();
 
-    const [rawi, mohdith, book, numberOrPage, grade] = [
-      ...info.children[1].querySelectorAll('.primary-text-color'),
-    ].map((el) => el.textContent.trim());
-
-    const sharhId = info.querySelector('a[xplain]')?.getAttribute('xplain');
-
-    const mohdithId = info
-      .querySelector('a[view-card="mhd"]')
-      ?.getAttribute('card-link')
-      ?.match(/\d+/)?.[0];
-
-    const bookId = info
-      .querySelector('a[view-card="book"]')
-      ?.getAttribute('card-link')
-      ?.match(/\d+/)?.[0];
+    const parsedInfo = parseHadithInfo(info.children[1]);
+    const {
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      sharhId
+    } = parsedInfo;
 
     const similarHadithDorar = getSimilarHadithDorar(info);
 
