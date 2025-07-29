@@ -1,4 +1,5 @@
 const fs = require('fs');
+const rateLimit = require('express-rate-limit'); // Added rate-limit package
 
 const catchAsync = require('../utils/catchAsync');
 const sendSuccess = require('../utils/sendSuccess');
@@ -13,33 +14,38 @@ const getData = (file) => {
   });
 };
 
+const limiter = rateLimit({ // Added rate-limiting configuration
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+
 class DataController {
-  getBook = catchAsync(async (req, res, next) => {
+  getBook = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('book');
     sendSuccess(res, 200, result);
   });
 
-  getDegree = catchAsync(async (req, res, next) => {
+  getDegree = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('degree');
     sendSuccess(res, 200, result);
   });
 
-  getMethodSearch = catchAsync(async (req, res, next) => {
+  getMethodSearch = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('method-search');
     sendSuccess(res, 200, result);
   });
 
-  getMohdith = catchAsync(async (req, res, next) => {
+  getMohdith = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('mohdith');
     sendSuccess(res, 200, result);
   });
 
-  getRawi = catchAsync(async (req, res, next) => {
+  getRawi = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('rawi');
     sendSuccess(res, 200, result);
   });
 
-  getZoneSearch = catchAsync(async (req, res, next) => {
+  getZoneSearch = catchAsync(limiter, async (req, res, next) => { // Applied rate limiter
     const result = await getData('zone-search');
     sendSuccess(res, 200, result);
   });

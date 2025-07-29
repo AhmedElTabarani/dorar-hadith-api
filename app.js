@@ -48,14 +48,14 @@ app.use((req, res, next) => {
   // Process removeHTML parameter
   req.isRemoveHTML = req.query.removehtml || true;
   req.isRemoveHTML =
-    req.query.removehtml?.toLowerCase() === 'false' ? false : true;
+    typeof req.query.removehtml === 'string' && req.query.removehtml.toLowerCase() === 'false' ? false : true;
   
   delete req.query.removehtml;
 
   // Process specialist parameter
   req.isForSpecialist = req.query.specialist || false;
   req.isForSpecialist =
-    req.query.specialist?.toLowerCase() === 'true' ? true : false;
+    typeof req.query.specialist === 'string' && req.query.specialist.toLowerCase() === 'true' ? true : false;
   req.tab = req.isForSpecialist ? 'specialist' : 'home';
 
   delete req.query.specialist;
