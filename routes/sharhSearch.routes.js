@@ -1,24 +1,33 @@
-const router = require('express').Router();
+const router = require('ultimate-express').Router();
 const SharhSearchController = require('../controllers/sharhSearch.controller');
 const {
   validateSharhSearch,
   validateSharhId,
-  validateSharhText
+  validateSharhText,
 } = require('../middleware/validators');
 
 // Search route
 router
   .route('/site/sharh/search')
-  .get(validateSharhSearch, SharhSearchController.getAllSharhUsingSiteDorar);
+  .get(
+    validateSharhSearch,
+    SharhSearchController.getAllSharhUsingSiteDorar,
+  );
 
 // Text-based search route
 router
   .route('/site/sharh/text/:text')
-  .get(validateSharhText, SharhSearchController.getOneSharhByTextUsingSiteDorar);
+  .get(
+    validateSharhText,
+    SharhSearchController.getOneSharhByTextUsingSiteDorar,
+  );
 
 // ID-based route
 router
   .route('/site/sharh/:id')
-  .get(validateSharhId, SharhSearchController.getOneSharhByIdUsingSiteDorar);
+  .get(
+    validateSharhId,
+    SharhSearchController.getOneSharhByIdUsingSiteDorar,
+  );
 
 module.exports = router;
