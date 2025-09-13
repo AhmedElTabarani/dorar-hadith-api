@@ -5,6 +5,7 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
+    "mcp": "node mcp-server/index.js",
     "dev": "nodemon server.js",
     "test": "NODE_ENV=test jest",
     "test:watch": "NODE_ENV=test jest --watch",

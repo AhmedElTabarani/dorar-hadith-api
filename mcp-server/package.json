@@ -1,0 +1,33 @@
+{
+  "name": "dorar-hadith-mcp-server",
+  "version": "1.0.0",
+  "description": "MCP server for Dorar Hadith API - Provides LLM tools to search and retrieve Islamic hadith data",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "hadith",
+    "islamic",
+    "dorar",
+    "sunnah",
+    "llm-tools"
+  ],
+  "author": "أحمد الطبراني (Ahmed El-Tabarani)",
+  "license": "MIT",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "axios": "^1.6.0",
+    "zod": "^3.22.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "bin": {
+    "dorar-hadith-mcp": "./index.js"
+  }
+}
