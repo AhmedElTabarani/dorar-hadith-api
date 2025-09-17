@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('ultimate-express').Router();
 
 const DataController = require('../controllers/data.controller');
 
