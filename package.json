@@ -7,10 +7,9 @@
     "start": "node server.js",
     "mcp": "node mcp-server/index.js",
     "dev": "nodemon server.js",
-    "test": "NODE_ENV=test jest",
-    "test:watch": "NODE_ENV=test jest --watch",
-    "test:coverage": "NODE_ENV=test jest --coverage",
-    "test:integration": "NODE_ENV=test jest tests/integration"
+    "test:watch": "cross-env NODE_ENV=test jest --watch",
+    "test:coverage": "cross-env NODE_ENV=test jest --coverage",
+    "test:integration": "cross-env NODE_ENV=test jest tests/integration"
   },
   "keywords": [
     "hadith",
@@ -33,8 +32,8 @@
     "yamljs": "^0.3.0"
   },
   "devDependencies": {
+    "cross-env": "^10.1.0",
     "jest": "^29.7.0",
-    "nock": "^13.5.5",
     "nodemon": "^2.0.15",
     "supertest": "^7.0.0"
   },
