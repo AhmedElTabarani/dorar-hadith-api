@@ -66,6 +66,12 @@ function parseHadithInfo(infoElement) {
   const sharhId = sharhElement?.getAttribute('xplain');
   result.sharhId = sharhId && sharhId !== '0' ? sharhId : null;
 
+  // If grade is empty but explainGrade has a value, use explainGrade for grade
+  // This is because dorar.net only shows "خلاصة حكم المحدث" (explainGrade) in search results
+  if (!result.grade && result.explainGrade) {
+    result.grade = result.explainGrade;
+  }
+
   return result;
 }
 
