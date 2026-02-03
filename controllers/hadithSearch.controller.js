@@ -12,6 +12,7 @@ const { parseHadithInfo } = require('../utils/parseHadithInfo');
 const AppError = require('../utils/AppError');
 const fetchWithTimeout = require('../utils/fetchWithTimeout');
 const serializeQueryParams = require('../utils/serializeQueryParams');
+const config = require('../config/config');
 
 class HadithSearchController {
   searchUsingAPIDorar = catchAsync(async (req, res, next) => {
@@ -79,9 +80,18 @@ class HadithSearchController {
 
     cache.set(url, result);
 
+    // Calculate pagination metadata (limited - API doesn't provide total count)
+    const apiPageSize = config.hadithApiPageSize; // dorar.net API returns 15 results per page by default
+    const currentPage = parseInt(req.query.page, 10) || 1;
+    const hasNextPage = result.length === apiPageSize; // Estimate: if full page, likely more
+    const hasPrevPage = currentPage > 1;
+
     const metadata = {
       length: result.length,
-      page: req.query.page,
+      currentPageCount: result.length,
+      page: currentPage,
+      hasNextPage, // Note: This is an estimate based on current page being full
+      hasPrevPage,
       removeHTML: req.isRemoveHTML,
     };
     cache.set(`metadata:${url}`, metadata);
@@ -207,9 +217,22 @@ class HadithSearchController {
 
     cache.set(url, result);
 
+    // Calculate pagination metadata
+    const sitePageSize = config.hadithSitePageSize; // dorar.net returns 30 results per page by default
+    const currentPage = parseInt(req.query.page, 10) || 1;
+    const total = req.isForSpecialist ? numberOfSpecialist : numberOfNonSpecialist;
+    const totalPages = Math.ceil(total / sitePageSize);
+    const hasNextPage = currentPage < totalPages;
+    const hasPrevPage = currentPage > 1;
+
     const metadata = {
       length: result.length,
-      page: req.query.page,
+      currentPageCount: result.length,
+      total,
+      page: currentPage,
+      totalPages,
+      hasNextPage,
+      hasPrevPage,
       removeHTML: req.isRemoveHTML,
       specialist: req.isForSpecialist,
       numberOfNonSpecialist,

@@ -293,8 +293,14 @@ components:
           properties:
             length:
               type: integer
+            currentPageCount:
+              type: integer
             page:
               type: integer
+            hasNextPage:
+              type: boolean
+            hasPrevPage:
+              type: boolean
             removeHTML:
               type: boolean
             isCached:
@@ -328,8 +334,18 @@ components:
           properties:
             length:
               type: integer
+            currentPageCount:
+              type: integer
+            total:
+              type: integer
             page:
               type: integer
+            totalPages:
+              type: integer
+            hasNextPage:
+              type: boolean
+            hasPrevPage:
+              type: boolean
             removeHTML:
               type: boolean
             specialist:
