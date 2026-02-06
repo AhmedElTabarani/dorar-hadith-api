@@ -246,8 +246,12 @@ module.exports = (req, res, next) => {
             grade: 'درجة الصحة',
             explainGrade: 'توضيح درجة الصحة',
             hadithId: 'رقم الحديث',
-            categories:
-              'التصنيف الموضوعي للحديث (مصفوفة من { id, name })',
+            categories: [
+                {
+                    id: 'رقم الصنيف',
+                    name: 'اسم التصنيف',
+                },
+            ],
             hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
             hasAlternateHadithSahih:
               'هل الحديث له حديث صحيح بديل أم لا',
