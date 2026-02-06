@@ -499,6 +499,17 @@ components:
           items:
             $ref: '#/components/schemas/SiteHadithItem'
 
+    HadithCategory:
+      type: object
+      description: Thematic category (التصنيف الموضوعي) from dorar.net
+      properties:
+        id:
+          type: string
+          description: Category hash ID used in dorar.net URLs (e.g. hadith-category/cat/{id})
+        name:
+          type: string
+          description: Category name in Arabic
+
     SiteHadithItem:
       type: object
       properties:
@@ -524,6 +535,11 @@ components:
           type: string
         hadithId:
           type: string
+        categories:
+          type: array
+          description: Thematic categories for this hadith (التصنيف الموضوعي)
+          items:
+            $ref: '#/components/schemas/HadithCategory'
         hasSimilarHadith:
           type: boolean
         hasAlternateHadithSahih:
