@@ -5,7 +5,6 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "mcp": "node mcp-server/index.js",
     "dev": "nodemon server.js",
     "test:watch": "cross-env NODE_ENV=test jest --watch",
     "test:coverage": "cross-env NODE_ENV=test jest --coverage",

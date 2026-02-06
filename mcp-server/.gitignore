@@ -1,8 +1,0 @@
-# Dorar Hadith MCP Server
-
-node_modules/
-*.log
-.env
-.DS_Store
-*.tmp
-*.temp
