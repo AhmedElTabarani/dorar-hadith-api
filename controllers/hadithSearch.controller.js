@@ -251,109 +251,8 @@ class HadithSearchController {
   });
 
   getOneHadithUsingSiteDorarById = catchAsync(async (req, res, next) => {
-      const hadithId = req.params.id;
-      const url = `https://www.dorar.net/h/${hadithId}`;
-
-      if (cache.has(url)) {
-        const result = cache.get(url);
-        return sendSuccess(res, 200, result, {
-          ...cache.get(`metadata:${url}`),
-          isCached: true,
-        });
-      }
-
-      const response = await fetchWithTimeout(url);
-      const html = decode(await response.text());
-      const doc = parseHTML(html).document;
-
-      const info = doc.querySelector(`.border-bottom`);
-      if (!info) {
-      throw new AppError('Invalid response structure from Dorar', 502);
-      }
-
-      const hadith = info.children[0].textContent
-        .replace(/-\s*\:?\s*/g, '')
-        .trim();
-
-      const parsedInfo = parseHadithInfo(info);
-      const {
-        rawi,
-        mohdith,
-        mohdithId,
-        book,
-        bookId,
-        numberOrPage,
-        grade,
-        explainGrade,
-        takhrij,
-      sharhId
-      } = parsedInfo;
-
-    const [similarHadithDorar, alternateHadithSahihDorar, usulHadithDorar] = [
-        getSimilarHadithDorar(info),
-        getAlternateHadithSahihDorar(info),
-        getUsulHadithDorar(info),
-      ];
-
-      const categories = parseHadithCategories(info);
-
-      const result = {
-        hadith,
-        rawi,
-        mohdith,
-        mohdithId,
-        book,
-        bookId,
-        numberOrPage,
-        grade,
-        explainGrade,
-        takhrij,
-        hadithId,
-        categories,
-        hasSimilarHadith: !!similarHadithDorar,
-        hasAlternateHadithSahih: !!alternateHadithSahihDorar,
-        hasUsulHadith: !!usulHadithDorar,
-        similarHadithDorar,
-        alternateHadithSahihDorar,
-        usulHadithDorar,
-        urlToGetSimilarHadith: similarHadithDorar
-          ? `/v1/site/hadith/similar/${hadithId}`
-          : undefined,
-        urlToGetAlternateHadithSahih: alternateHadithSahihDorar
-          ? `/v1/site/hadith/alternate/${hadithId}`
-          : undefined,
-        urlToGetUsulHadith: usulHadithDorar
-          ? `/v1/site/hadith/usul/${hadithId}`
-          : undefined,
-        hasSharhMetadata: !!sharhId,
-        sharhMetadata: sharhId
-          ? {
-              id: sharhId,
-              isContainSharh: false,
-              urlToGetSharh: `/v1/site/sharh/${sharhId}`,
-            }
-          : undefined,
-      };
-
-      cache.set(url, result);
-
-      const metadata = {
-        length: 1,
-      };
-      cache.set(`metadata:${url}`, metadata);
-
-      sendSuccess(res, 200, result, {
-        ...metadata,
-        isCached: false,
-      });
-  });
-
-  getHadithsByCategory = catchAsync(async (req, res, next) => {
-    const categoryId = req.params.id;
-    const page = parseInt(req.query.page, 10) || 1;
-    const baseUrl =
-      'https://www.dorar.net/hadith-category/cat/' + categoryId;
-    const url = page > 1 ? `${baseUrl}?page=${page}` : baseUrl;
+    const hadithId = req.params.id;
+    const url = `https://www.dorar.net/h/${hadithId}`;
 
     if (cache.has(url)) {
       const result = cache.get(url);
@@ -367,113 +266,77 @@ class HadithSearchController {
     const html = decode(await response.text());
     const doc = parseHTML(html).document;
 
-    const container = doc.querySelector('#home') || doc;
-    const borderItems = container.querySelectorAll('.border-bottom');
-    if (!borderItems.length) {
-      throw new AppError(
-        'No hadiths found for this category or invalid category ID',
-        404,
-      );
+    const info = doc.querySelector(`.border-bottom`);
+    if (!info) {
+      throw new AppError('Invalid response structure from Dorar', 502);
     }
 
-    const result = Array.from(borderItems)
-      .map((info) => {
-        try {
-          let hadith;
-          if (req.isRemoveHTML)
-            hadith = info.children[0].textContent
-              .replace(/\d+\s+-/g, '')
-              .trim();
-          else
-            hadith = info.children[0].innerHTML
-              .replace(/\d+\s+-/g, '')
-              .trim();
+    const hadith = info.children[0].textContent
+      .replace(/-\s*\:?\s*/g, '')
+      .trim();
 
-          const parsedInfo = parseHadithInfo(info.children[1]);
-          const {
-            rawi,
-            mohdith,
-            mohdithId,
-            book,
-            bookId,
-            numberOrPage,
-            grade,
-            explainGrade,
-            takhrij,
-            sharhId,
-          } = parsedInfo;
+    const parsedInfo = parseHadithInfo(info);
+    const {
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      explainGrade,
+      takhrij,
+      sharhId
+    } = parsedInfo;
 
-          const [
-            similarHadithDorar,
-            alternateHadithSahihDorar,
-            usulHadithDorar,
-          ] = [
-            getSimilarHadithDorar(info),
-            getAlternateHadithSahihDorar(info),
-            getUsulHadithDorar(info),
-          ];
+    const [similarHadithDorar, alternateHadithSahihDorar, usulHadithDorar] = [
+      getSimilarHadithDorar(info),
+      getAlternateHadithSahihDorar(info),
+      getUsulHadithDorar(info),
+    ];
 
-          const hadithId = getHadithId(info);
-
-          const categories = parseHadithCategories(info);
-
-          return {
-            hadith,
-            rawi,
-            mohdith,
-            mohdithId,
-            book,
-            bookId,
-            numberOrPage,
-            grade,
-            explainGrade,
-            takhrij,
-            hadithId,
-            categories,
-            hasSimilarHadith: !!similarHadithDorar,
-            hasAlternateHadithSahih: !!alternateHadithSahihDorar,
-            hasUsulHadith: !!usulHadithDorar,
-            similarHadithDorar,
-            alternateHadithSahihDorar,
-            usulHadithDorar,
-            urlToGetSimilarHadith: similarHadithDorar
-              ? `/v1/site/hadith/similar/${hadithId}`
-              : undefined,
-            urlToGetAlternateHadithSahih: alternateHadithSahihDorar
-              ? `/v1/site/hadith/alternate/${hadithId}`
-              : undefined,
-            urlToGetUsulHadith: usulHadithDorar
-              ? `/v1/site/hadith/usul/${hadithId}`
-              : undefined,
-            hasSharhMetadata: !!sharhId,
-            sharhMetadata: sharhId
-              ? {
-                  id: sharhId,
-                  isContainSharh: false,
-                  urlToGetSharh: `/v1/site/sharh/${sharhId}`,
-                }
-              : undefined,
-          };
-        } catch (error) {
-          console.error('Error parsing hadith in category:', error);
-          return null;
-        }
-      })
-      .filter(Boolean);
+    const result = {
+      hadith,
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      explainGrade,
+      takhrij,
+      hadithId,
+      categories,
+      hasSimilarHadith: !!similarHadithDorar,
+      hasAlternateHadithSahih: !!alternateHadithSahihDorar,
+      hasUsulHadith: !!usulHadithDorar,
+      similarHadithDorar,
+      alternateHadithSahihDorar,
+      usulHadithDorar,
+      urlToGetSimilarHadith: similarHadithDorar
+        ? `/v1/site/hadith/similar/${hadithId}`
+        : undefined,
+      urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+        ? `/v1/site/hadith/alternate/${hadithId}`
+        : undefined,
+      urlToGetUsulHadith: usulHadithDorar
+        ? `/v1/site/hadith/usul/${hadithId}`
+        : undefined,
+      hasSharhMetadata: !!sharhId,
+      sharhMetadata: sharhId
+        ? {
+            id: sharhId,
+            isContainSharh: false,
+            urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+          }
+        : undefined,
+    };
 
     cache.set(url, result);
 
-    const sitePageSize = config.hadithSitePageSize;
-    const hasNextPage = result.length >= sitePageSize;
-    const hasPrevPage = page > 1;
     const metadata = {
-      length: result.length,
-      currentPageCount: result.length,
-      page,
-      hasNextPage,
-      hasPrevPage,
-      removeHTML: req.isRemoveHTML,
-      categoryId,
+      length: 1,
     };
     cache.set(`metadata:${url}`, metadata);
 
@@ -504,7 +367,7 @@ class HadithSearchController {
         try {
           const hadith = info.children[0].textContent
             .replace(/-\s*\:?\s*/g, '')
-              .trim();
+            .trim();
 
           const parsedInfo = parseHadithInfo(info.children[1]);
           const {
@@ -588,91 +451,89 @@ class HadithSearchController {
   });
 
   getAlternateHadithUsingSiteDorar = catchAsync(async (req, res, next) => {
-      const alternateId = req.params.id;
-      const url = `https://www.dorar.net/h/${alternateId}?alts=1`;
+    const alternateId = req.params.id;
+    const url = `https://www.dorar.net/h/${alternateId}?alts=1`;
 
-      if (cache.has(url)) {
-        const result = cache.get(url);
-        return sendSuccess(res, 200, result, {
-          isCached: true,
-        });
-      }
-
-      const response = await fetchWithTimeout(url);
-      const html = decode(await response.text());
-      const doc = parseHTML(html).document;
-
-      const info = doc.querySelectorAll('.border-bottom')[1];
-      if (!info) {
-        throw new AppError('No alternate hadith found', 404);
-      }
-
-      const hadith = info.children[0].textContent
-        .replace(/-\s*\:?\s*/g, '')
-        .trim();
-
-      const parsedInfo = parseHadithInfo(info.children[1]);
-      const {
-        rawi,
-        mohdith,
-        mohdithId,
-        book,
-        bookId,
-        numberOrPage,
-        grade,
-        explainGrade,
-        takhrij,
-      sharhId
-      } = parsedInfo;
-
-      const [similarHadithDorar, usulHadithDorar] = [
-        getSimilarHadithDorar(info),
-        getUsulHadithDorar(info),
-      ];
-
-      const hadithId = getHadithId(info);
-
-      const categories = parseHadithCategories(info);
-
-      const result = {
-        hadith,
-        rawi,
-        mohdith,
-        mohdithId,
-        book,
-        bookId,
-        numberOrPage,
-        grade,
-        explainGrade,
-        takhrij,
-        hadithId,
-        categories,
-        hasSimilarHadith: !!similarHadithDorar,
-        hasAlternateHadithSahih: false,
-        hasUsulHadith: !!usulHadithDorar,
-        similarHadithDorar,
-        usulHadithDorar,
-        urlToGetSimilarHadith: similarHadithDorar
-          ? `/v1/site/hadith/similar/${hadithId}`
-          : undefined,
-        urlToGetUsulHadith: usulHadithDorar
-          ? `/v1/site/hadith/usul/${hadithId}`
-          : undefined,
-        hasSharhMetadata: !!sharhId,
-        sharhMetadata: sharhId
-          ? {
-              id: sharhId,
-              isContainSharh: false,
-              urlToGetSharh: `/v1/site/sharh/${sharhId}`,
-            }
-          : undefined,
-      };
-
-      cache.set(url, result);
-
-      sendSuccess(res, 200, result, {
-        isCached: false,
+    if (cache.has(url)) {
+      const result = cache.get(url);
+      return sendSuccess(res, 200, result, {
+        isCached: true,
       });
+    }
+
+    const response = await fetchWithTimeout(url);
+    const html = decode(await response.text());
+    const doc = parseHTML(html).document;
+
+    const info = doc.querySelectorAll('.border-bottom')[1];
+    if (!info) {
+      throw new AppError('No alternate hadith found', 404);
+    }
+
+    const hadith = info.children[0].textContent
+      .replace(/-\s*\:?\s*/g, '')
+      .trim();
+
+    const parsedInfo = parseHadithInfo(info.children[1]);
+    const {
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      explainGrade,
+      takhrij,
+      sharhId
+    } = parsedInfo;
+
+    const [similarHadithDorar, usulHadithDorar] = [
+      getSimilarHadithDorar(info),
+      getUsulHadithDorar(info),
+    ];
+
+    const hadithId = getHadithId(info);
+
+    const result = {
+      hadith,
+      rawi,
+      mohdith,
+      mohdithId,
+      book,
+      bookId,
+      numberOrPage,
+      grade,
+      explainGrade,
+      takhrij,
+      hadithId,
+      categories,
+      hasSimilarHadith: !!similarHadithDorar,
+      hasAlternateHadithSahih: false,
+      hasUsulHadith: !!usulHadithDorar,
+      similarHadithDorar,
+      usulHadithDorar,
+      urlToGetSimilarHadith: similarHadithDorar
+        ? `/v1/site/hadith/similar/${hadithId}`
+        : undefined,
+      urlToGetUsulHadith: usulHadithDorar
+        ? `/v1/site/hadith/usul/${hadithId}`
+        : undefined,
+      hasSharhMetadata: !!sharhId,
+      sharhMetadata: sharhId
+        ? {
+            id: sharhId,
+            isContainSharh: false,
+            urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+          }
+        : undefined,
+    };
+
+    cache.set(url, result);
+
+    sendSuccess(res, 200, result, {
+      isCached: false,
+    });
   });
 
   getUsulHadithUsingSiteDorar = catchAsync(async (req, res, next) => {
