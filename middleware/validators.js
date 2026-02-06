@@ -97,9 +97,22 @@ const validateMohdithId = [
   validateRequest
 ];
 
+// Validation rules for hadith category ID (thematic classification)
+const validateCategoryId = [
+  param('id')
+    .notEmpty()
+    .withMessage('Category ID is required')
+    .isString()
+    .trim()
+    .matches(/^[0-9a-zA-Z]+$/)
+    .withMessage('Invalid category ID format'),
+  validateRequest
+];
+
 module.exports = {
   validateHadithSearch,
   validateHadithId,
+  validateCategoryId,
   validateSharhSearch,
   validateSharhId,
   validateSharhText,

@@ -258,6 +258,57 @@ module.exports = (req, res, next) => {
         },
       },
       {
+        endpoint: '/v1/site/hadith/category/:id',
+        example: '/v1/site/hadith/category/f2917268ab57ac69a6bc1a77ec75c39c',
+        abstractResponse: {
+          metadata: {
+            length: 'عدد النتائج في هذه الصفحة',
+            currentPageCount: 'عدد النتائج الحالية',
+            page: 'رقم الصفحة',
+            hasNextPage: 'هل توجد صفحة تالية',
+            hasPrevPage: 'هل توجد صفحة سابقة',
+            removeHTML: 'هل تم إزالة عناصر الـ HTML',
+            categoryId: 'معرّف التصنيف الموضوعي',
+            isCached: 'هل هذه النتائج من الـ cache أم لا',
+          },
+          data: [
+            {
+              hadith: 'الحديث',
+              rawi: 'الراوي',
+              mohdith: 'المحدث',
+              mohdithId: 'رقم المحدث',
+              book: 'الكتاب',
+              bookId: 'رقم الكتاب',
+              numberOrPage: 'رقم الحديث او الصفحة',
+              grade: 'درجة الصحة',
+              explainGrade: 'توضيح درجة الصحة',
+              takhrij: 'تخريج الحديث في كتب أخرى',
+              hadithId: 'رقم الحديث',
+              categories:
+                'التصنيف الموضوعي للحديث (مصفوفة من { id, name })',
+              hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
+              hasAlternateHadithSahih:
+                'هل الحديث له حديث صحيح بديل أم لا',
+              hasUsulHadith: 'هل الحديث له أصول أم لا',
+              similarHadithDorar: 'رابط الأحاديث المشابهة في موقع الدرر',
+              alternateHadithSahihDorar:
+                'رابط الحديث الصحيح في موقع الدرر',
+              usulHadithDorar: 'رابط أصول الحديث في موقع الدرر',
+              urlToGetSimilarHadith: 'رابط للأحاديث المشابهة',
+              urlToGetAlternateHadithSahih: 'رابط للحديث الصحيح البديل',
+              urlToGetUsulHadith: 'رابط لأصول الحديث',
+              hasSharhMetadata: 'هل الحديث له شرح أم لا',
+              sharhMetadata: {
+                id: 'رقم الشرح',
+                isContainSharh:
+                  'هل يحتوى هذا الرد على شرح الحديث أم لا؟',
+                urlToGetSharh: 'رابط لشرح الحديث',
+              },
+            },
+          ],
+        },
+      },
+      {
         endpoint: '/v1/site/sharh/:id',
         example: '/v1/site/sharh/3429',
         abstractResponse: {

@@ -72,6 +72,80 @@ http://localhost:5000
 
 ستجد هنا واجهة `Swagger UI` التي تتيح لك استكشاف جميع نقاط النهاية المتاحة واختبار الـ `API` مباشرة من المتصفح
 
+<<<<<<< HEAD
+=======
+### MCP Server (Model Context Protocol)
+
+يتضمن المشروع `Server` خاص للـ `MCP` والذي سمح لأي `LLMs` الوصول المباشر إلى `API` الأحاديث  
+بالتالي يسمح لأدوات الذكاء الاصطناعي مثل `Claude` و `Copilot` بالبحث في الأحاديث والحصول على المعلومات بسهولة
+
+#### إعداد الـ MCP
+
+1. تأكد من تشغيل الـ `API`:
+
+   ```bash
+   npm start
+   ```
+
+2. تشغيل `Server` الـ `MCP`:
+
+   انتقل إلى مجلد `mcp-server` وقم بتثبيت الـ `dependencies`:
+
+   ```bash
+   cd mcp-server
+   npm install
+   ```
+
+3. تشغيل `Server` الـ `MCP`:
+
+   ```bash
+   npm run mcp
+   ```
+
+الآن بحسب الأداة التي تريد استخدامها مع `MCP` قم بإعدادها
+
+#### إعداد MCP مع VS Code Copilot
+
+قم بإنشاء مجلد يدعى `.vscode`  
+قم بإنشاء ملف `mcp.json` بداخله
+
+```json
+{
+  "servers": {
+    "dorar-hadith": {
+      "command": "node",
+      "args": ["./mcp-server/index.js"],
+      "env": {
+        "DORAR_API_BASE_URL": "http://localhost:5000/v1"
+      }
+    }
+  }
+}
+```
+
+الآن قم بتشغيل الـ `MCP` من خلال الضغط على `F1` ثم البحث عن `MCP: List Servers`  
+اختر `dorar-hadith` واضغط على `Enter`
+
+#### الأدوات المتاحة في MCP:
+
+- `search_hadith_api` - البحث في الأحاديث عبر API
+- `search_hadith_site` - البحث في الأحاديث عبر الموقع
+- `get_hadith_by_id` - الحصول على حديث محدد
+- `get_similar_hadiths` - الحصول على أحاديث مشابهة
+- `get_alternate_hadith` - الحصول على الحديث الصحيح البديل
+- `get_usul_hadith` - الحصول على أصول الحديث
+- `get_hadiths_by_category` - الحصول على أحاديث حسب التصنيف الموضوعي
+- `search_sharh` - البحث في شروح الأحاديث
+- `get_sharh_by_id` - الحصول على شرح محدد
+- `get_sharh_by_text` - البحث عن شرح بالنص
+- `get_mohdith_info` - معلومات المحدث
+- `get_book_info` - معلومات الكتاب
+- `get_books_data` - قائمة جميع الكتب
+- `get_degrees_data` - قائمة درجات الأحاديث
+- `get_mohdith_data` - قائمة المحدثين
+- `get_rawi_data` - قائمة الرواة
+
+>>>>>>> fa927f2 (add endpoint to retrieve hadiths by category and update documentation)
 ### Endpoints
 
 يحتوي الـ `API` على مجموعة من الـ `endpoint`
@@ -312,6 +386,60 @@ http://localhost:5000
       "count": "عدد المصادر"
     }
   }
+}
+```
+
+#### /v1/site/hadith/category/:id
+
+يحضر لك الأحاديث التابعة لتصنيف موضوعي (التصنيف الموضوعي). معرّف التصنيف `id` يمكن الحصول عليه من حقل `categories` في أي حديث (مثلاً من `/v1/site/hadith/:id`).
+
+استعلام اختياري: `?page=1` للصفحة، `?removehtml=true|false` لإزالة الـ HTML من نص الحديث.
+
+شكل الرد كـ `JSON`
+
+```json
+{
+  "metadata": {
+    "length": "عدد النتائج في هذه الصفحة",
+    "currentPageCount": "عدد النتائج الحالية",
+    "page": "رقم الصفحة",
+    "hasNextPage": "هل توجد صفحة تالية",
+    "hasPrevPage": "هل توجد صفحة سابقة",
+    "removeHTML": "هل تم إزالة عناصر الـ HTML",
+    "categoryId": "معرّف التصنيف الموضوعي",
+    "isCached": "هل هذه النتائج من الـ cache أم لا"
+  },
+  "data": [
+    {
+      "hadith": "الحديث",
+      "rawi": "الراوي",
+      "mohdith": "المحدث",
+      "mohdithId": "رقم المحدث",
+      "book": "الكتاب",
+      "bookId": "رقم الكتاب",
+      "numberOrPage": "رقم الحديث او الصفحة",
+      "grade": "درجة الصحة",
+      "explainGrade": "توضيح درجة الصحة",
+      "takhrij": "تخريج الحديث في كتب أخرى",
+      "hadithId": "رقم الحديث",
+      "categories": "التصنيف الموضوعي للحديث (مصفوفة من { id, name })",
+      "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
+      "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
+      "hasUsulHadith": "هل الحديث له أصول أم لا",
+      "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
+      "alternateHadithSahihDorar": "رابط الحديث الصحيح في موقع الدرر",
+      "usulHadithDorar": "رابط أصول الحديث في موقع الدرر",
+      "urlToGetSimilarHadith": "رابط للأحاديث المشابهة",
+      "urlToGetAlternateHadithSahih": "رابط للحديث الصحيح البديل",
+      "urlToGetUsulHadith": "رابط لأصول الحديث",
+      "hasSharhMetadata": "هل الحديث له شرح أم لا",
+      "sharhMetadata": {
+        "id": "رقم الشرح",
+        "isContainSharh": "هل يحتوى هذا الرد على شرح الحديث أم لا؟",
+        "urlToGetSharh": "رابط لشرح الحديث"
+      }
+    }
+  ]
 }
 ```
 

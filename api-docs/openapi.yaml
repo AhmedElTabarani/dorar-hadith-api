@@ -164,6 +164,38 @@ paths:
               schema:
                 $ref: '#/components/schemas/SiteHadithSearchResponse'
 
+  /site/hadith/category/{id}:
+    get:
+      summary: Get hadiths by thematic category (التصنيف الموضوعي)
+      description: Returns hadiths belonging to a category. Category IDs can be obtained from the categories array on any hadith (e.g. from GET /site/hadith/{id}).
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+          description: Category ID (e.g. f2917268ab57ac69a6bc1a77ec75c39c)
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 1
+          description: Page number for pagination
+        - in: query
+          name: removehtml
+          schema:
+            type: boolean
+          description: Remove HTML tags from hadith text
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteHadithCategoryResponse'
+        '404':
+          description: No hadiths found for this category or invalid category ID
+
   /site/hadith/{id}:
     get:
       summary: Get a specific hadith by ID from site
@@ -492,6 +524,33 @@ components:
               type: integer
             numberOfSpecialist:
               type: integer
+            isCached:
+              type: boolean
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/SiteHadithItem'
+
+    SiteHadithCategoryResponse:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            length:
+              type: integer
+            currentPageCount:
+              type: integer
+            page:
+              type: integer
+            hasNextPage:
+              type: boolean
+            hasPrevPage:
+              type: boolean
+            removeHTML:
+              type: boolean
+            categoryId:
+              type: string
             isCached:
               type: boolean
         data:

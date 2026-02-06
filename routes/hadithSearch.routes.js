@@ -2,7 +2,8 @@ const router = require('express').Router();
 const HadithSearchController = require('../controllers/hadithSearch.controller');
 const {
   validateHadithSearch,
-  validateHadithId
+  validateHadithId,
+  validateCategoryId
 } = require('../middleware/validators');
 
 // Search routes
@@ -26,6 +27,10 @@ router
 router
   .route('/site/hadith/usul/:id')
   .get(validateHadithId, HadithSearchController.getUsulHadithUsingSiteDorar);
+
+router
+  .route('/site/hadith/category/:id')
+  .get(validateCategoryId, HadithSearchController.getHadithsByCategory);
 
 router
   .route('/site/hadith/:id')
