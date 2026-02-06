@@ -1,6 +1,7 @@
 module.exports = (req, res, next) => {
   res.json({
     status: 'success',
+    swagger: '/api-docs',
     github: 'https://github.com/AhmedElTabarani/dorar-hadith-api',
     postman:
       'https://www.postman.com/crimson-robot-408440/workspace/hadith-api/collection/14391446-6a1c5404-cc59-4d59-933d-c07547ee75ca?action=share&creator=14391446',
