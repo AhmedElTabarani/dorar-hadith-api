@@ -231,6 +231,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/SiteUsulHadithResponse'
+        '404':
+          description: Hadith not found
 
   /site/sharh/{id}:
     get:
@@ -581,8 +583,6 @@ components:
                     type: object
                     properties:
                       source:
-                        type: string
-                      chain:
                         type: string
                       chain:
                         type: string
