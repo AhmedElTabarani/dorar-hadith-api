@@ -215,6 +215,23 @@ paths:
               schema:
                 $ref: '#/components/schemas/SiteSingleHadithResponse'
 
+  /site/hadith/usul/{id}:
+    get:
+      summary: Get usul (sources) of a hadith by ID
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SiteUsulHadithResponse'
+
   /site/sharh/{id}:
     get:
       summary: Get sharh (explanation) for a hadith by ID
@@ -517,3 +534,59 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/SiteHadithItem'
+
+    SiteUsulHadithResponse:
+      type: object
+      properties:
+        metadata:
+          type: object
+          properties:
+            isCached:
+              type: boolean
+        data:
+          type: object
+          properties:
+            hadith:
+              type: string
+            rawi:
+              type: string
+            mohdith:
+              type: string
+            mohdithId:
+              type: string
+            book:
+              type: string
+            bookId:
+              type: string
+            numberOrPage:
+              type: string
+            grade:
+              type: string
+            explainGrade:
+              type: string
+            hadithId:
+              type: string
+            hasSimilarHadith:
+              type: boolean
+            hasAlternateHadithSahih:
+              type: boolean
+            hasUsulHadith:
+              type: boolean
+            usulHadith:
+              type: object
+              properties:
+                sources:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      source:
+                        type: string
+                      chain:
+                        type: string
+                      chain:
+                        type: string
+                      hadithText:
+                        type: string
+                count:
+                  type: integer
