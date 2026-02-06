@@ -295,6 +295,8 @@ class HadithSearchController {
       getUsulHadithDorar(info),
     ];
 
+    const categories = parseHadithCategories(info);
+
     const result = {
       hadith,
       rawi,
@@ -337,6 +339,139 @@ class HadithSearchController {
 
     const metadata = {
       length: 1,
+    };
+    cache.set(`metadata:${url}`, metadata);
+
+    sendSuccess(res, 200, result, {
+      ...metadata,
+      isCached: false,
+    });
+  });
+
+  getHadithsByCategory = catchAsync(async (req, res, next) => {
+    const categoryId = req.params.id;
+    const page = parseInt(req.query.page, 10) || 1;
+    const baseUrl = 'https://www.dorar.net/hadith-category/cat/' + categoryId;
+    const url = page > 1 ? `${baseUrl}?page=${page}` : baseUrl;
+
+    if (cache.has(url)) {
+      const result = cache.get(url);
+      return sendSuccess(res, 200, result, {
+        ...cache.get(`metadata:${url}`),
+        isCached: true,
+      });
+    }
+
+    const response = await fetchWithTimeout(url, {
+      headers: {
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+      },
+    });
+    const html = decode(await response.text());
+    const doc = parseHTML(html).document;
+
+    const container = doc.querySelector('#home') || doc;
+    const borderItems = container.querySelectorAll('.border-bottom');
+    if (!borderItems.length) {
+      throw new AppError('No hadiths found for this category or invalid category ID', 404);
+    }
+
+    const result = Array.from(borderItems)
+      .map((info) => {
+        try {
+          const hadithBlock = info.children[0];
+          const hadithEl = hadithBlock?.querySelector?.('h5') || hadithBlock;
+          const rawHadith = req.isRemoveHTML
+            ? (hadithEl?.textContent || '')
+            : (hadithEl?.innerHTML || '');
+          const hadith = rawHadith
+            .replace(/\d+\s+-/g, '')
+            .replace(/^\s*-\s*/, '')
+            .trim();
+
+          const infoBlock = info.children[1];
+          if (!infoBlock) return null;
+          const parsedInfo = parseHadithInfo(infoBlock);
+          const {
+            rawi,
+            mohdith,
+            mohdithId,
+            book,
+            bookId,
+            numberOrPage,
+            grade,
+            explainGrade,
+            takhrij,
+            sharhId
+          } = parsedInfo;
+
+          const [similarHadithDorar, alternateHadithSahihDorar, usulHadithDorar] = [
+            getSimilarHadithDorar(info),
+            getAlternateHadithSahihDorar(info),
+            getUsulHadithDorar(info),
+          ];
+
+          const hadithId = getHadithId(info);
+          const categories = parseHadithCategories(info);
+
+          return {
+            hadith,
+            rawi,
+            mohdith,
+            mohdithId,
+            book,
+            bookId,
+            numberOrPage,
+            grade,
+            explainGrade,
+            takhrij,
+            hadithId,
+            categories,
+            hasSimilarHadith: !!similarHadithDorar,
+            hasAlternateHadithSahih: !!alternateHadithSahihDorar,
+            hasUsulHadith: !!usulHadithDorar,
+            similarHadithDorar,
+            alternateHadithSahihDorar,
+            usulHadithDorar,
+            urlToGetSimilarHadith: similarHadithDorar
+              ? `/v1/site/hadith/similar/${hadithId}`
+              : undefined,
+            urlToGetAlternateHadithSahih: alternateHadithSahihDorar
+              ? `/v1/site/hadith/alternate/${hadithId}`
+              : undefined,
+            urlToGetUsulHadith: usulHadithDorar
+              ? `/v1/site/hadith/usul/${hadithId}`
+              : undefined,
+            hasSharhMetadata: !!sharhId,
+            sharhMetadata: sharhId
+              ? {
+                  id: sharhId,
+                  isContainSharh: false,
+                  urlToGetSharh: `/v1/site/sharh/${sharhId}`,
+                }
+              : undefined,
+          };
+        } catch (error) {
+          console.error('Error parsing hadith in category:', error);
+          return null;
+        }
+      })
+      .filter(Boolean);
+
+    cache.set(url, result);
+
+    const sitePageSize = config.hadithSitePageSize;
+    const hasNextPage = result.length >= sitePageSize;
+    const hasPrevPage = page > 1;
+    const metadata = {
+      length: result.length,
+      currentPageCount: result.length,
+      page,
+      hasNextPage,
+      hasPrevPage,
+      removeHTML: req.isRemoveHTML,
+      categoryId,
     };
     cache.set(`metadata:${url}`, metadata);
 
