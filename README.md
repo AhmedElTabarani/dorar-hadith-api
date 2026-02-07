@@ -315,65 +315,6 @@ http://localhost:5000
 }
 ```
 
-#### /v1/site/hadith/category/:id
-
-يحضر لك الأحاديث التابعة لتصنيف موضوعي (التصنيف الموضوعي). معرّف التصنيف `id` يمكن الحصول عليه من حقل `categories` في أي حديث (مثلاً من `/v1/site/hadith/:id`).
-
-استعلام اختياري: `?page=1` للصفحة، `?removehtml=true|false` لإزالة الـ HTML من نص الحديث.
-
-شكل الرد كـ `JSON`
-
-```json
-{
-  "metadata": {
-    "length": "عدد النتائج في هذه الصفحة",
-    "currentPageCount": "عدد النتائج الحالية",
-    "page": "رقم الصفحة",
-    "hasNextPage": "هل توجد صفحة تالية",
-    "hasPrevPage": "هل توجد صفحة سابقة",
-    "removeHTML": "هل تم إزالة عناصر الـ HTML",
-    "categoryId": "معرّف التصنيف الموضوعي",
-    "isCached": "هل هذه النتائج من الـ cache أم لا"
-  },
-  "data": [
-    {
-      "hadith": "الحديث",
-      "rawi": "الراوي",
-      "mohdith": "المحدث",
-      "mohdithId": "رقم المحدث",
-      "book": "الكتاب",
-      "bookId": "رقم الكتاب",
-      "numberOrPage": "رقم الحديث او الصفحة",
-      "grade": "درجة الصحة",
-      "explainGrade": "توضيح درجة الصحة",
-      "takhrij": "تخريج الحديث في كتب أخرى",
-      "hadithId": "رقم الحديث",
-      "categories": [
-          {
-              "id": "رقم الصنيف",
-              "name": "اسم التصنيف",
-          },
-      ],
-      "hasSimilarHadith": "هل الحديث له أحاديث مشابهة أم لا",
-      "hasAlternateHadithSahih": "هل الحديث له حديث صحيح بديل أم لا",
-      "hasUsulHadith": "هل الحديث له أصول أم لا",
-      "similarHadithDorar": "رابط الأحاديث المشابهة في موقع الدرر",
-      "alternateHadithSahihDorar": "رابط الحديث الصحيح في موقع الدرر",
-      "usulHadithDorar": "رابط أصول الحديث في موقع الدرر",
-      "urlToGetSimilarHadith": "رابط للأحاديث المشابهة",
-      "urlToGetAlternateHadithSahih": "رابط للحديث الصحيح البديل",
-      "urlToGetUsulHadith": "رابط لأصول الحديث",
-      "hasSharhMetadata": "هل الحديث له شرح أم لا",
-      "sharhMetadata": {
-        "id": "رقم الشرح",
-        "isContainSharh": "هل يحتوى هذا الرد على شرح الحديث أم لا؟",
-        "urlToGetSharh": "رابط لشرح الحديث"
-      }
-    }
-  ]
-}
-```
-
 #### /v1/site/sharh/:id
 
 للبحث عن شرح لحديث واحد عن طريق الـ `id`

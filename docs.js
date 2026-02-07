@@ -57,8 +57,12 @@ module.exports = (req, res, next) => {
               takhrij: 'تخريج الحديث في كتب أخرى',
               hadithId:
                 'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
-              categories:
-                'التصنيف الموضوعي للحديث (مصفوفة من { id, name })',
+              categories: [
+                {
+                  id: 'رقم الصنيف',
+                  name: 'اسم التصنيف',
+                },
+              ],
               hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
               hasAlternateHadithSahih:
                 'هل الحديث له حديث صحيح بديل أم لا',
@@ -106,10 +110,10 @@ module.exports = (req, res, next) => {
             hadithId:
               'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
             categories: [
-                {
-                    id: 'رقم الصنيف',
-                    name: 'اسم التصنيف',
-                },
+              {
+                id: 'رقم الصنيف',
+                name: 'اسم التصنيف',
+              },
             ],
             hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
             hasAlternateHadithSahih:
@@ -156,8 +160,12 @@ module.exports = (req, res, next) => {
               numberOrPage: 'رقم الحديث او الصفحة',
               grade: 'درجة الصحة',
               explainGrade: 'توضيح درجة الصحة',
-              categories:
-                'التصنيف الموضوعي للحديث (مصفوفة من { id, name })',
+              categories: [
+                {
+                  id: 'رقم الصنيف',
+                  name: 'اسم التصنيف',
+                },
+              ],
               hadithId:
                 'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
               hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
@@ -206,10 +214,10 @@ module.exports = (req, res, next) => {
             hadithId:
               'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
             categories: [
-                {
-                    id: 'رقم الصنيف',
-                    name: 'اسم التصنيف',
-                },
+              {
+                id: 'رقم الصنيف',
+                name: 'اسم التصنيف',
+              },
             ],
             hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
             hasAlternateHadithSahih:
@@ -247,10 +255,10 @@ module.exports = (req, res, next) => {
             explainGrade: 'توضيح درجة الصحة',
             hadithId: 'رقم الحديث',
             categories: [
-                {
-                    id: 'رقم الصنيف',
-                    name: 'اسم التصنيف',
-                },
+              {
+                id: 'رقم الصنيف',
+                name: 'اسم التصنيف',
+              },
             ],
             hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
             hasAlternateHadithSahih:
@@ -296,12 +304,12 @@ module.exports = (req, res, next) => {
               explainGrade: 'توضيح درجة الصحة',
               takhrij: 'تخريج الحديث في كتب أخرى',
               hadithId: 'رقم الحديث',
-            categories: [
+              categories: [
                 {
-                    id: 'رقم الصنيف',
-                    name: 'اسم التصنيف',
+                  id: 'رقم الصنيف',
+                  name: 'اسم التصنيف',
                 },
-            ],
+              ],
               hasSimilarHadith: 'هل الحديث له أحاديث مشابهة أم لا',
               hasAlternateHadithSahih:
                 'هل الحديث له حديث صحيح بديل أم لا',
