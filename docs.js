@@ -9,7 +9,7 @@ module.exports = (req, res, next) => {
       {
         endpoint: '/v1/api/hadith/search?value={text}&page={page}',
         example:
-          '/v1/api/hadith/search?value=انما الاعمال بالنيات&page=2',
+          '/v1/api/hadith/search?value=انما الاعمال بالنيات&page=1',
         abstractResponse: {
           metadata: {
             length: 'عدد نتائج البحث',
@@ -32,7 +32,7 @@ module.exports = (req, res, next) => {
       {
         endpoint: '/v1/site/hadith/search?value={text}&page={page}',
         example:
-          '/v1/site/hadith/search?value=انما الاعمال بالنيات&page=2',
+          '/v1/site/hadith/search?value=انما الاعمال بالنيات&page=1',
         abstractResponse: {
           metadata: {
             length: 'عدد نتائج البحث',
@@ -59,7 +59,7 @@ module.exports = (req, res, next) => {
                 'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
               categories: [
                 {
-                  id: 'رقم الصنيف',
+                  id: 'رقم التصنيف',
                   name: 'اسم التصنيف',
                 },
               ],
@@ -111,7 +111,7 @@ module.exports = (req, res, next) => {
               'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
             categories: [
               {
-                id: 'رقم الصنيف',
+                id: 'رقم التصنيف',
                 name: 'اسم التصنيف',
               },
             ],
@@ -162,7 +162,7 @@ module.exports = (req, res, next) => {
               explainGrade: 'توضيح درجة الصحة',
               categories: [
                 {
-                  id: 'رقم الصنيف',
+                  id: 'رقم التصنيف',
                   name: 'اسم التصنيف',
                 },
               ],
@@ -215,7 +215,7 @@ module.exports = (req, res, next) => {
               'رقم الحديث لاستخدامه في البحث عن الأحاديث البديلة أو الحديث البديل الصحيح',
             categories: [
               {
-                id: 'رقم الصنيف',
+                id: 'رقم التصنيف',
                 name: 'اسم التصنيف',
               },
             ],
@@ -256,7 +256,7 @@ module.exports = (req, res, next) => {
             hadithId: 'رقم الحديث',
             categories: [
               {
-                id: 'رقم الصنيف',
+                id: 'رقم التصنيف',
                 name: 'اسم التصنيف',
               },
             ],
