@@ -28,6 +28,7 @@
     "linkedom": "^0.14.25",
     "node-cache": "^5.1.2",
     "swagger-ui-express": "^5.0.1",
+    "ultimate-express": "^2.0.9",
     "yamljs": "^0.3.0"
   },
   "devDependencies": {

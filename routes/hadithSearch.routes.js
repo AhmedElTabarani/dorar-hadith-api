@@ -1,4 +1,4 @@
-const router = require('express').Router();
+const router = require('ultimate-express').Router();
 const HadithSearchController = require('../controllers/hadithSearch.controller');
 const {
   validateHadithSearch,
@@ -8,27 +8,45 @@ const {
 // Search routes
 router
   .route('/api/hadith/search')
-  .get(validateHadithSearch, HadithSearchController.searchUsingAPIDorar);
+  .get(
+    validateHadithSearch,
+    HadithSearchController.searchUsingAPIDorar,
+  );
 
 router
   .route('/site/hadith/search')
-  .get(validateHadithSearch, HadithSearchController.searchUsingSiteDorar);
+  .get(
+    validateHadithSearch,
+    HadithSearchController.searchUsingSiteDorar,
+  );
 
 // ID-based routes
 router
   .route('/site/hadith/similar/:id')
-  .get(validateHadithId, HadithSearchController.getAllSimilarHadithUsingSiteDorar);
+  .get(
+    validateHadithId,
+    HadithSearchController.getAllSimilarHadithUsingSiteDorar,
+  );
 
 router
   .route('/site/hadith/alternate/:id')
-  .get(validateHadithId, HadithSearchController.getAlternateHadithUsingSiteDorar);
+  .get(
+    validateHadithId,
+    HadithSearchController.getAlternateHadithUsingSiteDorar,
+  );
 
 router
   .route('/site/hadith/usul/:id')
-  .get(validateHadithId, HadithSearchController.getUsulHadithUsingSiteDorar);
+  .get(
+    validateHadithId,
+    HadithSearchController.getUsulHadithUsingSiteDorar,
+  );
 
 router
   .route('/site/hadith/:id')
-  .get(validateHadithId, HadithSearchController.getOneHadithUsingSiteDorarById);
+  .get(
+    validateHadithId,
+    HadithSearchController.getOneHadithUsingSiteDorarById,
+  );
 
 module.exports = router;
