@@ -5,7 +5,7 @@ info:
   description: API for searching and retrieving hadith from Dorar.net
 
 servers:
-  - url: http://localhost:5000/v1
+  - url: http://localhost:5001/v1
 
 paths:
   /api/hadith/search:
@@ -499,33 +499,6 @@ components:
           items:
             $ref: '#/components/schemas/SiteHadithItem'
 
-    SiteHadithCategoryResponse:
-      type: object
-      properties:
-        metadata:
-          type: object
-          properties:
-            length:
-              type: integer
-            currentPageCount:
-              type: integer
-            page:
-              type: integer
-            hasNextPage:
-              type: boolean
-            hasPrevPage:
-              type: boolean
-            removeHTML:
-              type: boolean
-            categoryId:
-              type: string
-            isCached:
-              type: boolean
-        data:
-          type: array
-          items:
-            $ref: '#/components/schemas/SiteHadithItem'
-
     HadithCategory:
       type: object
       description: Thematic category (التصنيف الموضوعي) from dorar.net
@@ -564,6 +537,9 @@ components:
           type: string
         categories:
           type: array
+          description: Thematic categories (التصنيف الموضوعي) from dorar.net
+          items:
+            $ref: '#/components/schemas/HadithCategory'
         hasSimilarHadith:
           type: boolean
         hasAlternateHadithSahih:
