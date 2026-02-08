@@ -2,7 +2,7 @@ const router = require('express').Router();
 const HadithSearchController = require('../controllers/hadithSearch.controller');
 const {
   validateHadithSearch,
-  validateHadithId
+  validateHadithId,
 } = require('../middleware/validators');
 
 // Search routes

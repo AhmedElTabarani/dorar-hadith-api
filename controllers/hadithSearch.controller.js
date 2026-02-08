@@ -9,6 +9,7 @@ const getHadithId = require('../utils/getHadithId');
 const getAlternateHadithSahihDorar = require('../utils/getAlternateHadithSahihDorar');
 const getUsulHadithDorar = require('../utils/getUsulHadithDorar');
 const { parseHadithInfo } = require('../utils/parseHadithInfo');
+const { parseHadithCategories } = require('../utils/parseHadithCategories');
 const AppError = require('../utils/AppError');
 const fetchWithTimeout = require('../utils/fetchWithTimeout');
 const serializeQueryParams = require('../utils/serializeQueryParams');
@@ -172,6 +173,8 @@ class HadithSearchController {
 
           const hadithId = getHadithId(info);
 
+          const categories = parseHadithCategories(info);
+
           return {
             hadith,
             rawi,
@@ -184,6 +187,7 @@ class HadithSearchController {
             explainGrade,
             takhrij,
             hadithId,
+            categories,
             hasSimilarHadith: !!similarHadithDorar,
             hasAlternateHadithSahih: !!alternateHadithSahihDorar,
             hasUsulHadith: !!usulHadithDorar,
@@ -291,6 +295,8 @@ class HadithSearchController {
       getUsulHadithDorar(info),
     ];
 
+    const categories = parseHadithCategories(info);
+
     const result = {
       hadith,
       rawi,
@@ -303,6 +309,7 @@ class HadithSearchController {
       explainGrade,
       takhrij,
       hadithId,
+      categories,
       hasSimilarHadith: !!similarHadithDorar,
       hasAlternateHadithSahih: !!alternateHadithSahihDorar,
       hasUsulHadith: !!usulHadithDorar,
@@ -386,6 +393,8 @@ class HadithSearchController {
 
           const hadithId = getHadithId(info);
 
+          const categories = parseHadithCategories(info);
+
           return {
             hadith,
             rawi,
@@ -398,6 +407,7 @@ class HadithSearchController {
             explainGrade,
             takhrij,
             hadithId,
+            categories,
             hasSimilarHadith: !!similarHadithDorar,
             hasAlternateHadithSahih: !!alternateHadithSahihDorar,
             hasUsulHadith: !!usulHadithDorar,
@@ -499,6 +509,7 @@ class HadithSearchController {
       explainGrade,
       takhrij,
       hadithId,
+      categories,
       hasSimilarHadith: !!similarHadithDorar,
       hasAlternateHadithSahih: false,
       hasUsulHadith: !!usulHadithDorar,
@@ -574,27 +585,29 @@ class HadithSearchController {
 
     const hadithId = getHadithId(mainInfo);
 
+    const categories = parseHadithCategories(mainInfo);
+
     // Get the usul hadith sources (all articles after the heading)
     const usulSources = [];
     const articles = doc.querySelectorAll('article');
-    
+
     // Skip the first article (main hadith) and process the rest
     for (let i = 1; i < articles.length; i++) {
       const article = articles[i];
       const sourceInfo = article.querySelector('h5');
-      
+
       if (sourceInfo) {
         // Extract source name and page from the span with maroon color
         const sourceSpan = sourceInfo.querySelector('span[style*="color:maroon"]');
         const sourceName = sourceSpan?.textContent.trim() || '';
-        
+
         // Extract the chain of narration from the span with blue color
         const chainSpan = sourceInfo.querySelector('span[style*="color:blue"]');
         const chain = chainSpan?.textContent.trim() || '';
-        
+
         // Get the full text and extract the hadith text after the colored spans
         let fullText = sourceInfo.textContent.trim();
-        
+
         // Remove the source name and chain to get the actual hadith text
         if (sourceName) {
           fullText = fullText.replace(sourceName, '').trim();
@@ -602,10 +615,10 @@ class HadithSearchController {
         if (chain) {
           fullText = fullText.replace(chain, '').trim();
         }
-        
+
         // Clean up the hadith text (remove leading commas, periods, etc.)
         const hadithText = fullText.replace(/^[،,.\s]+/, '').trim();
-        
+
         usulSources.push({
           source: sourceName,
           chain: chain,
@@ -626,6 +639,7 @@ class HadithSearchController {
       explainGrade,
       takhrij,
       hadithId,
+      categories,
       hasSimilarHadith: !!similarHadithDorar,
       hasAlternateHadithSahih: !!alternateHadithSahihDorar,
       hasUsulHadith: true,
