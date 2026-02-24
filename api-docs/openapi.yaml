@@ -5,7 +5,7 @@ info:
   description: API for searching and retrieving hadith from Dorar.net
 
 servers:
-  - url: http://localhost:5000/v1
+  - url: /v1
 
 paths:
   /api/hadith/search:

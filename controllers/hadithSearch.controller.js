@@ -497,6 +497,8 @@ class HadithSearchController {
 
     const hadithId = getHadithId(info);
 
+    const categories = parseHadithCategories(info);
+
     const result = {
       hadith,
       rawi,
