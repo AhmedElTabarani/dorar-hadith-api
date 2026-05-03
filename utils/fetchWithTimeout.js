@@ -9,7 +9,20 @@ const fetchWithTimeout = async (url, options = {}) => {
   try {
     const response = await fetch(url, {
       ...options,
-      signal: controller.signal
+      signal: controller.signal,
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Safari/537.36",
+        "Accept": "application/json, text/plain, */*",
+        "Accept-Language": "ar,en;q=0.9",
+        "Referer": "https://dorar.net/",
+        "Origin": "https://dorar.net",
+        "Connection": "keep-alive",
+        "Sec-Fetch-Dest": "empty",
+        "Sec-Fetch-Mode": "cors",
+        "Sec-Fetch-Site": "same-origin",
+        "Cache-Control": "no-cache",
+        "Pragma": "no-cache"
+      }
     });
     clearTimeout(id);
 
