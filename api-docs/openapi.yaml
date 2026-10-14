@@ -642,7 +642,7 @@ components:
             sharhMetadata:
               type: object
               properties:
-                id:
+                key:
                   type: string
                 isContainSharh:
                   type: boolean
@@ -861,7 +861,7 @@ components:
             sharhMetadata:
               type: object
               properties:
-                id:
+                key:
                   type: string
                 isContainSharh:
                   type: boolean
@@ -895,7 +895,7 @@ components:
           items:
             type: object
             properties:
-              id:
+              key:
                 type: string
-              name:
+              value:
                 type: string

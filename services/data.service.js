@@ -4,7 +4,7 @@ const { getCachedResponse, setCachedResponse } = require('./common/cache.service
 
 const getData = async (file) => {
   const cacheKey = `local-data:${file}`;
-  const cached = getCachedResponse(cacheKey);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }

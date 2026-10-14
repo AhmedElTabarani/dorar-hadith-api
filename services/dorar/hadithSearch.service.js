@@ -13,8 +13,9 @@ const {
 const searchUsingAPIDorar = async ({ queryParams, isRemoveHTML }) => {
   const query = serializeQueryParams(queryParams).replace('value=', 'skey=') || '';
   const url = `https://dorar.net/dorar_api.json?${query}`;
+  const cacheKey = JSON.stringify(['v2', 'searchUsingAPIDorar', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -38,16 +39,19 @@ const searchUsingAPIDorar = async ({ queryParams, isRemoveHTML }) => {
     })
     .filter(Boolean);
 
-  if (result.length === 0) {
+  if (result.length === 0 && !/لا توجد نتائج|لا يوجد نتائج|لم يتم العثور/.test(doc.textContent || doc.documentElement?.textContent || '')) {
     throw new AppError('No hadith found in the response', 502);
   }
 
+  const parsedCount = result.length;
   const currentPage = parseInt(queryParams.page, 10) || 1;
   const hasNextPage = result.length === config.hadithApiPageSize;
   const hasPrevPage = currentPage > 1;
 
   const metadata = {
     length: result.length,
+    parsedCount,
+    partial: result.length < doc.querySelectorAll(typeof tab === 'undefined' ? '.hadith-info' : `#${tab} .border-bottom`).length,
     currentPageCount: result.length,
     page: currentPage,
     hasNextPage,
@@ -55,14 +59,15 @@ const searchUsingAPIDorar = async ({ queryParams, isRemoveHTML }) => {
     removeHTML: isRemoveHTML,
   };
 
-  return setCachedResponse(url, result, metadata);
+  return setCachedResponse(cacheKey, result, metadata);
 };
 
 const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpecialist }) => {
   const query = serializeQueryParams(queryParams).replace('value=', 'q=') || '';
   const url = `https://www.dorar.net/hadith/search?${query}${tab === 'specialist' ? '&all' : ''}`;
+  const cacheKey = JSON.stringify(['v2', 'searchUsingSiteDorar', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -88,7 +93,7 @@ const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpeci
       try {
         return mapSiteHadithBlock(info, {
           removeHTML: isRemoveHTML,
-          hadithCleanRegex: /\d+\s+-/g,
+          hadithCleanRegex: /^\s*\d+\s+-\s*/,
         });
       } catch (error) {
         return null;
@@ -96,6 +101,9 @@ const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpeci
     })
     .filter(Boolean);
 
+  const parsedCount = result.length;
+  if (!result.length && tabElement.querySelectorAll('.border-bottom').length) throw new AppError('Source parser yielded no records', 502);
+  if (!result.length && !/لا توجد نتائج|لا يوجد نتائج|لم يتم العثور/.test(tabElement.textContent) && !doc.querySelector(`a[aria-controls="${tab}"]`)?.textContent.match(/\b0\b/)) throw new AppError('Unrecognized empty source page', 502);
   const currentPage = parseInt(queryParams.page, 10) || 1;
   const total = isForSpecialist ? numberOfSpecialist : numberOfNonSpecialist;
   const totalPages = Math.ceil(total / config.hadithSitePageSize);
@@ -104,6 +112,8 @@ const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpeci
 
   const metadata = {
     length: result.length,
+    parsedCount,
+    partial: result.length < doc.querySelectorAll(typeof tab === 'undefined' ? '.hadith-info' : `#${tab} .border-bottom`).length,
     currentPageCount: result.length,
     total,
     page: currentPage,
@@ -116,13 +126,14 @@ const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpeci
     numberOfSpecialist,
   };
 
-  return setCachedResponse(url, result, metadata);
+  return setCachedResponse(cacheKey, result, metadata);
 };
 
 const getOneHadithUsingSiteDorarById = async ({ hadithId }) => {
   const url = `https://www.dorar.net/h/${hadithId}`;
+  const cacheKey = JSON.stringify(['v2', 'getOneHadithUsingSiteDorarById', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -137,16 +148,19 @@ const getOneHadithUsingSiteDorarById = async ({ hadithId }) => {
     removeHTML: true,
     hadithNode: info.children[0],
     infoNode: info,
-    hadithCleanRegex: /-\s*\:?\s*/g,
+    hadithCleanRegex: /^\s*-\s*:?\s*/,
   });
 
-  return setCachedResponse(url, result, { length: 1 });
+  result.hadithId ||= hadithId;
+  if (result.hadithId !== hadithId) throw new AppError('Source identity mismatch', 502);
+  return setCachedResponse(cacheKey, result, { length: 1 });
 };
 
 const getAllSimilarHadithUsingSiteDorar = async ({ similarId }) => {
   const url = `https://www.dorar.net/h/${similarId}?sims=1`;
+  const cacheKey = JSON.stringify(['v2', 'getAllSimilarHadithUsingSiteDorar', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -159,7 +173,7 @@ const getAllSimilarHadithUsingSiteDorar = async ({ similarId }) => {
           removeHTML: true,
           hadithNode: info.children[0],
           infoNode: info.children[1],
-          hadithCleanRegex: /-\s*\:?\s*/g,
+          hadithCleanRegex: /^\s*-\s*:?\s*/,
         });
       } catch (error) {
         return null;
@@ -167,13 +181,14 @@ const getAllSimilarHadithUsingSiteDorar = async ({ similarId }) => {
     })
     .filter(Boolean);
 
-  return setCachedResponse(url, result, { length: result.length });
+  return setCachedResponse(cacheKey, result, { length: result.length });
 };
 
 const getAlternateHadithUsingSiteDorar = async ({ alternateId }) => {
   const url = `https://www.dorar.net/h/${alternateId}?alts=1`;
+  const cacheKey = JSON.stringify(['v2', 'getAlternateHadithUsingSiteDorar', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -188,17 +203,18 @@ const getAlternateHadithUsingSiteDorar = async ({ alternateId }) => {
     removeHTML: true,
     hadithNode: info.children[0],
     infoNode: info.children[1],
-    hadithCleanRegex: /-\s*\:?\s*/g,
+    hadithCleanRegex: /^\s*-\s*:?\s*/,
     includeAlternate: false,
   });
 
-  return setCachedResponse(url, result, {});
+  return setCachedResponse(cacheKey, result, {});
 };
 
 const getUsulHadithUsingSiteDorar = async ({ usulId }) => {
   const url = `https://www.dorar.net/h/${usulId}?osoul=1`;
+  const cacheKey = JSON.stringify(['v2', 'getUsulHadithUsingSiteDorar', url, typeof isRemoveHTML === 'undefined' ? true : isRemoveHTML, typeof tab === 'undefined' ? '' : tab]);
 
-  const cached = getCachedResponse(url);
+  const cached = await getCachedResponse(cacheKey);
   if (cached) {
     return cached;
   }
@@ -213,7 +229,7 @@ const getUsulHadithUsingSiteDorar = async ({ usulId }) => {
     removeHTML: true,
     hadithNode: mainInfo.children[0],
     infoNode: mainInfo.children[1],
-    hadithCleanRegex: /-\s*\:?\s*/g,
+    hadithCleanRegex: /^\s*-\s*:?\s*/,
   });
 
   const usulSources = extractUsulSources(doc);
@@ -226,17 +242,17 @@ const getUsulHadithUsingSiteDorar = async ({ usulId }) => {
     },
   };
 
-  return setCachedResponse(url, result, {
+  return setCachedResponse(cacheKey, result, {
     length: 1,
     usulSourcesCount: usulSources.length,
   });
 };
 
-module.exports = {
+module.exports = require('../common/singleFlight')({
   searchUsingAPIDorar,
   searchUsingSiteDorar,
   getOneHadithUsingSiteDorarById,
   getAllSimilarHadithUsingSiteDorar,
   getAlternateHadithUsingSiteDorar,
   getUsulHadithUsingSiteDorar,
-};
+});

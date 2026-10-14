@@ -1,3 +1,5 @@
+> Tathabbat fork: see [IMPLEMENTATION.md](IMPLEMENTATION.md) for the v2 hardening and deployment gates. Production now requires private `SERVICE_API_KEY` authentication and `REDIS_URL`. All data endpoints require `X-Service-Key` when configured. Explanation search returns references for on-demand loading; it no longer downloads every explanation body. Run `npm ci && npm test` on Node 22. The underlying provider contract still needs live-fixture review before release.
+
 # Dorar.net Hadith API
 
 السلام عليكم ورحمة الله وبركاته

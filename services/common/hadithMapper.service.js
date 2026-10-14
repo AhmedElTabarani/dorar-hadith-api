@@ -41,10 +41,11 @@ const mapSiteHadithBlock = (container, options = {}) => {
     removeHTML = true,
     hadithNode = container.children[0],
     infoNode = container.children[1],
-    hadithCleanRegex = /\d+\s+-/g,
+    hadithCleanRegex = /^\s*\d+\s+-\s*/,
     includeAlternate = true,
   } = options;
 
+  if (!hadithNode?.textContent.trim()) throw new Error('Missing hadith text');
   const hadith = removeHTML
     ? cleanHadithText(hadithNode.textContent, hadithCleanRegex)
     : cleanHadithText(hadithNode.innerHTML, hadithCleanRegex);
@@ -103,9 +104,10 @@ const mapSiteHadithBlock = (container, options = {}) => {
 
 const mapApiHadithInfo = (info, removeHTML) => {
   const hadithNode = info.previousElementSibling;
+  if (!hadithNode?.textContent.trim()) throw new Error('Missing hadith text');
   const hadith = removeHTML
-    ? hadithNode.textContent.replace(/\d+ -/g, '').trim()
-    : hadithNode.innerHTML.replace(/\d+ -/g, '').trim();
+    ? hadithNode.textContent.replace(/^\s*\d+\s*-\s*/, '').trim()
+    : hadithNode.innerHTML.replace(/^\s*\d+\s*-\s*/, '').trim();
 
   const [rawi, mohdith, book, numberOrPage, grade] = [
     ...info.querySelectorAll('.info-subtitle'),
