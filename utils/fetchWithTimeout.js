@@ -10,7 +10,10 @@ module.exports = async (url, options = {}) => {
   if (openUntil > Date.now()) throw new AppError('Source circuit is open', 503);
   if (active >= 8) throw new AppError('Upstream concurrency limit reached', 503);
   active++; metrics.add('source_requests');
-  const signals = [AbortSignal.timeout(config.fetchTimeout), options.signal, context.getStore()?.signal].filter(Boolean);
+  const deadline = new AbortController();
+  // Keep pending body reads alive until the deadline, even without an open socket.
+  const timer = setTimeout(() => deadline.abort(), config.fetchTimeout);
+  const signals = [deadline.signal, options.signal, context.getStore()?.signal].filter(Boolean);
   const signal = AbortSignal.any(signals);
   try {
     signal.throwIfAborted();
@@ -35,5 +38,5 @@ module.exports = async (url, options = {}) => {
     if ((!error.statusCode || error.statusCode >= 500) && ++failures >= 5) { metrics.add('circuit_opened'); openUntil = Date.now() + 30000; failures = 0; }
     if (signal.aborted) throw new AppError('Source deadline exceeded', 504);
     throw error;
-  } finally { active--; }
+  } finally { clearTimeout(timer); active--; }
 };

@@ -75,3 +75,22 @@ test('canonical filter ordering and atomic cache metadata', async () => {
   const serialize=require('../utils/serializeQueryParams'); assert.equal(serialize({m:['2','1'],value:'a'}),serialize({value:'a',m:['1','2']}));
   const cache=require('../services/common/cache.service'); await cache.setCachedResponse('unit:atomic',[1],{partial:true}); const entry=await cache.getCachedResponse('unit:atomic'); assert.deepEqual(entry.data,[1]); assert.equal(entry.metadata.partial,true); assert.ok(entry.metadata.retrievedAt);
 });
+test('a stalled body reaches its deadline without other event-loop handles', () => {
+  const { spawnSync } = require('node:child_process');
+  const result = spawnSync(process.execPath, ['-e', `
+    process.env.NODE_ENV = 'test';
+    delete process.env.REDIS_URL;
+    require('./config/config').fetchTimeout = 20;
+    global.fetch = async (_url, { signal }) => new Response(new ReadableStream({
+      start(controller) {
+        signal.addEventListener('abort', () => controller.error(signal.reason), { once: true });
+      }
+    }));
+    process.exitCode = 2;
+    require('./utils/fetchWithTimeout')('https://dorar.net/test').catch(error => {
+      if (error.statusCode === 504) process.exitCode = 0;
+    });
+  `], { cwd: require('node:path').resolve(__dirname, '..'), encoding: 'utf8', timeout: 5000 });
+  assert.ifError(result.error);
+  assert.equal(result.status, 0, result.stderr || 'Process exited before the deadline rejected');
+});
