@@ -15,9 +15,9 @@ const getCachedResponse = (key) => {
   };
 };
 
-const setCachedResponse = (key, data, metadata = {}) => {
-  cache.set(key, data);
-  cache.set(`metadata:${key}`, metadata);
+const setCachedResponse = (key, data, metadata = {}, ttl) => {
+  cache.set(key, data, ttl);
+  cache.set(`metadata:${key}`, metadata, ttl);
 
   return {
     data,
