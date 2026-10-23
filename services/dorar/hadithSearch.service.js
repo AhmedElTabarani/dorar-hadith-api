@@ -13,8 +13,9 @@ const {
 const searchUsingAPIDorar = async ({ queryParams, isRemoveHTML }) => {
   const query = serializeQueryParams(queryParams).replace('value=', 'skey=') || '';
   const url = `https://dorar.net/dorar_api.json?${query}`;
+  const key = `hadith-api:${url}:removehtml=${isRemoveHTML}`;
 
-  const cached = getCachedResponse(url);
+  const cached = getCachedResponse(key);
   if (cached) {
     return cached;
   }
@@ -55,14 +56,15 @@ const searchUsingAPIDorar = async ({ queryParams, isRemoveHTML }) => {
     removeHTML: isRemoveHTML,
   };
 
-  return setCachedResponse(url, result, metadata);
+  return setCachedResponse(key, result, metadata);
 };
 
 const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpecialist }) => {
   const query = serializeQueryParams(queryParams).replace('value=', 'q=') || '';
   const url = `https://www.dorar.net/hadith/search?${query}${tab === 'specialist' ? '&all' : ''}`;
+  const key = `hadith-search:${url}:removehtml=${isRemoveHTML}`;
 
-  const cached = getCachedResponse(url);
+  const cached = getCachedResponse(key);
   if (cached) {
     return cached;
   }
@@ -116,7 +118,7 @@ const searchUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpeci
     numberOfSpecialist,
   };
 
-  return setCachedResponse(url, result, metadata);
+  return setCachedResponse(key, result, metadata);
 };
 
 const getOneHadithUsingSiteDorarById = async ({ hadithId }) => {
@@ -140,7 +142,7 @@ const getOneHadithUsingSiteDorarById = async ({ hadithId }) => {
     hadithCleanRegex: /-\s*\:?\s*/g,
   });
 
-  return setCachedResponse(url, result, { length: 1 });
+  return setCachedResponse(url, result, { length: 1 }, config.cacheStableEach);
 };
 
 const getAllSimilarHadithUsingSiteDorar = async ({ similarId }) => {
@@ -167,7 +169,7 @@ const getAllSimilarHadithUsingSiteDorar = async ({ similarId }) => {
     })
     .filter(Boolean);
 
-  return setCachedResponse(url, result, { length: result.length });
+  return setCachedResponse(url, result, { length: result.length }, config.cacheStableEach);
 };
 
 const getAlternateHadithUsingSiteDorar = async ({ alternateId }) => {

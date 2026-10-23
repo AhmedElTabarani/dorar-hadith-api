@@ -1,5 +1,6 @@
 const AppError = require('../../utils/AppError');
 const serializeQueryParams = require('../../utils/serializeQueryParams');
+const config = require('../../config/config');
 
 const { getCachedResponse, setCachedResponse } = require('../common/cache.service');
 const { fetchDocument } = require('../common/dorarFetch.service');
@@ -53,7 +54,7 @@ const getOneSharhByIdUsingSiteDorar = async ({ sharhId }) => {
   }
 
   const result = await getSharhById(sharhId);
-  return setCachedResponse(url, result, {});
+  return setCachedResponse(url, result, {}, config.cacheStableEach);
 };
 
 const getOneSharhByTextUsingSiteDorar = async ({ text, tab, isForSpecialist }) => {
@@ -62,8 +63,9 @@ const getOneSharhByTextUsingSiteDorar = async ({ text, tab, isForSpecialist }) =
   }
 
   const url = `https://www.dorar.net/hadith/search?q=${text}${tab === 'specialist' ? '&all' : ''}`;
+  const key = `sharh-text:${url}`;
 
-  const cached = getCachedResponse(url);
+  const cached = getCachedResponse(key);
   if (cached) {
     return {
       ...cached,
@@ -86,14 +88,15 @@ const getOneSharhByTextUsingSiteDorar = async ({ text, tab, isForSpecialist }) =
   }
 
   const result = await getSharhById(sharhId);
-  return setCachedResponse(url, result, { specialist: isForSpecialist });
+  return setCachedResponse(key, result, { specialist: isForSpecialist });
 };
 
 const getAllSharhUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isForSpecialist }) => {
   const query = serializeQueryParams(queryParams).replace('value=', 'q=') || '';
   const url = `https://www.dorar.net/hadith/search?${query}${tab === 'specialist' ? '&all' : ''}`;
+  const key = `sharh-search:${url}:removehtml=${isRemoveHTML}`;
 
-  const cached = getCachedResponse(url);
+  const cached = getCachedResponse(key);
   if (cached) {
     return cached;
   }
@@ -129,7 +132,7 @@ const getAllSharhUsingSiteDorar = async ({ queryParams, tab, isRemoveHTML, isFor
     specialist: isForSpecialist,
   };
 
-  return setCachedResponse(url, result, metadata);
+  return setCachedResponse(key, result, metadata);
 };
 
 module.exports = {

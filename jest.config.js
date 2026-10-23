@@ -9,6 +9,5 @@ module.exports = {
     '/tests/helpers/'
   ],
   testMatch: ['**/tests/**/*.test.js'],
-  setupFilesAfterEnv: ['./tests/setup.js'],
   testTimeout: 20000
 };
